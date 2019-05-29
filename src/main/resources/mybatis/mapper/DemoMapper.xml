@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.DemoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.Demo">
+    <id column="test_id" jdbcType="INTEGER" property="testId" />
+    <result column="test_name" jdbcType="VARCHAR" property="testName" />
+    <result column="test_regist_time" jdbcType="TIMESTAMP" property="testRegistTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hitwh.vblog.bean.Demo">
+    <result column="test_description" jdbcType="LONGVARCHAR" property="testDescription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    test_id, test_name, test_regist_time
+  </sql>
+  <sql id="Blob_Column_List">
+    test_description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from test
+    where test_id = #{testId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from test
+    where test_id = #{testId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.Demo" keyProperty="testId" useGeneratedKeys="true">
+    insert into test (test_id, test_name, test_regist_time, 
+      test_description)
+    values (null, #{testName,jdbcType=VARCHAR}, #{testRegistTime,jdbcType=TIMESTAMP},
+      #{testDescription,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.Demo">
+    insert into test
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="testId != null">
+        test_id,
+      </if>
+      <if test="testName != null">
+        test_name,
+      </if>
+      <if test="testRegistTime != null">
+        test_regist_time,
+      </if>
+      <if test="testDescription != null">
+        test_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="testId != null">
+        #{testId,jdbcType=INTEGER},
+      </if>
+      <if test="testName != null">
+        #{testName,jdbcType=VARCHAR},
+      </if>
+      <if test="testRegistTime != null">
+        #{testRegistTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="testDescription != null">
+        #{testDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.Demo">
+    update test
+    <set>
+      <if test="testName != null">
+        test_name = #{testName,jdbcType=VARCHAR},
+      </if>
+      <if test="testRegistTime != null">
+        test_regist_time = #{testRegistTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="testDescription != null">
+        test_description = #{testDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where test_id = #{testId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hitwh.vblog.bean.Demo">
+    update test
+    set test_name = #{testName,jdbcType=VARCHAR},
+      test_regist_time = #{testRegistTime,jdbcType=TIMESTAMP},
+      test_description = #{testDescription,jdbcType=LONGVARCHAR}
+    where test_id = #{testId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hitwh.vblog.bean.Demo">
+    update test
+    set test_name = #{testName,jdbcType=VARCHAR},
+      test_regist_time = #{testRegistTime,jdbcType=TIMESTAMP}
+    where test_id = #{testId,jdbcType=INTEGER}
+  </update>
+</mapper>
