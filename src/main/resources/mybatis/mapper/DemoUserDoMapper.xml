@@ -33,7 +33,7 @@
     values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userRegistTime,jdbcType=TIMESTAMP}, 
       #{userDescription,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.DemoUserDo">
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.DemoUserDo" useGeneratedKeys="true" keyProperty="userId">
     insert into demo_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">

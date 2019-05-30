@@ -4,9 +4,11 @@ package com.hitwh.vblog.response;
 public enum EnumError implements CommonError {
     SUCCESS(0, "成功"),
     // 通用错误类型
-    PARAMETER_VALIDATION_ERROR(00001, "参数不合法"),
+    PARAMETER_VALIDATION_ERROR(4001, "参数不合法"),
     // 10000开头为用户信息相关错误定义
-    USER_NOT_EXIST(10001, "用户不存在")
+    USER_NOT_EXIST(1001, "用户不存在"),
+    DATABASE_INSERT_ERROR(2001, "数据库添加失败"),
+    UNKNOWN_ERROR(4002, "未知错误")
     ;
 
     private int errCode;

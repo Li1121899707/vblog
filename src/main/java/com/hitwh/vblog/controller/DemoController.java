@@ -1,5 +1,6 @@
 package com.hitwh.vblog.controller;
 
+import com.hitwh.vblog.inparam.DemoInParam;
 import com.hitwh.vblog.model.DemoModel;
 import com.hitwh.vblog.outparam.DemoOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -9,15 +10,15 @@ import com.hitwh.vblog.service.DemoService;
 import com.hitwh.vblog.util.TimestampUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 
 
 @RestController
 @RequestMapping("/demo")
-public class DemoController {
+public class DemoController extends BaseController{
     @Autowired
     DemoService demoService;
     @Autowired
@@ -44,12 +45,16 @@ public class DemoController {
         return demoOutParam;
     }
 
-    //定义exceptionhandler解决未被controller吸收的exception
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public CommonReturnType handlerException(HttpServletRequest request, Exception ex){
-        BusinessException businessException = (BusinessException)ex;
-        return CommonReturnType.create(businessException.getErrCode(), businessException.getErrMsg());
+
+    @RequestMapping("/register")
+    public CommonReturnType demoRegister(DemoInParam demoInParam) throws BusinessException {
+        DemoModel demoModel = new DemoModel();
+        demoModel.setUserName(demoInParam.getUserName());
+        demoModel.setUserPwd(demoInParam.getUserPwd());
+        demoModel.setUserDescription(demoInParam.getUserDescription());
+        Timestamp time=timestampUtil.getNowTime();
+        demoModel.setUserRegistTime(time);
+        demoService.demoRegister(demoModel);
+        return CommonReturnType.create(EnumError.SUCCESS.getErrCode(), "添加成功");
     }
 }

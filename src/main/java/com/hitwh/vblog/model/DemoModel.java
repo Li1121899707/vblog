@@ -1,19 +1,27 @@
 package com.hitwh.vblog.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 // 领域模型
 public class DemoModel {
+
     private Integer userId;
 
+    @NotBlank(message = "姓名不能为空")
     private String userName;
 
     private Date userRegistTime;
 
+    //@Min(value=0, message="年龄必须大于0")
+    //@Max(value=0, message="年龄必须小于150")
+
+    @NotNull(message = "描述不可以为null")
     private String userDescription;
 
-    private Integer demoUserPwdId;
-
+    @NotBlank(message = "密码不能为空")
     private String userPwd;
 
     public Integer getUserId() {
@@ -46,14 +54,6 @@ public class DemoModel {
 
     public void setUserDescription(String userDescription) {
         this.userDescription = userDescription;
-    }
-
-    public Integer getDemoUserPwdId() {
-        return demoUserPwdId;
-    }
-
-    public void setDemoUserPwdId(Integer demoUserPwdId) {
-        this.demoUserPwdId = demoUserPwdId;
     }
 
     public String getUserPwd() {
