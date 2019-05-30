@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// 时间转换工具
 @Component
 public class TimestampUtil {
     //获取当前时间

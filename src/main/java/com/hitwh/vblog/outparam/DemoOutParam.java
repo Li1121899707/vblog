@@ -1,5 +1,6 @@
 package com.hitwh.vblog.outparam;
 
+// 传出参数类，用于接收从前端传来的数据
 public class DemoOutParam {
     private Integer userId;
 

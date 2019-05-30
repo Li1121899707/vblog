@@ -9,6 +9,7 @@ import javax.validation.Validator;
 
 import java.util.Set;
 
+// 校验类实现
 @Component
 public class ValidatorImpl implements InitializingBean {
 
@@ -22,12 +23,12 @@ public class ValidatorImpl implements InitializingBean {
         if(constraintViolationSet.size() > 0){
             // 有错误
             result.setHasErrors(true);
-            // 遍历
-            constraintViolationSet.forEach(objectConstraintViolation -> {
+            // 遍历错误，存放错误描述
+            for (ConstraintViolation<Object> objectConstraintViolation : constraintViolationSet) {
                 String errMsg = objectConstraintViolation.getMessage();
                 String propertyName = objectConstraintViolation.getPropertyPath().toString();
                 result.getErrorMsgMap().put(propertyName, errMsg);
-            });
+            }
         }
         return result;
     }

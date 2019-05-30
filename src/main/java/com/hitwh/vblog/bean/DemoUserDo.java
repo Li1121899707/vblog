@@ -2,6 +2,7 @@ package com.hitwh.vblog.bean;
 
 import java.util.Date;
 
+//DO:Database Object ,表示数据库实体类模型，与数据库一一对应
 public class DemoUserDo {
     private Integer userId;
 

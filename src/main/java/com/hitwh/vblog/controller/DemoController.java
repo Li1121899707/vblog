@@ -32,6 +32,7 @@ public class DemoController extends BaseController{
         if(demoModel == null)
             throw new BusinessException(EnumError.USER_NOT_EXIST);
 
+        // 领域模型转换为传出参数
         DemoOutParam demoOutParam = convertFromModel(demoModel);
         // 返回通用对象
         return CommonReturnType.create(demoOutParam);
@@ -48,6 +49,7 @@ public class DemoController extends BaseController{
 
     @RequestMapping("/register")
     public CommonReturnType demoRegister(DemoInParam demoInParam) throws BusinessException {
+        // 构造Service层需要的领域模型类，即将传入参数对象转换为领域模型对象
         DemoModel demoModel = new DemoModel();
         demoModel.setUserName(demoInParam.getUserName());
         demoModel.setUserPwd(demoInParam.getUserPwd());
@@ -55,6 +57,7 @@ public class DemoController extends BaseController{
         Timestamp time=timestampUtil.getNowTime();
         demoModel.setUserRegistTime(time);
         demoService.demoRegister(demoModel);
+        // 直接返回添加成功的原因是：如果在任何一步添加失败，会直接抛出异常，不会到这一句
         return CommonReturnType.create(EnumError.SUCCESS.getErrCode(), "添加成功");
     }
 }

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-// 领域模型
+// 领域模型， 用于事务处理，包含了参数的验证，拼接分散在不同数据库表中的字段
 public class DemoModel {
 
     private Integer userId;

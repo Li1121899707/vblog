@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// 通用返回类型，按照接口文档格式编写
 public class CommonReturnType {
     // 时间戳
     private String response_time;

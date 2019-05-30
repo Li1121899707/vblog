@@ -36,23 +36,31 @@ public class DemoServiceImpl implements DemoService {
         if(demoModel == null){
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         }
+
+        // 验证数据是否合法，不合法抛出数据不合法异常，由于使用了插件，所以result中包含的是所有参数不合法的信息
         ValidationResult result = validator.validate(demoModel);
         if(result.isHasErrors()){
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
 
+        // 将领域模型转为Dao模型
         DemoUserDo demoUserDo = convertFromModel(demoModel);
+        // 向userDao表插入数据，返回主键，即userId
         Integer usercolumn = demoUserDoMapper.insertSelective(demoUserDo);
 
+        // 插入数据返回的数值，代表影响的行数
         if(usercolumn != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
+        // 领域模型更新，将userId插入
         demoModel.setUserId(demoUserDo.getUserId());
 
-
+        // 将领域模型转为Dao模型
         DemoUserPwdDo demoUserPwdDo = convertPwdFromModel(demoModel);
+        // 向password表插入数据
         Integer pwdcolumn = demoUserPwdDoMapper.insertSelective(demoUserPwdDo);
 
+        // 插入数据返回的数值，代表影响的行数
         if(pwdcolumn != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 

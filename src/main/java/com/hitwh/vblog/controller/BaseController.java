@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
+// Controller基类，负责抛出异常，管理登陆信息
 public class BaseController {
 
     //定义exceptionhandler解决未被controller吸收的exception

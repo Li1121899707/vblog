@@ -1,6 +1,5 @@
 package com.hitwh.vblog.validator;
 
-;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+// 传入参数校验类，依赖于hibernate-validator
 public class ValidationResult {
     // 校验结果是否有错误
     private boolean hasErrors = false;
