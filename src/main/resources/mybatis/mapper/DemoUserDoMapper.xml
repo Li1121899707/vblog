@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.DemoUserDoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.DemoUserDo">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_regist_time" jdbcType="TIMESTAMP" property="userRegistTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hitwh.vblog.bean.DemoUserDo">
+    <result column="user_description" jdbcType="LONGVARCHAR" property="userDescription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_name, user_regist_time
+  </sql>
+  <sql id="Blob_Column_List">
+    user_description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from demo_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from demo_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.DemoUserDo">
+    insert into demo_user (user_id, user_name, user_regist_time, 
+      user_description)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userRegistTime,jdbcType=TIMESTAMP}, 
+      #{userDescription,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.DemoUserDo">
+    insert into demo_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userRegistTime != null">
+        user_regist_time,
+      </if>
+      <if test="userDescription != null">
+        user_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userRegistTime != null">
+        #{userRegistTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userDescription != null">
+        #{userDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.DemoUserDo">
+    update demo_user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userRegistTime != null">
+        user_regist_time = #{userRegistTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userDescription != null">
+        user_description = #{userDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hitwh.vblog.bean.DemoUserDo">
+    update demo_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_regist_time = #{userRegistTime,jdbcType=TIMESTAMP},
+      user_description = #{userDescription,jdbcType=LONGVARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hitwh.vblog.bean.DemoUserDo">
+    update demo_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_regist_time = #{userRegistTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

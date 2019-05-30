@@ -1,9 +1,9 @@
 package com.hitwh.vblog.service;
 
-import com.hitwh.vblog.bean.Demo;
-import org.springframework.stereotype.Service;
 
+import com.hitwh.vblog.model.DemoModel;
 
 public interface DemoService {
-    Integer insertRecord(Demo demo);
+    //Integer insertRecord(Demo demo);
+    DemoModel getDemoInfo(Integer id);
 }

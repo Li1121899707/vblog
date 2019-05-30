@@ -81,7 +81,7 @@
                 <configuration>
                     <verbose>true</verbose>
                     <!-- 覆盖生成的文件（大型项目不允许开启，避免更改他人文件） -->
-                    <overwrite>true</overwrite>
+                    <overwrite>false</overwrite>
                     <!--<overwrite>false</overwrite>-->
                     <configurationFile>
                         src/main/resources/mybatis/mybatis-generator.xml

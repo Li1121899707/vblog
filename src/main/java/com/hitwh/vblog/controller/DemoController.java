@@ -1,45 +1,55 @@
 package com.hitwh.vblog.controller;
 
-import com.hitwh.vblog.bean.Demo;
+import com.hitwh.vblog.model.DemoModel;
+import com.hitwh.vblog.outparam.DemoOutParam;
+import com.hitwh.vblog.response.BusinessException;
+import com.hitwh.vblog.response.CommonReturnType;
+import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.DemoService;
 import com.hitwh.vblog.util.TimestampUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
+@RequestMapping("/demo")
 public class DemoController {
     @Autowired
     DemoService demoService;
     @Autowired
     TimestampUtil timestampUtil;
 
-    @RequestMapping(value = "/demo/test")
-    public Map<String, Object> demoTest(Demo demo){
-        Map<String,Object> map = new HashMap<>();
-        if(demo.getTestName()!= null && demo.getTestDescription() != null){
-            Timestamp time= timestampUtil.getNowTime();
-            demo.setTestRegistTime(time);
-        }else{
-            map.put("code", 1);
-            map.put("msg", "接收参数有误");
-            return map;
-        }
+    @RequestMapping("/info")
+    public CommonReturnType getUserInfo(@RequestParam(value = "id") Integer id) throws BusinessException{
+        DemoModel demoModel = demoService.getDemoInfo(id);
 
-        Integer column = demoService.insertRecord(demo);
-        if(column > 0){
-            map.put("code", 0);
-            map.put("msg", "成功");
-            map.put("column", "影响了" + column + "行");
-            map.put("key", "新插入的数据主键为 " + demo.getTestId());
-        }else{
-            map.put("code", 2);
-            map.put("msg", "插入数据失败");
-        }
-        return map;
+        // 抛出用户不存在异常
+        if(demoModel == null)
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
+        DemoOutParam demoOutParam = convertFromModel(demoModel);
+        // 返回通用对象
+        return CommonReturnType.create(demoOutParam);
+    }
+
+    // 领域模型转化为可供前端显示的输出模型
+    private DemoOutParam convertFromModel(DemoModel demoModel){
+        if(demoModel == null) return null;
+        DemoOutParam demoOutParam = new DemoOutParam();
+        BeanUtils.copyProperties(demoModel, demoOutParam);
+        return demoOutParam;
+    }
+
+    //定义exceptionhandler解决未被controller吸收的exception
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public CommonReturnType handlerException(HttpServletRequest request, Exception ex){
+        BusinessException businessException = (BusinessException)ex;
+        return CommonReturnType.create(businessException.getErrCode(), businessException.getErrMsg());
     }
 }
