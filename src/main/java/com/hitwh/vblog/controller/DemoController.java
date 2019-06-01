@@ -6,6 +6,7 @@ import com.hitwh.vblog.outparam.DemoOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
+import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.DemoService;
 import com.hitwh.vblog.util.TimestampUtil;
 import org.springframework.beans.BeanUtils;
@@ -59,5 +60,10 @@ public class DemoController extends BaseController{
         demoService.demoRegister(demoModel);
         // 直接返回添加成功的原因是：如果在任何一步添加失败，会直接抛出异常，不会到这一句
         return CommonReturnType.create(EnumError.SUCCESS.getErrCode(), "添加成功");
+    }
+
+    @RequestMapping("/query_all")
+    public CommonReturnType queryAll(){
+        return CommonReturnType.create(demoService.queryAll());
     }
 }

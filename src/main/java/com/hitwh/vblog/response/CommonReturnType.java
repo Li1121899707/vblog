@@ -1,18 +1,13 @@
 package com.hitwh.vblog.response;
 
-import com.hitwh.vblog.util.TimestampUtil;
-
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 // 通用返回类型，按照接口文档格式编写
 public class CommonReturnType {
     // 时间戳
-    private String response_time;
+    private long response_time;
 
     // 响应代码， 0为成功，其他所有为错误
-    private String code;
+    private Integer code;
 
     private String msg;
 
@@ -23,8 +18,8 @@ public class CommonReturnType {
     // 定义一个通用的创建方法（失败）
     public static CommonReturnType create(Integer code, String msg){
         CommonReturnType returnType = new CommonReturnType();
-        returnType.setResponse_time(String.valueOf(System.currentTimeMillis()));
-        returnType.setCode(String.valueOf(code));
+        returnType.setResponse_time(System.currentTimeMillis());
+        returnType.setCode(code);
         returnType.setMsg(msg);
         return returnType;
     }
@@ -32,21 +27,20 @@ public class CommonReturnType {
     // 定义一个通用的创建方法（成功）,result为返回前端的数据
     public static CommonReturnType create(Object result){
         CommonReturnType returnType = new CommonReturnType();
-        returnType.setResponse_time(String.valueOf(System.currentTimeMillis()));
-        returnType.setCode(String.valueOf(EnumError.SUCCESS.getErrCode()));
+        returnType.setResponse_time(System.currentTimeMillis());
+        returnType.setCode(EnumError.SUCCESS.getErrCode());
         returnType.setMsg(EnumError.SUCCESS.getErrMsg());
         returnType.setData(result);
         return returnType;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
-
 
     public Object getData() {
         return data;
@@ -56,11 +50,11 @@ public class CommonReturnType {
         this.data = data;
     }
 
-    public String getResponse_time() {
+    public long getResponse_time() {
         return response_time;
     }
 
-    public void setResponse_time(String response_time) {
+    public void setResponse_time(long response_time) {
         this.response_time = response_time;
     }
 

@@ -6,6 +6,7 @@ import com.hitwh.vblog.mapper.DemoUserDoMapper;
 import com.hitwh.vblog.mapper.DemoUserPwdDoMapper;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
+import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.DemoService;
 import com.hitwh.vblog.model.DemoModel;
 import com.hitwh.vblog.validator.ValidationResult;
@@ -14,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class DemoServiceImpl implements DemoService {
@@ -108,5 +111,14 @@ public class DemoServiceImpl implements DemoService {
         BeanUtils.copyProperties(demoUserDo, demoModel);
         BeanUtils.copyProperties(demoUserPwdDo, demoModel);
         return demoModel;
+    }
+
+    // 分页操作，查询所有数据，返回start， end， sum， 数据，使用PageResponse封装
+    @Override
+    public PageResponse queryAll() {
+        List<DemoUserDo> userDos = demoUserDoMapper.queryAllEmployeeInfo(2);
+        Integer sum = demoUserDoMapper.pageCount();
+        PageResponse pageResponse = new PageResponse(2, 2+userDos.size(), sum,  userDos);
+        return pageResponse;
     }
 }

@@ -18,11 +18,14 @@ public class BaseController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CommonReturnType handlerException(HttpServletRequest request, Exception ex){
-        if(ex instanceof BusinessException){
-            BusinessException businessException = (BusinessException)ex;
-            return CommonReturnType.create(businessException.getErrCode(), businessException.getErrMsg());
-        }else{
-            return CommonReturnType.create(EnumError.UNKNOWN_ERROR.getErrCode(), EnumError.UNKNOWN_ERROR.getErrMsg());
-        }
+//        if(ex instanceof BusinessException){
+//            BusinessException businessException = (BusinessException)ex;
+//            return CommonReturnType.create(businessException.getErrCode(), businessException.getErrMsg());
+//        }else{
+//            return CommonReturnType.create(EnumError.UNKNOWN_ERROR.getErrCode(), EnumError.UNKNOWN_ERROR.getErrMsg());
+//        }
+
+        BusinessException businessException = (BusinessException)ex;
+        return CommonReturnType.create(businessException.getErrCode(), businessException.getErrMsg());
     }
 }

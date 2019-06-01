@@ -20,7 +20,7 @@ public class CosController {
     QCloudUtil qCloudUtil;
 
     @RequestMapping("/image")
-    public CommonReturnType upload(@RequestParam("image") MultipartFile multfile)throws Exception{
+    public CommonReturnType uploadImage(@RequestParam("image") MultipartFile multfile)throws Exception{
         if(multfile == null){
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         }
@@ -34,7 +34,7 @@ public class CosController {
         multfile.transferTo(tempFile);
 
         //调用腾讯云工具上传文件
-        CommonReturnType result = qCloudUtil.uploadFile(tempFile,"/image/" + fileName);
+        CommonReturnType result = qCloudUtil.uploadFile(tempFile,"image/" + fileName);
         //程序结束时，删除临时文件
         deleteFile(tempFile);
 
