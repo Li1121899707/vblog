@@ -2,7 +2,7 @@ package com.hitwh.vblog.response;
 
 // 错误枚举
 public enum EnumError implements CommonError {
-    SUCCESS(0, "成功"),
+    SUCCESS(0, "success"),
     // 通用错误类型
     PARAMETER_VALIDATION_ERROR(4001, "参数不合法"),
     // 10000开头为用户信息相关错误定义

@@ -1,5 +1,6 @@
 server:
   port: 9000
+
 spring:
   datasource:
     username: root
@@ -9,3 +10,10 @@ spring:
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
+
+qcloud:
+  appID: 1257377207
+  secretId: AKID1yRp6FZ3CrMxW0GUXghdP0Qky1Uri63p
+  secretKey: swUxIeu1zmTzKUYSK6iBTaaP1Zv6b0EG
+  bucketName: vblogstore-1257377207
+  region: ap-chengdu
