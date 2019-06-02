@@ -1,8 +1,6 @@
 package com.hitwh.vblog.inparam;
 
 public class ArticleInParam extends BaseInParam {
-    private String key;
-
     private Integer uid;
 
     private String title;
@@ -24,14 +22,6 @@ public class ArticleInParam extends BaseInParam {
     private Integer start;
 
     private Integer end;
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public Integer getUid() {
         return uid;

@@ -114,11 +114,11 @@ public class DemoServiceImpl implements DemoService {
     }
 
     // 分页操作，查询所有数据，返回start， end， sum， 数据，使用PageResponse封装
-    @Override
-    public PageResponse queryAll() {
-        List<DemoUserDo> userDos = demoUserDoMapper.queryAllEmployeeInfo(2);
-        Integer sum = demoUserDoMapper.pageCount();
-        PageResponse pageResponse = new PageResponse(2, 2+userDos.size(), sum,  userDos);
-        return pageResponse;
-    }
+//    @Override
+//    public PageResponse queryAll() {
+//        List<DemoUserDo> userDos = demoUserDoMapper.queryAllEmployeeInfo(2);
+//        Integer sum = demoUserDoMapper.pageCount();
+//        PageResponse pageResponse = new PageResponse(2, 2+userDos.size(), sum,  userDos);
+//        return pageResponse;
+//    }
 }

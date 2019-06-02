@@ -82,8 +82,8 @@ public class DemoController extends BaseController{
         return CommonReturnType.create(EnumError.SUCCESS.getErrCode(), "添加成功");
     }
 
-    @RequestMapping("/query_all")
-    public CommonReturnType queryAll(){
-        return CommonReturnType.create(demoService.queryAll());
-    }
+//    @RequestMapping("/query_all")
+//    public CommonReturnType queryAll(){
+//        return CommonReturnType.create(demoService.queryAll());
+//    }
 }

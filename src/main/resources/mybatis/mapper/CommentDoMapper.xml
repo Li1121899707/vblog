@@ -3,7 +3,7 @@
 <mapper namespace="com.hitwh.vblog.mapper.CommentDoMapper">
   <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.CommentDo">
     <id column="comment_id" jdbcType="INTEGER" property="commentId" />
-    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
@@ -40,7 +40,7 @@
     insert into vblog_comment (comment_id, article_id, user_id, 
       comment, comment_time, parent_comment_id
       )
-    values (#{commentId,jdbcType=INTEGER}, #{articleId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+    values (#{commentId,jdbcType=INTEGER}, #{articleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
       #{comment,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP}, #{parentCommentId,jdbcType=INTEGER}
       )
   </insert>
@@ -91,7 +91,7 @@
     update vblog_comment
     <set>
       <if test="articleId != null">
-        article_id = #{articleId,jdbcType=VARCHAR},
+        article_id = #{articleId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
@@ -110,7 +110,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hitwh.vblog.bean.CommentDo">
     update vblog_comment
-    set article_id = #{articleId,jdbcType=VARCHAR},
+    set article_id = #{articleId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
       comment = #{comment,jdbcType=VARCHAR},
       comment_time = #{commentTime,jdbcType=TIMESTAMP},
@@ -125,6 +125,31 @@
     where article_id = #{articleId}
     and vblog_user.user_id = vblog_comment.user_id
     limit #{start} ,#{num}
+  </select>
+  <select id="selectByArticleId" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from vblog_comment
+    where article_id = #{articleId}
+  </select>
+<select id="selectDisplayCommentById" resultMap="CommentAndUserMap">
+    select vblog_user.user_id, nickname,
+    comment_id, article_id, vblog_comment.user_id, comment, comment_time, parent_comment_id
+    from vblog_comment, vblog_user
+    where vblog_user.user_id= #{userId}
+    and vblog_user.user_id = vblog_comment.user_id
+    limit #{start} ,#{num}
+</select>
+  <select id="selectByUserId" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from vblog_comment
+    where user_id = #{userId}
+  </select>
+  <select id="selectForParent" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="CommentAndUserMap">
+    select vblog_user.user_id, nickname,
+    comment_id, article_id, vblog_comment.user_id, comment, comment_time, parent_comment_id
+    from vblog_comment, vblog_user
+    where comment_id = #{parent_comment_id}
+    and vblog_user.user_id = vblog_comment.user_id
   </select>
 
 </mapper>
