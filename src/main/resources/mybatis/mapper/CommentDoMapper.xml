@@ -9,8 +9,22 @@
     <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
     <result column="parent_comment_id" jdbcType="INTEGER" property="parentCommentId" />
   </resultMap>
+
+  <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+  </resultMap>
+  
+  <resultMap id="CommentAndUserMap" type="com.hitwh.vblog.bean.ComAndUserDo">
+    <association property="userDo" javaType="com.hitwh.vblog.bean.UserDo" resultMap="UserMap"/>
+    <association property="commentDo" javaType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap"/>
+  </resultMap>
+
   <sql id="Base_Column_List">
     comment_id, article_id, user_id, comment, comment_time, parent_comment_id
+  </sql>
+  <sql id="My_Column_List">
+    article_id, user_id, comment, comment_time, parent_comment_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -103,4 +117,14 @@
       parent_comment_id = #{parentCommentId,jdbcType=INTEGER}
     where comment_id = #{commentId,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectDisplayComment" resultMap="CommentAndUserMap">
+    select vblog_user.user_id, nickname,
+    comment_id, article_id, vblog_comment.user_id, comment, comment_time, parent_comment_id
+    from vblog_comment, vblog_user
+    where article_id = #{articleId}
+    and vblog_user.user_id = vblog_comment.user_id
+    limit #{start} ,#{num}
+  </select>
+
 </mapper>

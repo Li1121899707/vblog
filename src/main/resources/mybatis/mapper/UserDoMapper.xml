@@ -6,6 +6,8 @@
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
     <result column="salt" jdbcType="INTEGER" property="salt" />
+    <result column="ban" jdbcType="INTEGER" property="ban" />
+    <result column="allowance" jdbcType="INTEGER" property="allowance" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.UserDo">
     <id column="user_id" jdbcType="INTEGER" property="userId" />
@@ -216,7 +218,7 @@
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <select id="selectIfLogin" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
-    select user_id,account,pwd,salt
+    select user_id,account,pwd,salt,ban,allowance
     from vblog_user
     where account = #{account,jdbcType=VARCHAR}
   </select>
