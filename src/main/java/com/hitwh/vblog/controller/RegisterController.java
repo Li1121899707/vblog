@@ -27,13 +27,9 @@ public class RegisterController extends BaseController {
         RegisterModel registerModel = new RegisterModel();
         //将传入参数转换为Model
         BeanUtils.copyProperties(registerInParam, registerModel);
-
-        // 抛出用户不存在异常
-        if(registerModel == null)
-            throw new BusinessException(EnumError.USER_NOT_EXIST);
         //执行Register
         registerService.register(registerModel);
         //返回执行结果
-        return CommonReturnType.create(EnumError.SUCCESS);
+        return CommonReturnType.success();
     }
 }
