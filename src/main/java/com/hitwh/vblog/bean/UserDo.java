@@ -25,7 +25,7 @@ public class UserDo {
 
     private Integer interest3;
 
-    private Integer identity;
+    private Integer allowance;
 
     private Integer ban;
 
@@ -121,12 +121,12 @@ public class UserDo {
         this.interest3 = interest3;
     }
 
-    public Integer getIdentity() {
-        return identity;
+    public Integer getAllowance() {
+        return allowance;
     }
 
-    public void setIdentity(Integer identity) {
-        this.identity = identity;
+    public void setAllowance(Integer allowance) {
+        this.allowance = allowance;
     }
 
     public Integer getBan() {
