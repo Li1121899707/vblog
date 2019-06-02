@@ -1,8 +1,10 @@
 package com.hitwh.vblog.service.impl;
 
 import com.hitwh.vblog.bean.ArticleDo;
+import com.hitwh.vblog.bean.ArticleDynamicDo;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.mapper.ArticleDoMapper;
+import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.ArticleModel;
 import com.hitwh.vblog.response.BusinessException;
@@ -25,6 +27,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     ArticleDoMapper articleDoMapper;
     @Autowired
+    ArticleDynamicDoMapper articleDynamicDoMapper;
+    @Autowired
     ValidatorImpl validator;
 
     @Override
@@ -40,6 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         UserDo userDo = new UserDo();
         ArticleDo articleDo = new ArticleDo();
+        ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
 
         userDo = userDoMapper.selectByPrimaryKey(articleModel.getUid());
 
@@ -64,6 +69,62 @@ public class ArticleServiceImpl implements ArticleService {
         Integer writeResult = 0;
 
         writeResult  = articleDoMapper.insertSelective(articleDo);
+
+        if (writeResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+        articleDynamicDo.setArticleId(articleDo.getArticleId());
+        articleDynamicDo.setVirtualId(virture);
+
+        writeResult = articleDynamicDoMapper.insertSelective(articleDynamicDo);
+
+        if (writeResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+    }
+
+    @Override
+    public void delete(Integer article_id) throws BusinessException {
+        if (article_id == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        Integer deleteResult = 0;
+        deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
+        if (deleteResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+    }
+
+    @Override
+    public void update(ArticleModel articleModel) throws BusinessException {
+        if (articleModel.getArticle_id() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        ArticleDo articleDoTest = new ArticleDo();
+        ArticleDo articleDo = new ArticleDo();
+        articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
+        if (articleDoTest == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        ValidationResult result = validator.validate(articleModel);
+        if(result.isHasErrors()){
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+        }
+
+        articleDo.setArticleId(articleModel.getArticle_id());
+        articleDo.setVirtualId(null);
+        articleDo.setTitle(articleModel.getTitle());
+        articleDo.setAuthorId(articleModel.getUid());
+        articleDo.setType1(articleModel.getType_1());
+        if (articleModel.getType_2() != null)
+            articleDo.setType2(articleModel.getType_2());
+        articleDo.setCover(articleModel.getCover());
+        articleDo.setHidden(articleModel.getHidden());
+        articleDo.setContent(articleModel.getContent());
+        articleDo.setArticleAbstract(articleModel.getArticleAbstract());
+        Timestamp timeStamp = TimestampUtil.getNowTime();
+        articleDo.setUpdateTime(timeStamp);
+
+        Integer writeResult = 0;
+
+        writeResult  = articleDoMapper.updateByPrimaryKeySelective(articleDo);
 
         if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
