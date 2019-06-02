@@ -8,6 +8,7 @@ import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.DemoService;
+import com.hitwh.vblog.util.MyMd5;
 import com.hitwh.vblog.util.TimestampUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,11 @@ public class DemoController extends BaseController{
         DemoOutParam demoOutParam = convertFromModel(demoModel);
         // 返回通用对象
         return CommonReturnType.create(demoOutParam);
+    }
+
+    @PostMapping("/md5")
+    public Object getMD5(){
+        return MyMd5.md5("123sbc");
     }
 
     // 领域模型转化为可供前端显示的输出模型

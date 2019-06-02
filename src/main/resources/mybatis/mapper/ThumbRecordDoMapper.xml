@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.ThumbRecordDoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.ThumbRecordDo">
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="thumber_id" jdbcType="INTEGER" property="thumberId" />
+    <result column="thumb_time" jdbcType="TIMESTAMP" property="thumbTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.ThumbRecordDo">
+    insert into vblog_thumb_record (article_id, thumber_id, thumb_time
+      )
+    values (#{articleId,jdbcType=INTEGER}, #{thumberId,jdbcType=INTEGER}, #{thumbTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ThumbRecordDo">
+    insert into vblog_thumb_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="thumberId != null">
+        thumber_id,
+      </if>
+      <if test="thumbTime != null">
+        thumb_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="thumberId != null">
+        #{thumberId,jdbcType=INTEGER},
+      </if>
+      <if test="thumbTime != null">
+        #{thumbTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

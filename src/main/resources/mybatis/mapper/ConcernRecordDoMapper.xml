@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.ConcernRecordDoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.ConcernRecordDo">
+    <result column="target_id" jdbcType="INTEGER" property="targetId" />
+    <result column="follower_id" jdbcType="INTEGER" property="followerId" />
+    <result column="concern_time" jdbcType="TIMESTAMP" property="concernTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.ConcernRecordDo">
+    insert into vblog_concern_record (target_id, follower_id, concern_time
+      )
+    values (#{targetId,jdbcType=INTEGER}, #{followerId,jdbcType=INTEGER}, #{concernTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ConcernRecordDo">
+    insert into vblog_concern_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="targetId != null">
+        target_id,
+      </if>
+      <if test="followerId != null">
+        follower_id,
+      </if>
+      <if test="concernTime != null">
+        concern_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="targetId != null">
+        #{targetId,jdbcType=INTEGER},
+      </if>
+      <if test="followerId != null">
+        #{followerId,jdbcType=INTEGER},
+      </if>
+      <if test="concernTime != null">
+        #{concernTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

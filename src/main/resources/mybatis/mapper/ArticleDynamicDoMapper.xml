@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.ArticleDynamicDoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.ArticleDynamicDo">
+    <id column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="virtual_id" jdbcType="VARCHAR" property="virtualId" />
+    <result column="reading_num" jdbcType="INTEGER" property="readingNum" />
+    <result column="thumb_num" jdbcType="INTEGER" property="thumbNum" />
+    <result column="collection_num" jdbcType="INTEGER" property="collectionNum" />
+    <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    article_id, virtual_id, reading_num, thumb_num, collection_num, comment_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vblog_article_dynamic
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vblog_article_dynamic
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleDynamicDo">
+    insert into vblog_article_dynamic (article_id, virtual_id, reading_num, 
+      thumb_num, collection_num, comment_num
+      )
+    values (#{articleId,jdbcType=INTEGER}, #{virtualId,jdbcType=VARCHAR}, #{readingNum,jdbcType=INTEGER}, 
+      #{thumbNum,jdbcType=INTEGER}, #{collectionNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ArticleDynamicDo">
+    insert into vblog_article_dynamic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="virtualId != null">
+        virtual_id,
+      </if>
+      <if test="readingNum != null">
+        reading_num,
+      </if>
+      <if test="thumbNum != null">
+        thumb_num,
+      </if>
+      <if test="collectionNum != null">
+        collection_num,
+      </if>
+      <if test="commentNum != null">
+        comment_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="virtualId != null">
+        #{virtualId,jdbcType=VARCHAR},
+      </if>
+      <if test="readingNum != null">
+        #{readingNum,jdbcType=INTEGER},
+      </if>
+      <if test="thumbNum != null">
+        #{thumbNum,jdbcType=INTEGER},
+      </if>
+      <if test="collectionNum != null">
+        #{collectionNum,jdbcType=INTEGER},
+      </if>
+      <if test="commentNum != null">
+        #{commentNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.ArticleDynamicDo">
+    update vblog_article_dynamic
+    <set>
+      <if test="virtualId != null">
+        virtual_id = #{virtualId,jdbcType=VARCHAR},
+      </if>
+      <if test="readingNum != null">
+        reading_num = #{readingNum,jdbcType=INTEGER},
+      </if>
+      <if test="thumbNum != null">
+        thumb_num = #{thumbNum,jdbcType=INTEGER},
+      </if>
+      <if test="collectionNum != null">
+        collection_num = #{collectionNum,jdbcType=INTEGER},
+      </if>
+      <if test="commentNum != null">
+        comment_num = #{commentNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hitwh.vblog.bean.ArticleDynamicDo">
+    update vblog_article_dynamic
+    set virtual_id = #{virtualId,jdbcType=VARCHAR},
+      reading_num = #{readingNum,jdbcType=INTEGER},
+      thumb_num = #{thumbNum,jdbcType=INTEGER},
+      collection_num = #{collectionNum,jdbcType=INTEGER},
+      comment_num = #{commentNum,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,12 +1,14 @@
 package com.hitwh.vblog.util;
 
+import org.springframework.util.DigestUtils;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MyMd5 {
 
-    public static String md5(String plainText) {
+    public static String md52(String plainText) {
         //定义一个字节数组
         byte[] secretBytes = null;
         try {
@@ -26,5 +28,9 @@ public class MyMd5 {
             md5code = "0" + md5code;
         }
         return md5code;
+    }
+
+    public static String md5(String plainText) {
+        return DigestUtils.md5DigestAsHex(plainText.getBytes());
     }
 }

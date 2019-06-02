@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.UserDoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.UserDo">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="img" jdbcType="INTEGER" property="img" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="interest_1" jdbcType="INTEGER" property="interest1" />
+    <result column="interest_2" jdbcType="INTEGER" property="interest2" />
+    <result column="interest_3" jdbcType="INTEGER" property="interest3" />
+    <result column="identity" jdbcType="INTEGER" property="identity" />
+    <result column="ban" jdbcType="INTEGER" property="ban" />
+    <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
+    <result column="salt" jdbcType="INTEGER" property="salt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, account, pwd, nickname, email, phone, img, signature, interest_1, interest_2, 
+    interest_3, identity, ban, register_time, salt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vblog_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vblog_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.UserDo">
+    insert into vblog_user (user_id, account, pwd, 
+      nickname, email, phone, 
+      img, signature, interest_1, 
+      interest_2, interest_3, identity, 
+      ban, register_time, salt
+      )
+    values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{img,jdbcType=INTEGER}, #{signature,jdbcType=VARCHAR}, #{interest1,jdbcType=INTEGER}, 
+      #{interest2,jdbcType=INTEGER}, #{interest3,jdbcType=INTEGER}, #{identity,jdbcType=INTEGER}, 
+      #{ban,jdbcType=INTEGER}, #{registerTime,jdbcType=TIMESTAMP}, #{salt,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.UserDo">
+    insert into vblog_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="interest1 != null">
+        interest_1,
+      </if>
+      <if test="interest2 != null">
+        interest_2,
+      </if>
+      <if test="interest3 != null">
+        interest_3,
+      </if>
+      <if test="identity != null">
+        identity,
+      </if>
+      <if test="ban != null">
+        ban,
+      </if>
+      <if test="registerTime != null">
+        register_time,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=INTEGER},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="interest1 != null">
+        #{interest1,jdbcType=INTEGER},
+      </if>
+      <if test="interest2 != null">
+        #{interest2,jdbcType=INTEGER},
+      </if>
+      <if test="interest3 != null">
+        #{interest3,jdbcType=INTEGER},
+      </if>
+      <if test="identity != null">
+        #{identity,jdbcType=INTEGER},
+      </if>
+      <if test="ban != null">
+        #{ban,jdbcType=INTEGER},
+      </if>
+      <if test="registerTime != null">
+        #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.UserDo">
+    update vblog_user
+    <set>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=INTEGER},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="interest1 != null">
+        interest_1 = #{interest1,jdbcType=INTEGER},
+      </if>
+      <if test="interest2 != null">
+        interest_2 = #{interest2,jdbcType=INTEGER},
+      </if>
+      <if test="interest3 != null">
+        interest_3 = #{interest3,jdbcType=INTEGER},
+      </if>
+      <if test="identity != null">
+        identity = #{identity,jdbcType=INTEGER},
+      </if>
+      <if test="ban != null">
+        ban = #{ban,jdbcType=INTEGER},
+      </if>
+      <if test="registerTime != null">
+        register_time = #{registerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hitwh.vblog.bean.UserDo">
+    update vblog_user
+    set account = #{account,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      img = #{img,jdbcType=INTEGER},
+      signature = #{signature,jdbcType=VARCHAR},
+      interest_1 = #{interest1,jdbcType=INTEGER},
+      interest_2 = #{interest2,jdbcType=INTEGER},
+      interest_3 = #{interest3,jdbcType=INTEGER},
+      identity = #{identity,jdbcType=INTEGER},
+      ban = #{ban,jdbcType=INTEGER},
+      register_time = #{registerTime,jdbcType=TIMESTAMP},
+      salt = #{salt,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>
