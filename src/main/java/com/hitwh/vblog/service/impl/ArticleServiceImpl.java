@@ -130,4 +130,9 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
     }
+
+    @Override
+    public void queryArticleId(Integer article_id) throws BusinessException {
+
+    }
 }
