@@ -19,7 +19,7 @@
     article_id, virtual_id, title, author_id, type_1, type_2, cover, hidden, content, 
     article_abstract, release_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from vblog_article
@@ -29,19 +29,19 @@
     delete from vblog_article
     where article_id = #{articleId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleDo">
-    insert into vblog_article (article_id, virtual_id, title, 
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleDo" useGeneratedKeys="true" keyProperty="articleId">
+    insert into vblog_article (article_id, virtual_id, title,
       author_id, type_1, type_2, 
       cover, hidden, content, 
       article_abstract, release_time, update_time
       )
-    values (#{articleId,jdbcType=INTEGER}, #{virtualId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+    values (#{articleId,jdbcType=INTEGER}, #{virtualId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
       #{authorId,jdbcType=INTEGER}, #{type1,jdbcType=INTEGER}, #{type2,jdbcType=INTEGER}, 
       #{cover,jdbcType=INTEGER}, #{hidden,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
       #{articleAbstract,jdbcType=VARCHAR}, #{releaseTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ArticleDo">
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ArticleDo" useGeneratedKeys="true" keyProperty="articleId">
     insert into vblog_article
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="articleId != null">

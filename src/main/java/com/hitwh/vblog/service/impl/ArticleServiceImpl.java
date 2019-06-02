@@ -1,8 +1,10 @@
 package com.hitwh.vblog.service.impl;
 
 import com.hitwh.vblog.bean.ArticleDo;
+import com.hitwh.vblog.bean.ArticleDynamicDo;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.mapper.ArticleDoMapper;
+import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.ArticleModel;
 import com.hitwh.vblog.response.BusinessException;
@@ -25,6 +27,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     ArticleDoMapper articleDoMapper;
     @Autowired
+    ArticleDynamicDoMapper articleDynamicDoMapper;
+    @Autowired
     ValidatorImpl validator;
 
     @Override
@@ -40,6 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         UserDo userDo = new UserDo();
         ArticleDo articleDo = new ArticleDo();
+        ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
 
         userDo = userDoMapper.selectByPrimaryKey(articleModel.getUid());
 
@@ -66,6 +71,26 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult  = articleDoMapper.insertSelective(articleDo);
 
         if (writeResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+        System.out.print(articleDo.getArticleId());
+        articleDynamicDo.setArticleId(articleDo.getArticleId());
+        articleDynamicDo.setVirtualId(virture);
+
+        writeResult = articleDynamicDoMapper.insertSelective(articleDynamicDo);
+
+        if (writeResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+    }
+
+    @Override
+    public void delete(Integer article_id) throws BusinessException {
+        if (article_id == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        Integer deleteResult = 0;
+        deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
+        if (deleteResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
     }

@@ -40,7 +40,8 @@ public class ArticleController extends BaseController {
     }
 
     @PostMapping("/delete")
-    public CommonReturnType deleteArticle(){
+    public CommonReturnType deleteArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
+        articleService.delete(articleInParam.getArticle_id());
         return CommonReturnType.create(EnumError.SUCCESS);
     }
 
