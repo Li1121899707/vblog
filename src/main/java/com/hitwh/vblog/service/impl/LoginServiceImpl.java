@@ -29,6 +29,7 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private TokenDoMapper tokenDoMapper;
 
+
     @Override
     public Map<String,Object> getLoginInfo(LoginModel loginModel) throws BusinessException {
 
@@ -64,9 +65,44 @@ public class LoginServiceImpl implements LoginService {
         tokenDo.setCreateTime(new Date(current));
         tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
         tokenDoMapper.insert(tokenDo);
+        returnMap.put("allowance",userDoFromTable.getAllowance());
         returnMap.put("userId",userDoFromTable.getUserId());
         returnMap.put("token",map.get("token").toString());
         return returnMap;
+    }
+
+    @Override
+    public Boolean tokenValidate(String key, Integer uid, long Request_time) {
+        TokenDo tokenDo = tokenDoMapper.selectByPrimaryKey(uid);
+        if(tokenDo == null)
+            return false;
+        String token = tokenDo.getToken();
+        int start = (int) (Request_time % 4);
+        char[] charToken = new char[8];
+        for(int i = 0; i < 8; i++){
+            charToken[i] = token.charAt(start);
+            start += 4;
+        }
+        String finalKey = charToken.toString() + uid.toString() + String.valueOf(Request_time);
+        String md5;
+
+        try {
+            md5 = MyMd5.md5Encryption(finalKey);
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (md5.equals(key)){
+            System.out.println("key success");
+            return true;
+        }
+
+        else{
+            System.out.println("key fail");
+            return false;
+        }
+
+
     }
 
 }

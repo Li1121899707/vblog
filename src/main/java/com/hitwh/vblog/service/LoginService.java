@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface LoginService {
     Map<String,Object> getLoginInfo(LoginModel loginModel) throws BusinessException;
-
+    Boolean tokenValidate(String key,Integer uid,long Request_time);
 }

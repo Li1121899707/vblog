@@ -1,6 +1,6 @@
 package com.hitwh.vblog.inparam;
 
-public class LoginInParam {
+public class LoginInParam extends  BaseInParam{
     private String account;
     private String pwd;
 

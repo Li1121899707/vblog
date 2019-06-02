@@ -8,6 +8,7 @@ import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.DemoService;
+import com.hitwh.vblog.service.LoginService;
 import com.hitwh.vblog.util.MyMd5;
 import com.hitwh.vblog.util.TimestampUtil;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,8 @@ public class DemoController extends BaseController{
     DemoService demoService;
     @Autowired
     TimestampUtil timestampUtil;
+    @Autowired
+    LoginService loginService;
 
     // @RequestBody 需要用对象形式接受，否则只能接受前端传来的所有json内容。不可以接受int等类型。
     // @RequestParam 不可以接受 json 数据。
@@ -48,10 +51,10 @@ public class DemoController extends BaseController{
     }
 
     @PostMapping("/md5")
-    public Object getMD5() throws BusinessException {
-
+    public void getMD5() throws BusinessException {
+        loginService.tokenValidate("1",1,10000);
         //return MyMd5.md5SaltEncryption("161110114");
-        return MyMd5.GetToken("zbh");
+        //return MyMd5.GetToken("zbh");
     }
 
     // 领域模型转化为可供前端显示的输出模型
