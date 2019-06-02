@@ -1,26 +1,26 @@
 package com.hitwh.vblog.bean;
 
 public class LabelDo {
-    private Integer lableId;
+    private Integer labelId;
 
-    private String lableName;
+    private String labelName;
 
     private String description;
 
-    public Integer getLableId() {
-        return lableId;
+    public Integer getLabelId() {
+        return labelId;
     }
 
-    public void setLableId(Integer lableId) {
-        this.lableId = lableId;
+    public void setLabelId(Integer labelId) {
+        this.labelId = labelId;
     }
 
-    public String getLableName() {
-        return lableName;
+    public String getLabelName() {
+        return labelName;
     }
 
-    public void setLableName(String lableName) {
-        this.lableName = lableName == null ? null : lableName.trim();
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
     }
 
     public String getDescription() {

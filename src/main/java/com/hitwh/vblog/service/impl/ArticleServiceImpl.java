@@ -1,5 +1,6 @@
 package com.hitwh.vblog.service.impl;
 
+import com.hitwh.vblog.bean.ArticleAndUserDo;
 import com.hitwh.vblog.bean.ArticleDo;
 import com.hitwh.vblog.bean.ArticleDynamicDo;
 import com.hitwh.vblog.bean.UserDo;
@@ -7,6 +8,7 @@ import com.hitwh.vblog.mapper.ArticleDoMapper;
 import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.ArticleModel;
+import com.hitwh.vblog.outparam.ArticleOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.ArticleService;
@@ -132,7 +134,27 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void queryArticleId(Integer article_id) throws BusinessException {
+    public ArticleOutParam queryArticleId(Integer article_id) throws BusinessException {
+        ArticleAndUserDo articleAndUserDo = new ArticleAndUserDo();
+        articleAndUserDo = articleDoMapper.selectSingleArticle(article_id);
+        if (articleAndUserDo == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        ArticleOutParam articleOutParam = new ArticleOutParam();
+        articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getVirtualId());
+        articleOutParam.setTitle(articleAndUserDo.getArticleDo().getTitle());
+        articleOutParam.setAuthor_id(articleAndUserDo.getArticleDo().getArticleId());
+        articleOutParam.setAuthor_nickname(articleAndUserDo.getUserDo().getNickname());
+        articleOutParam.setType_1(articleAndUserDo.getArticleDo().getType1());
+        articleOutParam.setType_2(articleAndUserDo.getArticleDo().getType2());
+        articleOutParam.setLabel_name1(articleAndUserDo.getLabelDo().getLabelName());//暂时只能返回一个标签
+        articleOutParam.setCover(null);//url在另一张表
+        articleOutParam.setHidden(articleAndUserDo.getArticleDo().getHidden());
+        articleOutParam.setContent(articleAndUserDo.getArticleDo().getContent());
+        articleOutParam.setArticleAbstract(articleAndUserDo.getArticleDo().getArticleAbstract());
+        articleOutParam.setRelease_time(1000);
+        articleOutParam.setThumb(articleAndUserDo.getArticleDynamicDo().getThumbNum());
+        articleOutParam.setReading(articleAndUserDo.getArticleDynamicDo().getReadingNum());
 
+        return articleOutParam;
     }
 }

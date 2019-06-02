@@ -1,7 +1,9 @@
 package com.hitwh.vblog.controller;
 
+import com.hitwh.vblog.bean.ArticleAndUserDo;
 import com.hitwh.vblog.inparam.ArticleInParam;
 import com.hitwh.vblog.model.ArticleModel;
+import com.hitwh.vblog.outparam.ArticleOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
@@ -49,8 +51,8 @@ public class ArticleController extends BaseController {
     }
 
     @PostMapping("/query_by_id")
-    public CommonReturnType queryArticleById(){
-        return CommonReturnType.create(EnumError.SUCCESS);
+    public CommonReturnType queryArticleById(@RequestBody ArticleInParam articleInParam) throws BusinessException{
+        return CommonReturnType.create(articleService.queryArticleId(articleInParam.getArticle_id()));
     }
 
     @PostMapping("/query_by_author")
