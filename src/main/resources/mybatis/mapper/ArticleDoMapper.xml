@@ -15,6 +15,25 @@
     <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="ArticleAndUserMap" type="com.hitwh.vblog.bean.ArticleAndUserDo">
+    <association property="userDo" javaType="com.hitwh.vblog.bean.UserDo" resultMap="UserMap"/>
+    <association property="articleDo" javaType="com.hitwh.vblog.bean.ArticleDo" resultMap="BaseResultMap" />
+    <association property="articleDynamicDo" javaType="com.hitwh.vblog.bean.ArticleDynamicDo" resultMap="ArticleDynamicMap" />
+    <association property="labelDo" javaType="com.hitwh.vblog.bean.LabelDo" resultMap="LabelMap" />
+  </resultMap>
+  <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+  </resultMap>
+  <resultMap id="ArticleDynamicMap" type="com.hitwh.vblog.bean.ArticleDynamicDo">
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="thumb_num" jdbcType="INTEGER" property="thumbNum" />
+    <result column="reading_num" jdbcType="INTEGER" property="readingNum" />
+  </resultMap>
+  <resultMap id="LabelMap" type="com.hitwh.vblog.bean.LabelDo">
+    <result column="label_id" jdbcType="INTEGER" property="labelId" />
+    <result column="label_name" jdbcType="VARCHAR" property="labelName" />
+  </resultMap>
   <sql id="Base_Column_List">
     article_id, virtual_id, title, author_id, type_1, type_2, cover, hidden, content, 
     article_abstract, release_time, update_time
@@ -25,6 +44,15 @@
     from vblog_article
     where article_id = #{articleId,jdbcType=INTEGER}
   </select>
+  <select id="selectSingleArticle" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
+    select vblog_article.article_id, vblog_article.virtual_id,  title, author_id, nickname, type_1,
+    type_2, label_name, cover, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num
+    from vblog_article, vblog_article_dynamic, vblog_user, vblog_label
+    where vblog_article.article_id = #{articleId}
+    and vblog_article.article_id = vblog_article_dynamic.article_id
+    and vblog_article.author_id = vblog_user.user_id
+    and (vblog_article.type_1 = vblog_label.label_id or vblog_article.type_2 = vblog_label.label_id)  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from vblog_article
     where article_id = #{articleId,jdbcType=INTEGER}

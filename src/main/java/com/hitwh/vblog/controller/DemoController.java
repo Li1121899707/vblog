@@ -9,6 +9,7 @@ import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.DemoService;
 import com.hitwh.vblog.service.LoginService;
+import com.hitwh.vblog.util.LoginRequired;
 import com.hitwh.vblog.util.MyMd5;
 import com.hitwh.vblog.util.TimestampUtil;
 import org.springframework.beans.BeanUtils;
@@ -50,11 +51,12 @@ public class DemoController extends BaseController{
         return CommonReturnType.create(demoOutParam);
     }
 
+
     @PostMapping("/md5")
-    public void getMD5() throws BusinessException {
-        loginService.tokenValidate("1",1,10000);
+    public Object getMD5() throws BusinessException {
+        //loginService.tokenValidate("1",1,10000);
         //return MyMd5.md5SaltEncryption("161110114");
-        //return MyMd5.GetToken("zbh");
+        return MyMd5.GetToken("zbh");
     }
 
     // 领域模型转化为可供前端显示的输出模型
@@ -68,18 +70,19 @@ public class DemoController extends BaseController{
     // 加@RequestBody可以使用json传递
     // 不加@RequestBody使用form传递
 
+    @LoginRequired
     @PostMapping("/register")
     public CommonReturnType demoRegister(@RequestBody DemoInParam demoInParam) throws BusinessException {
         // 构造Service层需要的领域模型类，即将传入参数对象转换为领域模型对象
-        DemoModel demoModel = new DemoModel();
-        demoModel.setUserName(demoInParam.getUserName());
-        demoModel.setUserPwd(demoInParam.getUserPwd());
-        demoModel.setUserDescription(demoInParam.getUserDescription());
-        Timestamp time=timestampUtil.getNowTime();
-        demoModel.setUserRegistTime(time);
-        demoService.demoRegister(demoModel);
-        // 直接返回添加成功的原因是：如果在任何一步添加失败，会直接抛出异常，不会到这一句
-        return CommonReturnType.create(EnumError.SUCCESS.getErrCode(), "添加成功");
+//        DemoModel demoModel = new DemoModel();
+//        demoModel.setUserName(demoInParam.getUserName());
+//        demoModel.setUserPwd(demoInParam.getUserPwd());
+//        demoModel.setUserDescription(demoInParam.getUserDescription());
+//        Timestamp time=timestampUtil.getNowTime();
+//        demoModel.setUserRegistTime(time);
+//        demoService.demoRegister(demoModel);
+//        // 直接返回添加成功的原因是：如果在任何一步添加失败，会直接抛出异常，不会到这一句
+        return CommonReturnType.success();
     }
 
 //    @RequestMapping("/query_all")

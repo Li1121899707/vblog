@@ -56,7 +56,6 @@ public class LoginServiceImpl implements LoginService {
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
             throw new BusinessException(EnumError.PASSWORD_ERROR);
 
-
         TokenDo tokenDo = new TokenDo();
         Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
         tokenDo.setUserId(userDoFromTable.getUserId());
@@ -83,7 +82,16 @@ public class LoginServiceImpl implements LoginService {
             charToken[i] = token.charAt(start);
             start += 4;
         }
-        String finalKey = charToken.toString() + uid.toString() + String.valueOf(Request_time);
+
+        System.out.println("token  " + token );
+        System.out.println("char  " + String.valueOf(charToken));
+        System.out.println("uid  " + uid);
+        System.out.println("request_time  " +String.valueOf(Request_time));
+
+        String finalKey = String.valueOf(charToken) + uid.toString() + String.valueOf(Request_time);
+
+        System.out.println("finalkey  " + finalKey);
+
         String md5;
 
         try {
@@ -92,6 +100,11 @@ public class LoginServiceImpl implements LoginService {
             e.printStackTrace();
             return false;
         }
+
+        System.out.println("key  " + key);
+        System.out.println("md5  " + md5);
+
+
         if (md5.equals(key)){
             System.out.println("key success");
             return true;
