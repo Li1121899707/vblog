@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/article")
 public class ArticleController extends BaseController {
-    
+
     @PostMapping("/write")
     public CommonReturnType writeArticle(){
         return CommonReturnType.create(EnumError.SUCCESS);
