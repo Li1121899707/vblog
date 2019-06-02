@@ -14,4 +14,7 @@ public interface UserDoMapper {
     int updateByPrimaryKeySelective(UserDo record);
 
     int updateByPrimaryKey(UserDo record);
+
+    UserDo selectIfLogin(UserDo userDo);
+
 }

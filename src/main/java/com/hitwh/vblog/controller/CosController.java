@@ -28,7 +28,7 @@ public class CosController {
         String fileName = multfile.getOriginalFilename();
         // 获取文件后缀
         String prefix=fileName.substring(fileName.lastIndexOf("."));
-        String virtualFileName = MyMd5.md5(fileName + System.currentTimeMillis()) +  prefix;
+        String virtualFileName = MyMd5.md5Encryption(fileName + System.currentTimeMillis()) +  prefix;
         // 用uuid作为文件名，防止生成的临时文件重复
         final File tempFile = File.createTempFile("imagesFile-"+System.currentTimeMillis(), prefix);
         // 将MultipartFile转为File
