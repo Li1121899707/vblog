@@ -48,8 +48,10 @@ public class DemoController extends BaseController{
     }
 
     @PostMapping("/md5")
-    public Object getMD5(){
-        return MyMd5.md5("123sbc");
+    public Object getMD5() throws BusinessException {
+
+        //return MyMd5.md5SaltEncryption("161110114");
+        return MyMd5.GetToken("zbh");
     }
 
     // 领域模型转化为可供前端显示的输出模型

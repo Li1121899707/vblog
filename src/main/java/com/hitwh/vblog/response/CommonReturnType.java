@@ -34,6 +34,14 @@ public class CommonReturnType {
         return returnType;
     }
 
+    public static CommonReturnType success(){
+        CommonReturnType returnType = new CommonReturnType();
+        returnType.setResponse_time(System.currentTimeMillis());
+        returnType.setCode(EnumError.SUCCESS.getErrCode());
+        returnType.setMsg(EnumError.SUCCESS.getErrMsg());
+        return returnType;
+    }
+
     public Integer getCode() {
         return code;
     }

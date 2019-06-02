@@ -13,6 +13,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+
 import static com.hitwh.vblog.util.TimestampUtil.getNowTime;
 
 @Service
@@ -42,8 +44,13 @@ public class RegisterServiceImpl implements RegisterService {
         userDo.setInterest1(0);
         userDo.setRegisterTime(TimestampUtil.getNowTime());
         userDo.setSalt(1001);
+        Integer registerResult = 0;
 
-        Integer registerResult = userDoMapper.insertSelective(userDo);
+        try {
+            registerResult  = userDoMapper.insertSelective(userDo);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+        }
 
         if (registerResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);

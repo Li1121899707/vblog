@@ -1,36 +1,64 @@
 package com.hitwh.vblog.util;
 
+import com.hitwh.vblog.response.BusinessException;
+import com.hitwh.vblog.response.EnumError;
 import org.springframework.util.DigestUtils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class MyMd5 {
 
-    public static String md52(String plainText) {
-        //定义一个字节数组
-        byte[] secretBytes = null;
+    public static String md5Encryption(String plainText) throws BusinessException {
+        String result = "";
         try {
-            // 生成一个MD5加密计算摘要
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            //对字符串进行加密
-            md.update(plainText.getBytes());
-            //获得加密后的数据
-            secretBytes = md.digest();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("没有md5这个算法！");
+            result = DigestUtils.md5DigestAsHex(plainText.getBytes());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.MD5_ERROR);
         }
-        //将加密后的数据转换为16进制数字
-        String md5code = new BigInteger(1, secretBytes).toString(16);// 16进制数字
-        // 如果生成数字未满32位，需要前面补0
-        for (int i = 0; i < 32 - md5code.length(); i++) {
-            md5code = "0" + md5code;
-        }
-        return md5code;
+        return result;
     }
 
-    public static String md5(String plainText) {
-        return DigestUtils.md5DigestAsHex(plainText.getBytes());
+    public static Map<String,Object> md5SaltEncryption(String plainText) throws BusinessException {
+        String result = "";
+        Random random = new Random(System.currentTimeMillis());
+        Integer salt = random.nextInt(8999) + 1000;
+        try {
+            String md5salt = DigestUtils.md5DigestAsHex(salt.toString().getBytes());
+            String md5pwd = DigestUtils.md5DigestAsHex(plainText.getBytes());
+            result = DigestUtils.md5DigestAsHex((md5pwd + md5salt).getBytes());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.MD5_ERROR);
+        }
+        System.out.println(salt);
+        Map<String,Object> map = new HashMap<>();
+        map.put("encryption",result);
+        map.put("salt", salt);
+        return map;
+    }
+    public static Map<String,Object> GetToken(String plainText) throws BusinessException {
+        String token = "";
+        long currentTime = System.currentTimeMillis();
+        long expiryTime = currentTime + 21600000;
+        try {
+            String currentTimeMD5 = DigestUtils.md5DigestAsHex(String.valueOf(currentTime).getBytes());
+            String plainTextMD5 = DigestUtils.md5DigestAsHex(plainText.getBytes());
+            token = DigestUtils.md5DigestAsHex((currentTimeMD5 + plainTextMD5).getBytes());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.MD5_ERROR);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",token);
+        map.put("currentTime", currentTime);
+        map.put("expiryTime",expiryTime);
+        System.out.println(currentTime);
+        System.out.println(expiryTime);
+        return map;
     }
 }
