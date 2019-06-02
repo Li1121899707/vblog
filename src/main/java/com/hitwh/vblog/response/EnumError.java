@@ -12,7 +12,11 @@ public enum EnumError implements CommonError {
     PASSWORD_ERROR(1003,"密码错误"),
     MD5_ERROR(4003, "MD5加密错误"),
     TOKEN_ERROR(2, "Token 错误"),
-    TOKEN_OVERDUE(3,"Token 已过期")
+    TOKEN_OVERDUE(3,"Token 已过期"),
+    TOKEN_UID_NOT_FOUND(4, "验证 Token，用户ID参数错误"),
+    TOKEN_TIME_NOT_FOUND(5, "验证 Token，时间参数错误"),
+    TOKEN_KEY_NOT_FOUND(6, "验证 Token ，key参数错误"),
+    TOKEN_VALIDATE_PARAM_NOT_FOUND(7, "验证Token， 参数未传入")
     ;
 
     private int errCode;
