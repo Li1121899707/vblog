@@ -33,10 +33,44 @@
         </javaClientGenerator>
 
         <!--生成对应表及类名-->
-        <table tableName="demo_user" domainObjectName="DemoUserDo" enableCountByExample="false" enableUpdateByExample="false"
+<!--        <table tableName="demo_user" domainObjectName="DemoUserDo" enableCountByExample="false" enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+<!--        <table tableName="demo_user_pwd" domainObjectName="DemoUserPwdDo" enableCountByExample="false" enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+
+        <table tableName="vblog_article" domainObjectName="ArticleDo" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="demo_user_pwd" domainObjectName="DemoUserPwdDo" enableCountByExample="false" enableUpdateByExample="false"
+
+        <table tableName="vblog_article_dynamic" domainObjectName="ArticleDynamicDo" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_collection_record" domainObjectName="CollectionRecordDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_comment" domainObjectName="CommentDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_concern_record" domainObjectName="ConcernRecordDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_label" domainObjectName="LabelDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_report_record" domainObjectName="ReportRecordDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_resource" domainObjectName="ResourceDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_thumb_record" domainObjectName="ThumbRecordDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_token" domainObjectName="TokenDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+        <table tableName="vblog_user" domainObjectName="UserDo" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+
     </context>
 
 </generatorConfiguration>

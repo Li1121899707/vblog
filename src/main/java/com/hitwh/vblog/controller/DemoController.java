@@ -25,9 +25,16 @@ public class DemoController extends BaseController{
     @Autowired
     TimestampUtil timestampUtil;
 
-    @RequestMapping("/info")
-    public CommonReturnType getUserInfo(@RequestParam(value = "id") Integer id) throws BusinessException{
-        DemoModel demoModel = demoService.getDemoInfo(id);
+    // @RequestBody 需要用对象形式接受，否则只能接受前端传来的所有json内容。不可以接受int等类型。
+    // @RequestParam 不可以接受 json 数据。
+    //'Content-Type': 'application/x-www-form-urlencoded' 可以使用 @RequestParam
+    /*headers:{
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },*/
+
+    @PostMapping("/info")
+    public CommonReturnType getUserInfo(@RequestBody DemoInParam demoInParam) throws BusinessException{
+        DemoModel demoModel = demoService.getDemoInfo(demoInParam.getId());
 
         // 抛出用户不存在异常
         if(demoModel == null)
@@ -47,9 +54,11 @@ public class DemoController extends BaseController{
         return demoOutParam;
     }
 
+    // 加@RequestBody可以使用json传递
+    // 不加@RequestBody使用form传递
 
-    @RequestMapping("/register")
-    public CommonReturnType demoRegister(DemoInParam demoInParam) throws BusinessException {
+    @PostMapping("/register")
+    public CommonReturnType demoRegister(@RequestBody DemoInParam demoInParam) throws BusinessException {
         // 构造Service层需要的领域模型类，即将传入参数对象转换为领域模型对象
         DemoModel demoModel = new DemoModel();
         demoModel.setUserName(demoInParam.getUserName());
