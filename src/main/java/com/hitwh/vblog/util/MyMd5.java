@@ -17,6 +17,7 @@ public class MyMd5 {
 
     public static String md5Encryption(String plainText) throws BusinessException {
         String result = "";
+        System.out.println("text  " + plainText );
         try {
             result = DigestUtils.md5DigestAsHex(plainText.getBytes());
         }catch (Exception e){
@@ -42,6 +43,8 @@ public class MyMd5 {
         map.put("salt", salt);
         return map;
     }
+
+
     public static Map<String,Object> GetToken(String plainText) throws BusinessException {
         String token = "";
         long currentTime = System.currentTimeMillis();

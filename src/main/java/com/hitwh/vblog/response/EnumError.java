@@ -10,9 +10,9 @@ public enum EnumError implements CommonError {
     DATABASE_INSERT_ERROR(2001, "数据库添加失败"),
     UNKNOWN_ERROR(4002, "未知错误"),
     PASSWORD_ERROR(1003,"密码错误"),
-    MD5_ERROR(4003, "MD5加密错误")
-
-
+    MD5_ERROR(4003, "MD5加密错误"),
+    TOKEN_ERROR(2, "Token 错误"),
+    TOKEN_OVERDUE(3,"Token 已过期")
     ;
 
     private int errCode;
