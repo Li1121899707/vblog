@@ -19,14 +19,14 @@
     <result column="interest_1" jdbcType="INTEGER" property="interest1" />
     <result column="interest_2" jdbcType="INTEGER" property="interest2" />
     <result column="interest_3" jdbcType="INTEGER" property="interest3" />
-    <result column="identity" jdbcType="INTEGER" property="identity" />
+    <result column="allowance" jdbcType="INTEGER" property="allowance" />
     <result column="ban" jdbcType="INTEGER" property="ban" />
     <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
     <result column="salt" jdbcType="INTEGER" property="salt" />
   </resultMap>
   <sql id="Base_Column_List">
     user_id, account, pwd, nickname, email, phone, img, signature, interest_1, interest_2, 
-    interest_3, identity, ban, register_time, salt
+    interest_3, allowance, ban, register_time, salt
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -42,13 +42,13 @@
     insert into vblog_user (user_id, account, pwd, 
       nickname, email, phone, 
       img, signature, interest_1, 
-      interest_2, interest_3, identity, 
+      interest_2, interest_3, allowance, 
       ban, register_time, salt
       )
     values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
       #{nickname,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{img,jdbcType=INTEGER}, #{signature,jdbcType=VARCHAR}, #{interest1,jdbcType=INTEGER}, 
-      #{interest2,jdbcType=INTEGER}, #{interest3,jdbcType=INTEGER}, #{identity,jdbcType=INTEGER}, 
+      #{interest2,jdbcType=INTEGER}, #{interest3,jdbcType=INTEGER}, #{allowance,jdbcType=INTEGER}, 
       #{ban,jdbcType=INTEGER}, #{registerTime,jdbcType=TIMESTAMP}, #{salt,jdbcType=INTEGER}
       )
   </insert>
@@ -88,8 +88,8 @@
       <if test="interest3 != null">
         interest_3,
       </if>
-      <if test="identity != null">
-        identity,
+      <if test="allowance != null">
+        allowance,
       </if>
       <if test="ban != null">
         ban,
@@ -135,8 +135,8 @@
       <if test="interest3 != null">
         #{interest3,jdbcType=INTEGER},
       </if>
-      <if test="identity != null">
-        #{identity,jdbcType=INTEGER},
+      <if test="allowance != null">
+        #{allowance,jdbcType=INTEGER},
       </if>
       <if test="ban != null">
         #{ban,jdbcType=INTEGER},
@@ -182,8 +182,8 @@
       <if test="interest3 != null">
         interest_3 = #{interest3,jdbcType=INTEGER},
       </if>
-      <if test="identity != null">
-        identity = #{identity,jdbcType=INTEGER},
+      <if test="allowance != null">
+        allowance = #{allowance,jdbcType=INTEGER},
       </if>
       <if test="ban != null">
         ban = #{ban,jdbcType=INTEGER},
@@ -209,7 +209,7 @@
       interest_1 = #{interest1,jdbcType=INTEGER},
       interest_2 = #{interest2,jdbcType=INTEGER},
       interest_3 = #{interest3,jdbcType=INTEGER},
-      identity = #{identity,jdbcType=INTEGER},
+      allowance = #{allowance,jdbcType=INTEGER},
       ban = #{ban,jdbcType=INTEGER},
       register_time = #{registerTime,jdbcType=TIMESTAMP},
       salt = #{salt,jdbcType=INTEGER}
