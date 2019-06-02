@@ -35,8 +35,11 @@ public class ArticleController extends BaseController {
     }
 
     @PostMapping("/update")
-    public CommonReturnType updateArticle(){
-        return CommonReturnType.create(EnumError.SUCCESS);
+    public CommonReturnType updateArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
+        ArticleModel articleModel = new ArticleModel();
+        BeanUtils.copyProperties(articleInParam, articleModel);
+        articleService.update(articleModel);
+        return CommonReturnType.success();
     }
 
     @PostMapping("/delete")

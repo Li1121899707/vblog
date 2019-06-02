@@ -73,7 +73,6 @@ public class ArticleServiceImpl implements ArticleService {
         if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
-        System.out.print(articleDo.getArticleId());
         articleDynamicDo.setArticleId(articleDo.getArticleId());
         articleDynamicDo.setVirtualId(virture);
 
@@ -91,6 +90,43 @@ public class ArticleServiceImpl implements ArticleService {
         Integer deleteResult = 0;
         deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
         if (deleteResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+    }
+
+    @Override
+    public void update(ArticleModel articleModel) throws BusinessException {
+        if (articleModel.getArticle_id() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        ArticleDo articleDoTest = new ArticleDo();
+        ArticleDo articleDo = new ArticleDo();
+        articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
+        if (articleDoTest == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        ValidationResult result = validator.validate(articleModel);
+        if(result.isHasErrors()){
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+        }
+
+        articleDo.setArticleId(articleModel.getArticle_id());
+        articleDo.setVirtualId(null);
+        articleDo.setTitle(articleModel.getTitle());
+        articleDo.setAuthorId(articleModel.getUid());
+        articleDo.setType1(articleModel.getType_1());
+        if (articleModel.getType_2() != null)
+            articleDo.setType2(articleModel.getType_2());
+        articleDo.setCover(articleModel.getCover());
+        articleDo.setHidden(articleModel.getHidden());
+        articleDo.setContent(articleModel.getContent());
+        articleDo.setArticleAbstract(articleModel.getArticleAbstract());
+        Timestamp timeStamp = TimestampUtil.getNowTime();
+        articleDo.setUpdateTime(timeStamp);
+
+        Integer writeResult = 0;
+
+        writeResult  = articleDoMapper.updateByPrimaryKeySelective(articleDo);
+
+        if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
     }
