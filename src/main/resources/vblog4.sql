@@ -225,7 +225,7 @@ CREATE TABLE `vblog_user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `account` varchar(20) NOT NULL,
   `pwd` varchar(32) NOT NULL,
-  `nickname` varchar(50) NOT NULL,
+  `nickname` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `signature` varchar(300) DEFAULT NULL,
@@ -233,9 +233,9 @@ CREATE TABLE `vblog_user` (
   `ban` int(11) NOT NULL DEFAULT '0',
   `register_time` datetime NOT NULL,
   `salt` int(11) NOT NULL,
-  `avatar_lg` text NOT NULL,
-  `avatar_md` text NOT NULL,
-  `avatar_sm` text NOT NULL,
+  `avatar_lg` text,
+  `avatar_md` text,
+  `avatar_sm` text,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `account` (`account`,`email`,`phone`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
