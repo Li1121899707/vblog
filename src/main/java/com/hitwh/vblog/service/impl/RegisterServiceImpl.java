@@ -52,6 +52,9 @@ public class RegisterServiceImpl implements RegisterService {
         userDo.setInterest1(0);
         userDo.setRegisterTime(TimestampUtil.getNowTime());
         userDo.setSalt(salt);
+        userDo.setAvatarLg(registerModel.getAvatarLg());
+        userDo.setAvatarMd(registerModel.getAvatarMd());
+        userDo.setAvatarSm(registerModel.getAvatarSm());
         Integer registerResult = 0;
 
         try {

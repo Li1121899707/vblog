@@ -20,6 +20,7 @@ public interface ArticleDoMapper {
                                                  @Param("num") Integer num,
                                                  @Param("typeId") Integer typeId);
 
+
     int selectArticleNumByUserId(@Param("userId")Integer userId);
 
     int selectArticleNumByTitle(@Param("title")String title);

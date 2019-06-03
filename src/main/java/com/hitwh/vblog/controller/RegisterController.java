@@ -26,7 +26,14 @@ public class RegisterController extends BaseController {
     public CommonReturnType register(@RequestBody RegisterInParam registerInParam) throws BusinessException {
         RegisterModel registerModel = new RegisterModel();
         //将传入参数转换为Model
-        BeanUtils.copyProperties(registerInParam, registerModel);
+        registerModel.setAccount(registerInParam.getAccount());
+        registerModel.setEmail(registerInParam.getEmail());
+        registerModel.setNickname(registerInParam.getNickname());
+        registerModel.setPhone(registerInParam.getPhone());
+        registerModel.setPwd(registerInParam.getPwd());
+        registerModel.setAvatarLg(registerInParam.getAvatar_lg());
+        registerModel.setAvatarMd(registerInParam.getAvatar_md());
+        registerModel.setAvatarSm(registerInParam.getAvatar_sm());
         //执行Register
         registerService.register(registerModel);
         //返回执行结果
