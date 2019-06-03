@@ -3,20 +3,27 @@ package com.hitwh.vblog.outparam;
 import java.util.Date;
 
 public class CommentOutParam {
-    private Integer articleId;
+    private Integer article_id;
+
     private String comment;
-    private Integer userId;
-    private String userNickname;
-    private Integer parentCommentId;
-    private Date commentTime;
+
+    private Integer user_id;
+
+    private String user_nickname;
+
+    private Integer parent_comment_id;
+
+    private Date comment_time;
+
+    private String avatar_sm;
 
 
-    public Integer getArticleId() {
-        return articleId;
+    public Integer getArticle_id() {
+        return article_id;
     }
 
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
+    public void setArticle_id(Integer article_id) {
+        this.article_id = article_id;
     }
 
     public String getComment() {
@@ -27,37 +34,43 @@ public class CommentOutParam {
         this.comment = comment;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getUser_id() {
+        return user_id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
-    public String getUserNickname() {
-        return userNickname;
+    public String getUser_nickname() {
+        return user_nickname;
     }
 
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
+    public void setUser_nickname(String user_nickname) {
+        this.user_nickname = user_nickname;
     }
 
-    public Integer getParentCommentId() {
-        return parentCommentId;
+    public Integer getParent_comment_id() {
+        return parent_comment_id;
     }
 
-    public void setParentCommentId(Integer parentCommentId) {
-        this.parentCommentId = parentCommentId;
+    public void setParent_comment_id(Integer parent_comment_id) {
+        this.parent_comment_id = parent_comment_id;
     }
 
-    public Date getCommentTime() {
-        return commentTime;
+    public Date getComment_time() {
+        return comment_time;
     }
 
-    public void setCommentTime(Date commentTime) {
-        this.commentTime = commentTime;
+    public void setComment_time(Date comment_time) {
+        this.comment_time = comment_time;
     }
 
+    public String getAvatar_sm() {
+        return avatar_sm;
+    }
 
+    public void setAvatar_sm(String avatar_sm) {
+        this.avatar_sm = avatar_sm;
+    }
 }

@@ -44,12 +44,12 @@ public class CommentController extends BaseController{
         //将通过service获取的数据换成要输出的形式
         for(int i =0;i < comAndUserDos.size();i++){
             CommentOutParam c = new CommentOutParam();
-            c.setUserId(comAndUserDos.get(i).getUserDo().getUserId());
-            c.setParentCommentId(comAndUserDos.get(i).getCommentDo().getParentCommentId());
-            c.setCommentTime(comAndUserDos.get(i).getCommentDo().getCommentTime());
+            c.setUser_id(comAndUserDos.get(i).getUserDo().getUserId());
+            c.setParent_comment_id(comAndUserDos.get(i).getCommentDo().getParentCommentId());
+            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime());
             c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
-            c.setUserNickname(comAndUserDos.get(i).getUserDo().getNickname());
-            c.setArticleId(comAndUserDos.get(i).getCommentDo().getArticleId());
+            c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
+            c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
             commentOutParams.add(c);
         }
         //判断返回给前端的end的值
@@ -80,12 +80,12 @@ public class CommentController extends BaseController{
         //将通过service获取的数据换成要输出的形式
         for(int i =0;i < comAndUserDos.size();i++){
             CommentOutParam c = new CommentOutParam();
-            c.setUserId(comAndUserDos.get(i).getUserDo().getUserId());
-            c.setParentCommentId(comAndUserDos.get(i).getCommentDo().getParentCommentId());
-            c.setCommentTime(comAndUserDos.get(i).getCommentDo().getCommentTime());
+            c.setUser_id(comAndUserDos.get(i).getUserDo().getUserId());
+            c.setParent_comment_id(comAndUserDos.get(i).getCommentDo().getParentCommentId());
+            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime());
             c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
-            c.setUserNickname(comAndUserDos.get(i).getUserDo().getNickname());
-            c.setArticleId(comAndUserDos.get(i).getCommentDo().getArticleId());
+            c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
+            c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
             commentOutParams.add(c);
         }
         //通过查询的条数判断返回给前端的end的值

@@ -53,12 +53,12 @@ public class CommentServiceImpl implements CommentService {
             return null;
         //转换成commentoutparam
         CommentOutParam commentOutParam = new CommentOutParam();
-        commentOutParam.setArticleId(comAndUserDo.getCommentDo().getArticleId());
-        commentOutParam.setUserNickname(comAndUserDo.getUserDo().getNickname());
+        commentOutParam.setArticle_id(comAndUserDo.getCommentDo().getArticleId());
+        commentOutParam.setUser_nickname(comAndUserDo.getUserDo().getNickname());
         commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
-        commentOutParam.setCommentTime(comAndUserDo.getCommentDo().getCommentTime());
-        commentOutParam.setUserId(comAndUserDo.getUserDo().getUserId());
-        commentOutParam.setParentCommentId(comAndUserDo.getCommentDo().getParentCommentId());
+        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime());
+        commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
+        commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
 
         //判断父评论是否被隐藏
         if(comAndUserDo.getCommentDo().getCommentHide() == 1)
