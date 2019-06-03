@@ -15,8 +15,6 @@ public class UserDo {
 
     private String phone;
 
-    private Integer img;
-
     private String signature;
 
     private Integer interest1;
@@ -32,6 +30,12 @@ public class UserDo {
     private Date registerTime;
 
     private Integer salt;
+
+    private String avatarLg;
+
+    private String avatarMd;
+
+    private String avatarSm;
 
     public Integer getUserId() {
         return userId;
@@ -79,14 +83,6 @@ public class UserDo {
 
     public void setPhone(String phone) {
         this.phone = phone == null ? null : phone.trim();
-    }
-
-    public Integer getImg() {
-        return img;
-    }
-
-    public void setImg(Integer img) {
-        this.img = img;
     }
 
     public String getSignature() {
@@ -151,5 +147,29 @@ public class UserDo {
 
     public void setSalt(Integer salt) {
         this.salt = salt;
+    }
+
+    public String getAvatarLg() {
+        return avatarLg;
+    }
+
+    public void setAvatarLg(String avatarLg) {
+        this.avatarLg = avatarLg;
+    }
+
+    public String getAvatarMd() {
+        return avatarMd;
+    }
+
+    public void setAvatarMd(String avatarMd) {
+        this.avatarMd = avatarMd;
+    }
+
+    public String getAvatarSm() {
+        return avatarSm;
+    }
+
+    public void setAvatarSm(String avatarSm) {
+        this.avatarSm = avatarSm;
     }
 }

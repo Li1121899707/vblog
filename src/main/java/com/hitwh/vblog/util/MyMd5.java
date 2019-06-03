@@ -48,6 +48,7 @@ public class MyMd5 {
     public static Map<String,Object> GetToken(String plainText) throws BusinessException {
         String token = "";
         long currentTime = System.currentTimeMillis();
+        System.out.println("currentTime is" + currentTime);
         long expiryTime = currentTime + 21600000;
         try {
             String currentTimeMD5 = DigestUtils.md5DigestAsHex(String.valueOf(currentTime).getBytes());

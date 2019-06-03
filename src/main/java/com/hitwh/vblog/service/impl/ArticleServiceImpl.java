@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -139,6 +141,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleAndUserDo = articleDoMapper.selectSingleArticle(article_id);
         if (articleAndUserDo == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
         ArticleOutParam articleOutParam = new ArticleOutParam();
         articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getVirtualId());
         articleOutParam.setTitle(articleAndUserDo.getArticleDo().getTitle());
@@ -147,14 +150,41 @@ public class ArticleServiceImpl implements ArticleService {
         articleOutParam.setType_1(articleAndUserDo.getArticleDo().getType1());
         articleOutParam.setType_2(articleAndUserDo.getArticleDo().getType2());
         articleOutParam.setLabel_name1(articleAndUserDo.getLabelDo().getLabelName());//暂时只能返回一个标签
-        articleOutParam.setCover(null);//url在另一张表
+        articleOutParam.setCover(articleAndUserDo.getResourceDo().getUrl());//另一张表的url字段
         articleOutParam.setHidden(articleAndUserDo.getArticleDo().getHidden());
         articleOutParam.setContent(articleAndUserDo.getArticleDo().getContent());
         articleOutParam.setArticleAbstract(articleAndUserDo.getArticleDo().getArticleAbstract());
-        articleOutParam.setRelease_time(1000);
+        articleOutParam.setRelease_time(articleAndUserDo.getArticleDo().getReleaseTime().getTime());//用getTime将Date转为long型
         articleOutParam.setThumb(articleAndUserDo.getArticleDynamicDo().getThumbNum());
         articleOutParam.setReading(articleAndUserDo.getArticleDynamicDo().getReadingNum());
 
         return articleOutParam;
+    }
+
+    @Override
+    public Map<String, Object> selectArticleById(Integer start, Integer num, Integer userId) {
+        Map<String,Object> map = new HashMap<>();
+        int sum = articleDoMapper.selectArticleNumByUserId(userId);
+        map.put("sum", sum);
+        map.put("list", articleDoMapper.selectArticleByUserId(start, num, userId));
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> selectArticleByType(Integer start, Integer num, Integer typeId) {
+        Map<String,Object> map = new HashMap<>();
+        int sum = articleDoMapper.selectArticleNumByType(typeId);
+        map.put("sum", sum);
+        map.put("list", articleDoMapper.selectArticleByType(start, num, typeId));
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> selectArticleByTitle(Integer start, Integer num, String title) {
+        Map<String,Object> map = new HashMap<>();
+        int sum = articleDoMapper.selectArticleNumByTitle(title);
+        map.put("sum", sum);
+        map.put("list", articleDoMapper.selectArticleByTitle(start, num, title));
+        return map;
     }
 }

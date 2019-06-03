@@ -20,6 +20,7 @@
     <association property="articleDo" javaType="com.hitwh.vblog.bean.ArticleDo" resultMap="BaseResultMap" />
     <association property="articleDynamicDo" javaType="com.hitwh.vblog.bean.ArticleDynamicDo" resultMap="ArticleDynamicMap" />
     <association property="labelDo" javaType="com.hitwh.vblog.bean.LabelDo" resultMap="LabelMap" />
+    <association property="resourceDo" javaType="com.hitwh.vblog.bean.ResourceDo" resultMap="ResourceMap"/>
   </resultMap>
   <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
     <result column="user_id" jdbcType="INTEGER" property="userId" />
@@ -34,6 +35,10 @@
     <result column="label_id" jdbcType="INTEGER" property="labelId" />
     <result column="label_name" jdbcType="VARCHAR" property="labelName" />
   </resultMap>
+  <resultMap id="ResourceMap" type="com.hitwh.vblog.bean.ResourceDo">
+    <result column="resource_id" jdbcType="INTEGER" property="resourceId"/>
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
   <sql id="Base_Column_List">
     article_id, virtual_id, title, author_id, type_1, type_2, cover, hidden, content, 
     article_abstract, release_time, update_time
@@ -44,15 +49,84 @@
     from vblog_article
     where article_id = #{articleId,jdbcType=INTEGER}
   </select>
+  <select id="selectArticleNumByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_article
+    where author_id = #{userId}
+  </select>
+    <select id="selectArticleByUserId" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
+    select vblog_article.article_id, vblog_article.virtual_id,  title, author_id, nickname, type_1,
+    type_2, label_name, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num, url
+    from vblog_article
+    left join vblog_resource
+    on vblog_article.cover = vblog_resource.resource_id
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+    left join vblog_label
+    on (vblog_article.type_1 = vblog_label.label_id or vblog_article.type_2 = vblog_label.label_id)
+    where vblog_user.user_id = #{userId}
+    limit #{start} ,#{num}
+  </select>
+  <select id="selectArticleNumByTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_article
+    where title = #{title}
+  </select>
+  <select id="selectArticleByTitle" resultMap="ArticleAndUserMap">
+    select vblog_article.article_id, vblog_article.virtual_id,  title, author_id, nickname, type_1,
+    type_2, label_name, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num, url
+    from vblog_article
+    left join vblog_resource
+    on vblog_article.cover = vblog_resource.resource_id
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+    left join vblog_label
+    on (vblog_article.type_1 = vblog_label.label_id or vblog_article.type_2 = vblog_label.label_id)
+    where vblog_article.title = #{title}
+    limit #{start} ,#{num}
+  </select>
+  <select id="selectArticleNumByType" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_article
+    where type_1 = #{typeId}
+  </select>
+  <select id="selectArticleByType" resultMap="ArticleAndUserMap">
+    select vblog_article.article_id, vblog_article.virtual_id,  title, author_id, nickname, type_1,
+    type_2, label_name, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num, url
+    from vblog_article
+    left join vblog_resource
+    on vblog_article.cover = vblog_resource.resource_id
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+    left join vblog_label
+    on (vblog_article.type_1 = vblog_label.label_id or vblog_article.type_2 = vblog_label.label_id)
+    where vblog_article.type_1 = #{typeId}
+    limit #{start} ,#{num}
+  </select>
   <select id="selectSingleArticle" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id,  title, author_id, nickname, type_1,
-    type_2, label_name, cover, hidden, content, article_abstract,
-    release_time, reading_num, thumb_num
-    from vblog_article, vblog_article_dynamic, vblog_user, vblog_label
+    type_2, label_name, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num, url
+    from vblog_article
+    left join vblog_resource
+    on vblog_article.cover = vblog_resource.resource_id
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+    left join vblog_label
+    on (vblog_article.type_1 = vblog_label.label_id or vblog_article.type_2 = vblog_label.label_id)
     where vblog_article.article_id = #{articleId}
-    and vblog_article.article_id = vblog_article_dynamic.article_id
-    and vblog_article.author_id = vblog_user.user_id
-    and (vblog_article.type_1 = vblog_label.label_id or vblog_article.type_2 = vblog_label.label_id)  </select>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from vblog_article
     where article_id = #{articleId,jdbcType=INTEGER}
