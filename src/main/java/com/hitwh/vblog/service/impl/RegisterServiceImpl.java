@@ -1,7 +1,9 @@
 package com.hitwh.vblog.service.impl;
 
 import com.hitwh.vblog.bean.UserDo;
+import com.hitwh.vblog.bean.UserInterestDo;
 import com.hitwh.vblog.mapper.UserDoMapper;
+import com.hitwh.vblog.mapper.UserInterestDoMapper;
 import com.hitwh.vblog.model.RegisterModel;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
@@ -28,6 +30,8 @@ public class RegisterServiceImpl implements RegisterService {
     private UserDoMapper userDoMapper;
     @Autowired
     private ValidatorImpl validator;
+    @Autowired
+    private UserInterestDoMapper userInterestDoMapper;
 
     @Override
     public void register(RegisterModel registerModel) throws BusinessException {
@@ -43,6 +47,7 @@ public class RegisterServiceImpl implements RegisterService {
         Map password = new HashMap();
         password = MyMd5.md5SaltEncryption(registerModel.getPwd());
         int salt = (Integer) password.get("salt");
+
         UserDo userDo = new UserDo();
         userDo.setAccount(registerModel.getAccount());
         userDo.setPwd(password.get("encryption").toString());
@@ -52,19 +57,38 @@ public class RegisterServiceImpl implements RegisterService {
         userDo.setInterest1(0);
         userDo.setRegisterTime(TimestampUtil.getNowTime());
         userDo.setSalt(salt);
-        userDo.setAvatarLg(registerModel.getAvatarLg());
-        userDo.setAvatarMd(registerModel.getAvatarMd());
-        userDo.setAvatarSm(registerModel.getAvatarSm());
-        Integer registerResult = 0;
+        if(registerModel.getAvatarLg() != null)
+            userDo.setAvatarLg(registerModel.getAvatarLg());
+        if(registerModel.getAvatarMd() != null)
+            userDo.setAvatarMd(registerModel.getAvatarMd());
+        if(registerModel.getAvatarSm() != null)
+            userDo.setAvatarSm(registerModel.getAvatarSm());
 
-        try {
-            registerResult  = userDoMapper.insertSelective(userDo);
-        }catch (Exception e){
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
-        }
+        Integer registerResult = 0;
+        registerResult  = userDoMapper.insertSelective(userDo);
 
         if (registerResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
+        Integer uid = userDo.getUserId();
+
+        if(registerModel.getInterest1() != null || registerModel.getInterest1() == 0){
+            UserInterestDo userInterestDo = new UserInterestDo();
+            userInterestDo.setUserId(uid);
+            userInterestDo.setLabelId(registerModel.getInterest1());
+            userInterestDoMapper.insertSelective(userInterestDo);
+        }
+        if(registerModel.getInterest2() != null || registerModel.getInterest2() == 0){
+            UserInterestDo userInterestDo = new UserInterestDo();
+            userInterestDo.setUserId(uid);
+            userInterestDo.setLabelId(registerModel.getInterest2());
+            userInterestDoMapper.insertSelective(userInterestDo);
+        }
+        if(registerModel.getInterest3() != null || registerModel.getInterest3() == 0){
+            UserInterestDo userInterestDo = new UserInterestDo();
+            userInterestDo.setUserId(uid);
+            userInterestDo.setLabelId(registerModel.getInterest3());
+            userInterestDoMapper.insertSelective(userInterestDo);
+        }
     }
 }

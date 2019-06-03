@@ -24,6 +24,13 @@ public class RegisterModel {
 
     private String avatarSm;
 
+    private Integer interest1;
+
+    private Integer interest2;
+
+    private Integer interest3;
+
+
     public String getAccount() {
         return account;
     }
@@ -86,5 +93,29 @@ public class RegisterModel {
 
     public void setAvatarSm(String avatarSm) {
         this.avatarSm = avatarSm;
+    }
+
+    public Integer getInterest1() {
+        return interest1;
+    }
+
+    public void setInterest1(Integer interest1) {
+        this.interest1 = interest1;
+    }
+
+    public Integer getInterest2() {
+        return interest2;
+    }
+
+    public void setInterest2(Integer interest2) {
+        this.interest2 = interest2;
+    }
+
+    public Integer getInterest3() {
+        return interest3;
+    }
+
+    public void setInterest3(Integer interest3) {
+        this.interest3 = interest3;
     }
 }

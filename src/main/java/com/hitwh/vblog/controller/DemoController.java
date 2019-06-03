@@ -1,6 +1,7 @@
 package com.hitwh.vblog.controller;
 
 import com.hitwh.vblog.inparam.DemoInParam;
+import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.DemoModel;
 import com.hitwh.vblog.outparam.DemoOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -29,6 +30,9 @@ public class DemoController extends BaseController{
     TimestampUtil timestampUtil;
     @Autowired
     LoginService loginService;
+
+    @Autowired
+    UserDoMapper userDoMapper;
 
     // @RequestBody 需要用对象形式接受，否则只能接受前端传来的所有json内容。不可以接受int等类型。
     // @RequestParam 不可以接受 json 数据。
@@ -89,4 +93,9 @@ public class DemoController extends BaseController{
 //    public CommonReturnType queryAll(){
 //        return CommonReturnType.create(demoService.queryAll());
 //    }
+
+    @RequestMapping("/userinfoselect")
+    public CommonReturnType select(){
+        return CommonReturnType.create(userDoMapper.selectByPrimaryKey(1));
+    }
 }

@@ -50,7 +50,7 @@ public class UserDo {
     }
 
     public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
+        this.account = account;
     }
 
     public String getPwd() {
@@ -58,7 +58,7 @@ public class UserDo {
     }
 
     public void setPwd(String pwd) {
-        this.pwd = pwd == null ? null : pwd.trim();
+        this.pwd = pwd;
     }
 
     public String getNickname() {
@@ -66,7 +66,7 @@ public class UserDo {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
+        this.nickname = nickname;
     }
 
     public String getEmail() {
@@ -74,7 +74,7 @@ public class UserDo {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getPhone() {
@@ -82,7 +82,7 @@ public class UserDo {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getSignature() {
@@ -90,7 +90,7 @@ public class UserDo {
     }
 
     public void setSignature(String signature) {
-        this.signature = signature == null ? null : signature.trim();
+        this.signature = signature;
     }
 
     public Integer getInterest1() {
