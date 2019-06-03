@@ -28,8 +28,10 @@ public class LabelController extends BaseController {
     }
 
     @PostMapping("/query_all_interests")
-    public CommonReturnType queryAllInterests(@RequestBody LabelInParam labelInParam){
+    public CommonReturnType queryAllInterests(@RequestBody LabelInParam labelInParam) throws BusinessException {
         return CommonReturnType.create(labelService.queryAllInterests(labelInParam.getStart(), labelInParam.getEnd()));
     }
+
+
 
 }

@@ -9,6 +9,7 @@ import com.hitwh.vblog.mapper.LabelDoMapper;
 import com.hitwh.vblog.outparam.LabelOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
+import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.LabelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,14 +41,18 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
-    public List<LabelOutParam> queryAllInterests(Integer start, Integer end) {
+    public PageResponse queryAllInterests(Integer start, Integer end) throws BusinessException {
+        Integer resultStart = start;
+        Integer resultEnd = end;
+        Integer resultNum = 0;
         List<LabelDo> labelDos = null;
         if(start == null && end == null){
             labelDos = labelDoMapper.selectAllInterests();
         }
         else if(start != null && end != null && start > 0 && end > start){
             labelDos = labelDoMapper.selectAllInterestsWithPage(start, end);
-        }
+        }else
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
         if(labelDos == null || labelDos.size() == 0)
             return null;
@@ -61,6 +66,15 @@ public class LabelServiceImpl implements LabelService {
             labelOutParams.add(labelOutParam);
         }
 
-        return labelOutParams;
+        if(resultStart == null)
+            resultStart = 0;
+        if(resultEnd == null)
+            resultEnd = labelDos.size();
+
+        resultNum = labelDoMapper.interestsPageCount();
+
+        return PageResponse.create(resultStart, resultEnd, resultNum, labelDos);
+
+
     }
 }

@@ -72,12 +72,16 @@
 
   <select id="selectAllInterests" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" /> from vblog_label
-    where label_id <![CDATA[>]]> 999
   </select>
 
   <select id="interestsPageCount"  resultType="int">
 		select count(*) from
 		vblog_label
 	</select>
+
+  <select id="selectAllInterestsWithPage" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from vblog_label
+    limit #{start}, #{num}
+  </select>
 
 </mapper>
