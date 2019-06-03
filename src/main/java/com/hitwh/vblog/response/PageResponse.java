@@ -9,11 +9,13 @@ public class PageResponse {
 
     private Object arr;
 
-    public PageResponse(Integer start, Integer end, Integer sum, Object arr){
-        this.start = start;
-        this.end = end;
-        this.sum = sum;
-        this.arr = arr;
+    public static PageResponse create(Integer start, Integer end, Integer sum, Object arr){
+        PageResponse pageResponse = new PageResponse();
+        pageResponse.start = start;
+        pageResponse.end = end;
+        pageResponse.sum = sum;
+        pageResponse.arr = arr;
+        return pageResponse;
     }
 
     public Integer getStart() {

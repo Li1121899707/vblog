@@ -9,5 +9,5 @@ import com.hitwh.vblog.response.PageResponse;
 public interface DemoService {
     Integer demoRegister(DemoModel demoModel) throws BusinessException;
     DemoModel getDemoInfo(Integer id);
-    PageResponse queryAll();
+    //PageResponse queryAll();
 }

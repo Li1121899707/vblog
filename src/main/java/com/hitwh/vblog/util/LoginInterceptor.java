@@ -23,16 +23,17 @@ import java.io.IOException;
  * @Author yf
  * @Date 2018/10/15 15:22
  * @Version 1.0
- *
+ * <p>
  * 登录拦截器，即Token验证过滤器,判断是否已登录
  */
 @Component
-public class LoginInterceptor implements HandlerInterceptor{
+public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(LoginInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginInterceptor.class);
 
     /**
      * 在controller处理之前首先对请求参数进行处理，以及对公共参数的保存
+     *
      * @param request
      * @param response
      * @param handler
@@ -42,26 +43,25 @@ public class LoginInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws BusinessException {
         System.out.println("---------------拦截器开始------------------");
-        if(!(handler instanceof HandlerMethod)){
+        if (!(handler instanceof HandlerMethod)) {
             LOGGER.info("不是HandlerMethod类型，则无需检查");
             return true;
         }
-        HandlerMethod method = (HandlerMethod)handler;
-        boolean hasLoginAnnotation=method.getMethod().isAnnotationPresent(LoginRequired.class);
-        if(!hasLoginAnnotation){
+        HandlerMethod method = (HandlerMethod) handler;
+        boolean hasLoginAnnotation = method.getMethod().isAnnotationPresent(LoginRequired.class);
+        if (!hasLoginAnnotation) {
             //不存在LoginRequired注解，则直接通过
             return true;
         }
 
-            response.setHeader("Content-type", "application/json;charset=UTF-8");
+        response.setHeader("Content-type", "application/json;charset=UTF-8");
 
-            //请求方法
-            String requestMethord = request.getRequestURI();
-            if(requestMethord==null){
-                return false;
-            }
-
-            //获取请求参数
+        //请求方法
+        String requestMethord = request.getRequestURI();
+        if (requestMethord == null) {
+            return false;
+        }
+        //获取请求参数
         JSONObject parameterMap = null;
         try {
             parameterMap = JSON.parseObject(new BodyReaderHttpServletRequestWrapper(request).getBodyString(request));
@@ -72,19 +72,31 @@ public class LoginInterceptor implements HandlerInterceptor{
         long request_time;
         String key;
         Integer uid;
+
+        //long request_time = (long) parameterMap.get("request_time");
+        //request_time = 1559483686339L;
+        if(parameterMap == null)
+            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_NOT_FOUND);
+
         try {
-            //long request_time = (long) parameterMap.get("request_time");
-             request_time = 1559483686339L;
-             key  = String.valueOf(parameterMap.get("key"));
-             uid = (Integer) parameterMap.get("uid");
+            request_time = (long) parameterMap.get("request_time");
         }catch (Exception e){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.TOKEN_TIME_NOT_FOUND);
         }
+
+        key = String.valueOf(parameterMap.get("key"));
+        if(key == null || key.equals("") || key.equals("null"))
+            throw new BusinessException(EnumError.TOKEN_KEY_NOT_FOUND);
+
+        uid = (Integer) parameterMap.get("uid");
+        if(uid == null || uid.equals(0))
+            throw new BusinessException(EnumError.TOKEN_UID_NOT_FOUND);
 
         LoginService loginService = (LoginService) SpringUtil.getBean(LoginService.class);
 
-        Boolean result =  loginService.tokenValidate(key,uid,request_time);
-        if(result)
+        Boolean result = loginService.tokenValidate(key, uid, request_time);
+
+        if (result)
             return true;
         else
             throw new BusinessException(EnumError.TOKEN_ERROR);

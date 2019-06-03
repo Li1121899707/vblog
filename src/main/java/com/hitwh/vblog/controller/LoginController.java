@@ -18,8 +18,8 @@ public class  LoginController extends BaseController{
     @Autowired
     LoginService loginService;
 
-    @PostMapping("/login")
-    public CommonReturnType login(@RequestBody LoginInParam loginInParam) throws BusinessException {
+    @PostMapping("/login_account")
+    public CommonReturnType loginAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
         //String pwd = MyMd5.md5Encryption(loginInParam.getPwd());
         LoginModel loginModel = new LoginModel();
         try{
@@ -28,7 +28,6 @@ public class  LoginController extends BaseController{
         }catch (Exception e){
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         }
-
 
         return CommonReturnType.create(loginService.getLoginInfo(loginModel));
     }

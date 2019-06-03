@@ -1,29 +1,22 @@
-package com.hitwh.vblog.bean;
+package com.hitwh.vblog.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-public class CommentDo {
+public class CommentModel {
+
     private Integer commentId;
-
+    @NotNull(message = "文章ID不能为空")
     private Integer articleId;
-
+    @NotNull(message = "评论者ID不能为空")
     private Integer userId;
-
+    @NotBlank(message = "评论不能为空")
     private String comment;
-
+    @NotNull(message = "日期不能为空")
     private Date commentTime;
-
+    @NotNull(message = "父评论不能为空")
     private Integer parentCommentId;
-
-    private Integer commentHide;
-
-    public Integer getCommentHide() {
-        return commentHide;
-    }
-
-    public void setCommentHide(Integer commentHide) {
-        this.commentHide = commentHide;
-    }
 
     public Integer getCommentId() {
         return commentId;

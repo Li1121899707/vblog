@@ -85,8 +85,8 @@ public class DemoController extends BaseController{
         return CommonReturnType.success();
     }
 
-    @RequestMapping("/query_all")
-    public CommonReturnType queryAll(){
-        return CommonReturnType.create(demoService.queryAll());
-    }
+//    @RequestMapping("/query_all")
+//    public CommonReturnType queryAll(){
+//        return CommonReturnType.create(demoService.queryAll());
+//    }
 }

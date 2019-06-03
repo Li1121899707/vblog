@@ -5,7 +5,7 @@ public class ArticleOutParam {
 
     private String title;
 
-    private String author_id;
+    private Integer author_id;
 
     private String author_nickname;
 
@@ -47,11 +47,11 @@ public class ArticleOutParam {
         this.title = title;
     }
 
-    public String getAuthor_id() {
+    public Integer getAuthor_id() {
         return author_id;
     }
 
-    public void setAuthor_id(String author_id) {
+    public void setAuthor_id(Integer author_id) {
         this.author_id = author_id;
     }
 
