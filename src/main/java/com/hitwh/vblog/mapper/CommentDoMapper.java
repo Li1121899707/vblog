@@ -23,11 +23,17 @@ public interface CommentDoMapper {
     List<ComAndUserDo> selectDisplayComment(@Param("start") Integer start,
                                                @Param("num") Integer num,
                                                @Param("articleId") Integer articleId);
+
     List<CommentDo> selectByArticleId(Integer articleId);
+
     List<ComAndUserDo> selectDisplayCommentById(@Param("start") Integer start,
                                             @Param("num") Integer num,
                                             @Param("userId") Integer userId);
+
     List<CommentDo> selectByUserId(Integer userId);
+
     ComAndUserDo selectForParent(Integer userId);
+
+    Integer updateCommentHide(Integer commentId);
 
 }

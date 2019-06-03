@@ -4,6 +4,7 @@ import com.hitwh.vblog.bean.ComAndUserDo;
 import com.hitwh.vblog.bean.CommentDo;
 import com.hitwh.vblog.mapper.CommentDoMapper;
 import com.hitwh.vblog.model.CommentModel;
+import com.hitwh.vblog.outparam.CommentOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.CommentService;
@@ -44,26 +45,63 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ComAndUserDo selectForParent(Integer parent_comment_id) {
-        return commentDoMapper.selectForParent(parent_comment_id);
+    public CommentOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
+        //通过数据库查询评论
+        ComAndUserDo comAndUserDo = commentDoMapper.selectForParent(parent_comment_id);
+        //判断是否为空
+        if (comAndUserDo == null)
+            return null;
+        //转换成commentoutparam
+        CommentOutParam commentOutParam = new CommentOutParam();
+        commentOutParam.setArticleId(comAndUserDo.getCommentDo().getArticleId());
+        commentOutParam.setUserNickname(comAndUserDo.getUserDo().getNickname());
+        commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
+        commentOutParam.setCommentTime(comAndUserDo.getCommentDo().getCommentTime());
+        commentOutParam.setUserId(comAndUserDo.getUserDo().getUserId());
+        commentOutParam.setParentCommentId(comAndUserDo.getCommentDo().getParentCommentId());
+
+        //判断父评论是否被隐藏
+        if(comAndUserDo.getCommentDo().getCommentHide() == 1)
+            throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
+
+        return commentOutParam;
     }
 
     @Override
     public void insertComment(CommentModel commentModel) throws BusinessException {
-        if(commentModel == null){
+        if (commentModel == null) {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         }
 
         ValidationResult result = validator.validate(commentModel);
-        if(result.isHasErrors()){
+        if (result.isHasErrors()) {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
-
+        //往数据库中存储评论
+        Integer ifInsert;
         CommentDo commentDo = new CommentDo();
-        BeanUtils.copyProperties(commentModel,commentDo);
-        commentDoMapper.insertSelective(commentDo);
+        BeanUtils.copyProperties(commentModel, commentDo);
+        try {
+            ifInsert = commentDoMapper.insertSelective(commentDo);
+        } catch (Exception e) {
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+        }
+        //返回值不为1则抛出错误
+        if (ifInsert != 1) {
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+        }
+    }
 
+    @Override
+    public void hideComment(Integer commentId) throws BusinessException {
+        //判断control传来的参数的正确性
+        if(commentId <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        // 需要加验证！！！！！！！！！！！！！！！！！！！！！
+        Integer hideResult = commentDoMapper.updateCommentHide(commentId);
+        //判断是否隐藏成功
+        if(hideResult != 1)
+            throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
+
     }
 }

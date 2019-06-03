@@ -1,20 +1,20 @@
 package com.hitwh.vblog.inparam;
 
 public class CommentInParam extends BaseInParam {
-    private Integer articleId;
+    private Integer article_id;
     private Integer start;
     private Integer end;
     private Integer uid;
-    private Integer commentId;
+    private Integer comment_id;
     private String comment;
-    private Integer parentCommentId;
+    private Integer parent_comment_id;
 
-    public Integer getArticleId() {
-        return articleId;
+    public Integer getArticle_id() {
+        return article_id;
     }
 
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
+    public void setArticle_id(Integer article_id) {
+        this.article_id = article_id;
     }
 
     public Integer getStart() {
@@ -33,20 +33,22 @@ public class CommentInParam extends BaseInParam {
         this.end = end;
     }
 
+    @Override
     public Integer getUid() {
         return uid;
     }
 
+    @Override
     public void setUid(Integer uid) {
         this.uid = uid;
     }
 
-    public Integer getCommentId() {
-        return commentId;
+    public Integer getComment_id() {
+        return comment_id;
     }
 
-    public void setCommentId(Integer commentId) {
-        this.commentId = commentId;
+    public void setComment_id(Integer comment_id) {
+        this.comment_id = comment_id;
     }
 
     public String getComment() {
@@ -57,11 +59,11 @@ public class CommentInParam extends BaseInParam {
         this.comment = comment;
     }
 
-    public Integer getParentCommentId() {
-        return parentCommentId;
+    public Integer getParent_comment_id() {
+        return parent_comment_id;
     }
 
-    public void setParentCommentId(Integer parentCommentId) {
-        this.parentCommentId = parentCommentId;
+    public void setParent_comment_id(Integer parent_comment_id) {
+        this.parent_comment_id = parent_comment_id;
     }
 }

@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
         if(result.isHasErrors()){
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
-
+        //判断用户密码是否正确
         UserDo userDo = new UserDo();
         BeanUtils.copyProperties(loginModel, userDo);
 
@@ -63,7 +63,8 @@ public class LoginServiceImpl implements LoginService {
         tokenDo.setToken(map.get("token").toString());
         tokenDo.setCreateTime(new Date(current));
         tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
-        tokenDoMapper.insert(tokenDo);
+        //tokenDoMapper.insert(tokenDo);
+        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
         returnMap.put("allowance",userDoFromTable.getAllowance());
         returnMap.put("userId",userDoFromTable.getUserId());
         returnMap.put("token",map.get("token").toString());

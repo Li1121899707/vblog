@@ -15,6 +15,16 @@ public class CommentDo {
 
     private Integer parentCommentId;
 
+    private Integer commentHide;
+
+    public Integer getCommentHide() {
+        return commentHide;
+    }
+
+    public void setCommentHide(Integer commentHide) {
+        this.commentHide = commentHide;
+    }
+
     public Integer getCommentId() {
         return commentId;
     }
