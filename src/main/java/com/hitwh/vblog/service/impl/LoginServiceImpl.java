@@ -29,7 +29,6 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private TokenDoMapper tokenDoMapper;
 
-
     @Override
     public Map<String,Object> getLoginInfo(LoginModel loginModel) throws BusinessException {
 
