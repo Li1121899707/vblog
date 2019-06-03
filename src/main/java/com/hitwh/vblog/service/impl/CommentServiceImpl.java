@@ -24,6 +24,13 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     ValidatorImpl validator;
 
+    /**
+     *
+     * @param start
+     * @param num
+     * @param articleId
+     * @return 通过文章ID查找评论
+     */
     @Override
     public Map<String,Object> selectDisplayComment(Integer start, Integer num, Integer articleId) {
         //if(commentDoMapper.selectDisplayComment(start,num, articleId) == null)
@@ -59,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
         commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime());
         commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
         commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
-
+        commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
         //判断父评论是否被隐藏
         if(comAndUserDo.getCommentDo().getCommentHide() == 1)
             throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);

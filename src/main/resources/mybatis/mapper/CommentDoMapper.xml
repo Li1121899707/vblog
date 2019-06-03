@@ -14,6 +14,7 @@
   <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
     <id column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="avatar_sm" jdbcType="VARCHAR" property="avatarSm" />
   </resultMap>
   
   <resultMap id="CommentAndUserMap" type="com.hitwh.vblog.bean.ComAndUserDo">
@@ -131,7 +132,8 @@
   
   <select id="selectDisplayComment" resultMap="CommentAndUserMap">
     select vblog_user.user_id, nickname,
-    comment_id, article_id, vblog_comment.user_id, comment, comment_time, parent_comment_id,comment_hide
+    comment_id, article_id, vblog_comment.user_id,
+    comment, comment_time, parent_comment_id,comment_hide,avatar_sm
     from vblog_comment, vblog_user
     where article_id = #{articleId}
     and vblog_user.user_id = vblog_comment.user_id
@@ -146,7 +148,8 @@
   </select>
 <select id="selectDisplayCommentById" resultMap="CommentAndUserMap">
     select vblog_user.user_id, nickname,
-    comment_id, article_id, vblog_comment.user_id, comment, comment_time, parent_comment_id
+    comment_id, article_id, vblog_comment.user_id,
+    comment, comment_time, parent_comment_id,avatar_sm
     from vblog_comment, vblog_user
     where vblog_user.user_id= #{userId}
     and vblog_user.user_id = vblog_comment.user_id
@@ -160,7 +163,8 @@
   </select>
   <select id="selectForParent" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="CommentAndUserMap">
     select vblog_user.user_id, nickname,
-    comment_id, article_id, vblog_comment.user_id, comment, comment_time, parent_comment_id,comment_hide
+    comment_id, article_id, vblog_comment.user_id, comment,
+    comment_time, parent_comment_id,comment_hide,avatar_sm
     from vblog_comment, vblog_user
     where comment_id = #{parent_comment_id}
     and vblog_user.user_id = vblog_comment.user_id

@@ -27,6 +27,13 @@ public class CommentController extends BaseController{
     @Autowired
     CommentServiceImpl commentService;
 
+    /**
+     *
+     * @param commentInParam
+     * @return
+     * @throws BusinessException
+     * 通过文章ID查找评论
+     */
     @PostMapping("/article_query")
     public PageResponse queryByArticle(@RequestBody CommentInParam commentInParam) throws BusinessException {
         //判断是否为空抛出异常
@@ -50,6 +57,7 @@ public class CommentController extends BaseController{
             c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
             c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
             c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
+            c.setAvatar_sm(comAndUserDos.get(i).getUserDo().getAvatarSm());
             commentOutParams.add(c);
         }
         //判断返回给前端的end的值
@@ -60,6 +68,12 @@ public class CommentController extends BaseController{
         return PageResponse.create(commentInParam.getStart(),end,sum,commentOutParams);
     }
 
+    /**
+     * 通过用户ID查找评论
+     * @param commentInParam
+     * @return
+     * @throws BusinessException
+     */
     @PostMapping("/person_query")
     public PageResponse queryByPerson(@RequestBody CommentInParam commentInParam) throws BusinessException {
         //判断前端传来的参数是否为空
@@ -86,6 +100,7 @@ public class CommentController extends BaseController{
             c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
             c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
             c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
+            c.setAvatar_sm(comAndUserDos.get(i).getUserDo().getAvatarSm());
             commentOutParams.add(c);
         }
         //通过查询的条数判断返回给前端的end的值
