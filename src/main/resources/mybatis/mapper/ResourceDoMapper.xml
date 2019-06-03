@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.ResourceDoMapper">
+  <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.ResourceDo">
+    <id column="resource_id" jdbcType="INTEGER" property="resourceId" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="encrypt_file" jdbcType="VARCHAR" property="encryptFile" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resource_id, path, encrypt_file, upload_time, url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vblog_resource
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vblog_resource
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hitwh.vblog.bean.ResourceDo">
+    insert into vblog_resource (resource_id, path, encrypt_file, 
+      upload_time, url)
+    values (#{resourceId,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, #{encryptFile,jdbcType=VARCHAR}, 
+      #{uploadTime,jdbcType=TIMESTAMP}, #{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ResourceDo">
+    insert into vblog_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="resourceId != null">
+        resource_id,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="encryptFile != null">
+        encrypt_file,
+      </if>
+      <if test="uploadTime != null">
+        upload_time,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="resourceId != null">
+        #{resourceId,jdbcType=INTEGER},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptFile != null">
+        #{encryptFile,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.ResourceDo">
+    update vblog_resource
+    <set>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptFile != null">
+        encrypt_file = #{encryptFile,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hitwh.vblog.bean.ResourceDo">
+    update vblog_resource
+    set path = #{path,jdbcType=VARCHAR},
+      encrypt_file = #{encryptFile,jdbcType=VARCHAR},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      url = #{url,jdbcType=VARCHAR}
+    where resource_id = #{resourceId,jdbcType=INTEGER}
+  </update>
+</mapper>
