@@ -31,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
 
 
     @Override
-    public Map<String,Object> getLoginInfo(LoginModel loginModel) throws BusinessException {
+    public Map<String,Object> getLoginInfoByAccout(LoginModel loginModel) throws BusinessException {
 
         Map<String,Object> returnMap = new HashMap<>();
 
@@ -105,7 +105,6 @@ public class LoginServiceImpl implements LoginService {
         System.out.println("key  " + key);
         System.out.println("md5  " + md5);
 
-
         if (md5.equals(key)){
             System.out.println("key success");
             return true;
@@ -115,8 +114,154 @@ public class LoginServiceImpl implements LoginService {
             System.out.println("key fail");
             return false;
         }
-
-
     }
+
+    @Override
+    public Map<String, Object> getLoginInfoByPhone(LoginModel loginModel) throws BusinessException {
+
+        //判断电话和密码不为空
+        if(loginModel.getPhone() == null || loginModel.getPwd() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        //将model中的数据封装到userDo
+        UserDo userDo = new UserDo();
+        userDo.setPhone(loginModel.getPhone());
+        userDo.setPwd(loginModel.getPwd());
+        //利用phone查询用户信息
+        UserDo userDoFromTable = userDoMapper.selectIfLoginByPhone(userDo);
+
+        System.out.println(userDoFromTable.getAccount());
+        Integer salt = userDoFromTable.getSalt();
+        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
+        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
+            throw new BusinessException(EnumError.PASSWORD_ERROR);
+
+        Map<String,Object> map = returnMap(userDoFromTable);
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> getLoginInfoByEmail(LoginModel loginModel) throws BusinessException {
+
+        //判断邮箱和密码不为空
+        if(loginModel.getEmail() == null || loginModel.getPwd() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        //将model中的数据封装到userDo
+        UserDo userDo = new UserDo();
+        userDo.setEmail(loginModel.getEmail());
+        userDo.setPwd(loginModel.getPwd());
+        //利用phone查询用户信息
+        UserDo userDoFromTable = userDoMapper.selectIfLoginByEmail(userDo);
+        System.out.println(userDoFromTable.getAccount());
+        Integer salt = userDoFromTable.getSalt();
+        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
+        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
+            throw new BusinessException(EnumError.PASSWORD_ERROR);
+
+        Map<String,Object> map = returnMap(userDoFromTable);
+
+        return map;
+    }
+
+    public Map<String,Object> returnMap(UserDo userDo) throws BusinessException {
+        Map<String,Object> returnMap = new HashMap<>();
+
+        TokenDo tokenDo = new TokenDo();
+        Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
+        tokenDo.setUserId(userDo.getUserId());
+        long current = Long.valueOf(map.get("currentTime").toString());
+        tokenDo.setToken(map.get("token").toString());
+        tokenDo.setCreateTime(new Date(current));
+        tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
+
+        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
+        returnMap.put("allowance",userDo.getAllowance());
+        returnMap.put("userId",userDo.getUserId());
+        returnMap.put("token",map.get("token").toString());
+        return returnMap;
+    }
+
+    @Override
+    public Integer loginValidateByAccount(LoginModel loginModel) throws BusinessException {
+
+        Integer returnInt  = 0;
+
+        if(loginModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        if(loginModel.getAccount() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        UserDo userDo = new UserDo();
+
+        if(loginModel.getAccount() != null){
+            userDo.setAccount(loginModel.getAccount());
+            if(userDoMapper.selectIfAccount(userDo) == null)
+                returnInt = 1;
+            else returnInt  = 0;
+        }
+
+        return returnInt;
+    }
+
+    @Override
+    public Integer loginValidateByPhone(LoginModel loginModel) throws BusinessException {
+
+        Integer returnInt  = 0;
+
+        if(loginModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        if(loginModel.getPhone() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        UserDo userDo = new UserDo();
+
+        if(loginModel.getPhone() != null){
+            userDo.setPhone(loginModel.getPhone());
+            if(userDoMapper.selectIfPhone(userDo) == null)
+                returnInt = 1;
+            else returnInt  = 0;
+        }
+
+        return returnInt;
+    }
+
+    @Override
+    public Integer loginValidateByEmail(LoginModel loginModel) throws BusinessException {
+
+        Integer returnInt  = 0;
+
+        if(loginModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        if(loginModel.getEmail() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        UserDo userDo = new UserDo();
+
+        if(loginModel.getEmail() != null){
+            userDo.setEmail(loginModel.getEmail());
+            if(userDoMapper.selectIfEmail(userDo) == null)
+                returnInt = 1;
+            else returnInt  = 0;
+        }
+
+        return returnInt;
+    }
+
+//        if(loginModel.getPhone() != null){
+//            userDo.setPhone(loginModel.getPhone());
+//            if(userDoMapper.selectIfPhone(userDo) == null)
+//                returnInt[1] = 1;
+//            else returnInt[1] = 0;
+//        }
+//
+//        if(loginModel.getEmail() != null){
+//            userDo.setEmail(loginModel.getEmail());
+//            if(userDoMapper.selectIfEmail(userDo) == null)
+//                returnInt[2] = 1;
+//            else returnInt[2] = 0;
+//        }
 
 }

@@ -7,6 +7,8 @@
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
     <result column="salt" jdbcType="INTEGER" property="salt" />
     <result column="ban" jdbcType="INTEGER" property="ban" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="allowance" jdbcType="INTEGER" property="allowance" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.UserDo">
@@ -221,5 +223,30 @@
     select user_id,account,pwd,salt,ban,allowance
     from vblog_user
     where account = #{account,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIfLoginByPhone" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
+    select user_id,account,phone,pwd,salt,ban,allowance
+    from vblog_user
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIfLoginByEmail" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
+    select user_id,account,email,pwd,salt,ban,allowance
+    from vblog_user
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIfAccount" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
+    select user_id
+    from vblog_user
+    where account = #{account,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIfPhone" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
+    select user_id
+    from vblog_user
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  <select id="selectIfEmail" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
+    select user_id
+    from vblog_user
+    where email = #{email,jdbcType=VARCHAR}
   </select>
 </mapper>
