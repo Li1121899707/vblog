@@ -18,6 +18,12 @@ public class RegisterModel {
     @NotBlank(message = "手机号不能为空")
     private String phone;
 
+    private String avatarLg;
+
+    private String avatarMd;
+
+    private String avatarSm;
+
     public String getAccount() {
         return account;
     }
@@ -56,5 +62,29 @@ public class RegisterModel {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAvatarLg() {
+        return avatarLg;
+    }
+
+    public void setAvatarLg(String avatarLg) {
+        this.avatarLg = avatarLg;
+    }
+
+    public String getAvatarMd() {
+        return avatarMd;
+    }
+
+    public void setAvatarMd(String avatarMd) {
+        this.avatarMd = avatarMd;
+    }
+
+    public String getAvatarSm() {
+        return avatarSm;
+    }
+
+    public void setAvatarSm(String avatarSm) {
+        this.avatarSm = avatarSm;
     }
 }
