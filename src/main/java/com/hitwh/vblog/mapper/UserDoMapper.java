@@ -17,4 +17,13 @@ public interface UserDoMapper {
 
     UserDo selectIfLogin(UserDo userDo);
 
+    UserDo selectIfLoginByPhone(UserDo userDo);
+
+    UserDo selectIfLoginByEmail(UserDo userDo);
+
+    UserDo selectIfAccount(UserDo userDo);
+
+    UserDo selectIfPhone(UserDo userDo);
+
+    UserDo selectIfEmail(UserDo userDo);
 }
