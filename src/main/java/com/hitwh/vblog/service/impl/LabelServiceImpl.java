@@ -32,8 +32,8 @@ public class LabelServiceImpl implements LabelService {
             return null;
 
         LabelOutParam labelOutParam = new LabelOutParam();
-        labelOutParam.setLabel_id(labelDo.getLableId());
-        labelOutParam.setLabel_name(labelDo.getLableName());
+        labelOutParam.setLabel_id(labelDo.getLabelId());
+        labelOutParam.setLabel_name(labelDo.getLabelName());
         labelOutParam.setDiscription(labelDo.getDescription());
 
         return labelOutParam;
@@ -49,14 +49,14 @@ public class LabelServiceImpl implements LabelService {
             labelDos = labelDoMapper.selectAllInterestsWithPage(start, end);
         }
 
-        if(labelDos == null)
+        if(labelDos == null || labelDos.size() == 0)
             return null;
 
         List<LabelOutParam> labelOutParams = new ArrayList<>();
         for(int i=0; i<labelDos.size(); i++){
             LabelOutParam labelOutParam = new LabelOutParam();
-            labelOutParam.setLabel_id(labelDos.get(i).getLableId());
-            labelOutParam.setLabel_name(labelDos.get(i).getLableName());
+            labelOutParam.setLabel_id(labelDos.get(i).getLabelId());
+            labelOutParam.setLabel_name(labelDos.get(i).getLabelName());
             labelOutParam.setDiscription(labelDos.get(i).getDescription());
             labelOutParams.add(labelOutParam);
         }
