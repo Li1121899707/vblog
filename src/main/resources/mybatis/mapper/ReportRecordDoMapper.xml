@@ -4,17 +4,17 @@
   <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.ReportRecordDo">
     <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="reporter_id" jdbcType="INTEGER" property="reporterId" />
-    <result column="label_id" jdbcType="INTEGER" property="labelId" />
+    <result column="reason" jdbcType="INTEGER" property="reason" />
     <result column="admin_id" jdbcType="INTEGER" property="adminId" />
     <result column="report_time" jdbcType="TIMESTAMP" property="reportTime" />
     <result column="handle_time" jdbcType="TIMESTAMP" property="handleTime" />
     <result column="handle_result" jdbcType="INTEGER" property="handleResult" />
   </resultMap>
   <insert id="insert" parameterType="com.hitwh.vblog.bean.ReportRecordDo">
-    insert into vblog_report_record (article_id, reporter_id, label_id, 
+    insert into vblog_report_record (article_id, reporter_id, reason, 
       admin_id, report_time, handle_time, 
       handle_result)
-    values (#{articleId,jdbcType=INTEGER}, #{reporterId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER}, 
+    values (#{articleId,jdbcType=INTEGER}, #{reporterId,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR},
       #{adminId,jdbcType=INTEGER}, #{reportTime,jdbcType=TIMESTAMP}, #{handleTime,jdbcType=TIMESTAMP}, 
       #{handleResult,jdbcType=INTEGER})
   </insert>
@@ -27,8 +27,8 @@
       <if test="reporterId != null">
         reporter_id,
       </if>
-      <if test="labelId != null">
-        label_id,
+      <if test="reason != null">
+        reason,
       </if>
       <if test="adminId != null">
         admin_id,
@@ -50,8 +50,8 @@
       <if test="reporterId != null">
         #{reporterId,jdbcType=INTEGER},
       </if>
-      <if test="labelId != null">
-        #{labelId,jdbcType=INTEGER},
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
       </if>
       <if test="adminId != null">
         #{adminId,jdbcType=INTEGER},

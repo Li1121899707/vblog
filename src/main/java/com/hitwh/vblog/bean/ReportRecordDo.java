@@ -7,7 +7,7 @@ public class ReportRecordDo {
 
     private Integer reporterId;
 
-    private Integer labelId;
+    private String reason;
 
     private Integer adminId;
 
@@ -33,12 +33,12 @@ public class ReportRecordDo {
         this.reporterId = reporterId;
     }
 
-    public Integer getLabelId() {
-        return labelId;
+    public String getReason() {
+        return reason;
     }
 
-    public void setLabelId(Integer labelId) {
-        this.labelId = labelId;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public Integer getAdminId() {
