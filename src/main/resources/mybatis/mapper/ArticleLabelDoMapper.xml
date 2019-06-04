@@ -12,4 +12,21 @@
     WHERE vblog_article_label.article_id = #{articleId}
     AND vblog_article_label.label_id = vblog_label.label_id
   </select>
+    <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleLabelDo">
+        insert into vblog_article_label (article_id, label_id, label_add_datetime)
+    values (#{articleId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER}, #{labelAddTime,jdbcType=TIMESTAMP})
+    </insert>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vblog_article_label
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </delete>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.ArticleLabelDo">
+        update vblog_article_label
+        <set>
+            <if test="labelId != null">
+                label_id = #{labelId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where article_id = #{articleId,jdbcType=INTEGER}
+    </update>
 </mapper>

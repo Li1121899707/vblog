@@ -50,6 +50,7 @@ public class ArticleServiceImpl implements ArticleService {
         UserDo userDo = new UserDo();
         ArticleDo articleDo = new ArticleDo();
         ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
+        ArticleLabelDo articleLabelDo = new ArticleLabelDo();
 
         userDo = userDoMapper.selectByPrimaryKey(articleModel.getUid());
 
@@ -85,6 +86,27 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+        articleLabelDo.setArticleId(articleDo.getArticleId());
+        articleLabelDo.setLabelId(articleModel.getType_1());
+        articleLabelDo.setLabelAddTime(timeStamp);
+
+        writeResult = articleLabelDoMapper.insert(articleLabelDo);
+
+        if (writeResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+        if (articleModel.getType_2() != null)
+        {
+            articleLabelDo.setArticleId(articleDo.getArticleId());
+            articleLabelDo.setLabelId(articleModel.getType_2());
+            articleLabelDo.setLabelAddTime(timeStamp);
+
+            writeResult = articleLabelDoMapper.insert(articleLabelDo);
+
+            if (writeResult != 1)
+                throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+        }
     }
 
     @Override
@@ -97,6 +119,13 @@ public class ArticleServiceImpl implements ArticleService {
         if (deleteResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
+        deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
+        if (deleteResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+        deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
+        if (deleteResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
 
     @Override
@@ -105,6 +134,7 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         ArticleDo articleDoTest = new ArticleDo();
         ArticleDo articleDo = new ArticleDo();
+        ArticleLabelDo articleLabelDo = new ArticleLabelDo();
         articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
         if (articleDoTest == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -134,6 +164,18 @@ public class ArticleServiceImpl implements ArticleService {
         if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
+        articleLabelDo.setArticleId(articleModel.getArticle_id());
+        articleLabelDo.setLabelId(articleModel.getType_1());
+
+        writeResult = articleLabelDoMapper.updateByPrimaryKeySelective(articleLabelDo);
+
+        if (articleModel.getType_2() != null)
+        {
+            articleLabelDo.setArticleId(articleModel.getArticle_id());
+            articleLabelDo.setLabelId(articleModel.getType_2());
+
+            writeResult = articleLabelDoMapper.updateByPrimaryKeySelective(articleLabelDo);
+        }
     }
 
     // 查询单条记录
