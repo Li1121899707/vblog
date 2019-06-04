@@ -18,8 +18,11 @@ public enum EnumError implements CommonError {
     TOKEN_TIME_NOT_FOUND(5, "验证 Token，时间参数错误"),
     TOKEN_KEY_NOT_FOUND(6, "验证 Token ，key参数错误"),
     TOKEN_VALIDATE_PARAM_NOT_FOUND(7, "验证Token， 参数未传入"),
-    PARENT_COMMENT_HIDDEN(4004,"父评论被隐藏"),
-    COMMENT_HIDE_ERROR(4005,"评论隐藏失败")
+    PARENT_COMMENT_HIDDEN(3201,"评论被隐藏"),
+    COMMENT_HIDE_ERROR(3202,"评论隐藏失败"),
+    ACCOUNT_NOT_EXIST(1201, "账号不存在或密码错误"),
+    PHONE_NOT_EXIST(1202, "手机号不存在或密码错误"),
+    EMAIL_NOT_EXIST(1203, "邮箱不存在或密码错误")
     ;
 
     private int errCode;

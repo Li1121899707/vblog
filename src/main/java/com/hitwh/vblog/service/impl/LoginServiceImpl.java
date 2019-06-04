@@ -48,7 +48,7 @@ public class LoginServiceImpl implements LoginService {
 
         UserDo userDoFromTable = userDoMapper.selectIfLogin(userDo);
         if(userDoFromTable == null)
-            throw new BusinessException(EnumError.USER_NOT_EXIST);
+            throw new BusinessException(EnumError.ACCOUNT_NOT_EXIST);
 
         Integer salt = userDoFromTable.getSalt();
         String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
@@ -115,6 +115,24 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    public Map<String,Object> returnMap(UserDo userDo) throws BusinessException {
+        Map<String,Object> returnMap = new HashMap<>();
+
+        TokenDo tokenDo = new TokenDo();
+        Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
+        tokenDo.setUserId(userDo.getUserId());
+        long current = Long.valueOf(map.get("currentTime").toString());
+        tokenDo.setToken(map.get("token").toString());
+        tokenDo.setCreateTime(new Date(current));
+        tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
+
+        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
+        returnMap.put("allowance",userDo.getAllowance());
+        returnMap.put("userId",userDo.getUserId());
+        returnMap.put("token",map.get("token").toString());
+        return returnMap;
+    }
+
     @Override
     public Map<String, Object> getLoginInfoByPhone(LoginModel loginModel) throws BusinessException {
 
@@ -127,6 +145,9 @@ public class LoginServiceImpl implements LoginService {
         userDo.setPwd(loginModel.getPwd());
         //利用phone查询用户信息
         UserDo userDoFromTable = userDoMapper.selectIfLoginByPhone(userDo);
+
+        if(userDoFromTable == null)
+            throw new BusinessException(EnumError.PHONE_NOT_EXIST);
 
         System.out.println(userDoFromTable.getAccount());
         Integer salt = userDoFromTable.getSalt();
@@ -151,6 +172,10 @@ public class LoginServiceImpl implements LoginService {
         userDo.setPwd(loginModel.getPwd());
         //利用phone查询用户信息
         UserDo userDoFromTable = userDoMapper.selectIfLoginByEmail(userDo);
+
+        if(userDoFromTable == null)
+            throw new BusinessException(EnumError.EMAIL_NOT_EXIST);
+
         System.out.println(userDoFromTable.getAccount());
         Integer salt = userDoFromTable.getSalt();
         String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
@@ -160,24 +185,6 @@ public class LoginServiceImpl implements LoginService {
         Map<String,Object> map = returnMap(userDoFromTable);
 
         return map;
-    }
-
-    public Map<String,Object> returnMap(UserDo userDo) throws BusinessException {
-        Map<String,Object> returnMap = new HashMap<>();
-
-        TokenDo tokenDo = new TokenDo();
-        Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
-        tokenDo.setUserId(userDo.getUserId());
-        long current = Long.valueOf(map.get("currentTime").toString());
-        tokenDo.setToken(map.get("token").toString());
-        tokenDo.setCreateTime(new Date(current));
-        tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
-
-        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
-        returnMap.put("allowance",userDo.getAllowance());
-        returnMap.put("userId",userDo.getUserId());
-        returnMap.put("token",map.get("token").toString());
-        return returnMap;
     }
 
     @Override
