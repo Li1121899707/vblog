@@ -166,15 +166,20 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleLabelDo.setArticleId(articleModel.getArticle_id());
         articleLabelDo.setLabelId(articleModel.getType_1());
+        articleLabelDo.setLabelAddTime(timeStamp);
 
-        writeResult = articleLabelDoMapper.updateByPrimaryKeySelective(articleLabelDo);
-
+        writeResult = articleLabelDoMapper.deleteByPrimaryKey(articleLabelDo.getArticleId());
+        writeResult = articleLabelDoMapper.insert(articleLabelDo);
+        if (writeResult != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
         if (articleModel.getType_2() != null)
         {
             articleLabelDo.setArticleId(articleModel.getArticle_id());
             articleLabelDo.setLabelId(articleModel.getType_2());
 
-            writeResult = articleLabelDoMapper.updateByPrimaryKeySelective(articleLabelDo);
+            writeResult = articleLabelDoMapper.insert(articleLabelDo);
+            if (writeResult != 1)
+                throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
         }
     }
 

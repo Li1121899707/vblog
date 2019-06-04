@@ -13,7 +13,7 @@
     AND vblog_article_label.label_id = vblog_label.label_id
   </select>
     <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleLabelDo">
-        insert into vblog_article_label (article_id, label_id, label_add_datetime)
+        insert into vblog_article_label (article_id, label_id, label_add_time)
     values (#{articleId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER}, #{labelAddTime,jdbcType=TIMESTAMP})
     </insert>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
