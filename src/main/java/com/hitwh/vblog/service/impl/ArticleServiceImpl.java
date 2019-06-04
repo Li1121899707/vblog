@@ -145,21 +145,19 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
         ArticleOutParam articleOutParam = new ArticleOutParam();
-//        articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getVirtualId());
-//        articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getVirtualId());
-//        articleOutParam.setTitle(articleAndUserDo.getArticleDo().getTitle());
-//        articleOutParam.setAuthor_id(articleAndUserDo.getArticleDo().getArticleId());
-//        articleOutParam.setAuthor_nickname(articleAndUserDo.getUserDo().getNickname());
-////        articleOutParam.setType_1(articleAndUserDo.getArticleDo().getType1());
-////        articleOutParam.setType_2(articleAndUserDo.getArticleDo().getType2());
-////        articleOutParam.setLabel_name1(articleAndUserDo.getLabelDo().getLabelName());//暂时只能返回一个标签
-//        articleOutParam.setCover(articleAndUserDo.getArticleDo().getCover());//另一张表的url字段
-//        articleOutParam.setHidden(articleAndUserDo.getArticleDo().getHidden());
-//        articleOutParam.setContent(articleAndUserDo.getArticleDo().getContent());
-//        articleOutParam.setArticleAbstract(articleAndUserDo.getArticleDo().getArticleAbstract());
-//        articleOutParam.setRelease_time(articleAndUserDo.getArticleDo().getReleaseTime().getTime());//用getTime将Date转为long型
-//        articleOutParam.setThumb(articleAndUserDo.getArticleDynamicDo().getThumbNum());
-//        articleOutParam.setReading(articleAndUserDo.getArticleDynamicDo().getReadingNum());
+        articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getArticleId());
+        articleOutParam.setVirtual_id(articleAndUserDo.getArticleDo().getVirtualId());
+        articleOutParam.setTitle(articleAndUserDo.getArticleDo().getTitle());
+        articleOutParam.setAuthor_id(articleAndUserDo.getArticleDo().getArticleId());
+        articleOutParam.setAuthor_nickname(articleAndUserDo.getUserDo().getNickname());
+        articleOutParam.setCover(articleAndUserDo.getArticleDo().getCover());//另一张表的url字段
+        articleOutParam.setContent(articleAndUserDo.getArticleDo().getContent());
+        articleOutParam.setArticleAbstract(articleAndUserDo.getArticleDo().getArticleAbstract());
+        articleOutParam.setRelease_time(articleAndUserDo.getArticleDo().getReleaseTime().getTime());//用getTime将Date转为long型
+        articleOutParam.setThumb(articleAndUserDo.getArticleDynamicDo().getThumbNum());
+        articleOutParam.setReading(articleAndUserDo.getArticleDynamicDo().getReadingNum());
+        List<ArticleLabelDoSimple> articleLabelDoSimples = articleLabelDoMapper.selectAllArticleInterest(articleAndUserDo.getArticleDo().getArticleId());
+        articleOutParam.setLabels(articleLabelDoSimples);
 
         return articleOutParam;
     }

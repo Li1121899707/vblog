@@ -117,18 +117,14 @@ SELECT vblog_article_label.article_id, vblog_article_label.label_id , vblog_arti
   </select>
 
   <select id="selectSingleArticle" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
-    select vblog_article.article_id, vblog_article.virtual_id,  title, author_id,
+    select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
     nickname, cover, hidden, content, article_abstract,
-    release_time, reading_num, thumb_num, vblog_label.label_id, label_name
-    from vblog_article_label
-    right join vblog_article
-    on vblog_article_label.article_id = vblog_article.article_id
-    right join vblog_article_dynamic
+    release_time, reading_num, thumb_num
+    from vblog_article
+    left join vblog_article_dynamic
     on vblog_article.article_id = vblog_article_dynamic.article_id
-    right join vblog_user
+    left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    left join vblog_label
-    on vblog_article_label.label_id = vblog_label.label_id
     where vblog_article.article_id = #{articleId}
   </select>
 
