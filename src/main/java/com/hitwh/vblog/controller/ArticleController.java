@@ -61,99 +61,43 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/query_by_author")
     public CommonReturnType queryArticleByAuthor(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        List<ArticleAndUserDo> articleAndUserDos =  (ArrayList)articleService.selectArticleById(articleInParam.getStart(),
+         List<ArticleOutParam> articleOutParams = (ArrayList)articleService.selectArticleByAuthorId(articleInParam.getStart(),
                 articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getUid()).get("list");
-        int sum = (int)articleService.selectArticleById(articleInParam.getStart(),
+
+        int sum = (int)articleService.selectArticleByAuthorId(articleInParam.getStart(),
                 articleInParam.getEnd()- articleInParam.getStart() + 1, articleInParam.getUid()).get("sum");
-        List<ArticleOutParam> articleOutParams = new ArrayList<>();
-        //将通过service获取的数据换成要输出的形式
-        for(int i =0;i < articleAndUserDos.size();i++){
-            ArticleOutParam articleOutParam = new ArticleOutParam();
-            articleOutParam.setArticle_id(articleAndUserDos.get(i).getArticleDo().getVirtualId());
-            articleOutParam.setTitle(articleAndUserDos.get(i).getArticleDo().getTitle());
-            articleOutParam.setAuthor_id(articleAndUserDos.get(i).getArticleDo().getArticleId());
-            articleOutParam.setAuthor_nickname(articleAndUserDos.get(i).getUserDo().getNickname());
-            articleOutParam.setType_1(articleAndUserDos.get(i).getArticleDo().getType1());
-            articleOutParam.setType_2(articleAndUserDos.get(i).getArticleDo().getType2());
-            articleOutParam.setLabel_name1(articleAndUserDos.get(i).getLabelDo().getLabelName());//暂时只能返回一个标签
-            articleOutParam.setCover(articleAndUserDos.get(i).getResourceDo().getUrl());//另一张表的url字段
-            articleOutParam.setHidden(articleAndUserDos.get(i).getArticleDo().getHidden());
-            articleOutParam.setContent(articleAndUserDos.get(i).getArticleDo().getContent());
-            articleOutParam.setArticleAbstract(articleAndUserDos.get(i).getArticleDo().getArticleAbstract());
-            articleOutParam.setRelease_time(articleAndUserDos.get(i).getArticleDo().getReleaseTime().getTime());//用getTime将Date转为long型
-            articleOutParam.setThumb(articleAndUserDos.get(i).getArticleDynamicDo().getThumbNum());
-            articleOutParam.setReading(articleAndUserDos.get(i).getArticleDynamicDo().getReadingNum());
-            articleOutParams.add(articleOutParam);
-        }
+
         int end = articleInParam.getEnd() - articleInParam.getStart() +1;
 
-        if(end > articleAndUserDos.size()) end = articleAndUserDos.size();
+        if(end > articleOutParams.size()) end = articleOutParams.size();
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
     @PostMapping("/query_by_title")
     public CommonReturnType queryArticleByTitle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        List<ArticleAndUserDo> articleAndUserDos =  (ArrayList)articleService.selectArticleByTitle(articleInParam.getStart(),
+        List<ArticleOutParam> articleOutParams =  (ArrayList)articleService.selectArticleByTitle(articleInParam.getStart(),
                 articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getTitle()).get("list");
         int sum = (int)articleService.selectArticleByTitle(articleInParam.getStart(),
                 articleInParam.getEnd()- articleInParam.getStart() + 1, articleInParam.getTitle()).get("sum");
-        List<ArticleOutParam> articleOutParams = new ArrayList<>();
-        //将通过service获取的数据换成要输出的形式
-        for(int i =0;i < articleAndUserDos.size();i++){
-            ArticleOutParam articleOutParam = new ArticleOutParam();
-            articleOutParam.setArticle_id(articleAndUserDos.get(i).getArticleDo().getVirtualId());
-            articleOutParam.setTitle(articleAndUserDos.get(i).getArticleDo().getTitle());
-            articleOutParam.setAuthor_id(articleAndUserDos.get(i).getArticleDo().getArticleId());
-            articleOutParam.setAuthor_nickname(articleAndUserDos.get(i).getUserDo().getNickname());
-            articleOutParam.setType_1(articleAndUserDos.get(i).getArticleDo().getType1());
-            articleOutParam.setType_2(articleAndUserDos.get(i).getArticleDo().getType2());
-            articleOutParam.setLabel_name1(articleAndUserDos.get(i).getLabelDo().getLabelName());//暂时只能返回一个标签
-            articleOutParam.setCover(articleAndUserDos.get(i).getResourceDo().getUrl());//另一张表的url字段
-            articleOutParam.setHidden(articleAndUserDos.get(i).getArticleDo().getHidden());
-            articleOutParam.setContent(articleAndUserDos.get(i).getArticleDo().getContent());
-            articleOutParam.setArticleAbstract(articleAndUserDos.get(i).getArticleDo().getArticleAbstract());
-            articleOutParam.setRelease_time(articleAndUserDos.get(i).getArticleDo().getReleaseTime().getTime());//用getTime将Date转为long型
-            articleOutParam.setThumb(articleAndUserDos.get(i).getArticleDynamicDo().getThumbNum());
-            articleOutParam.setReading(articleAndUserDos.get(i).getArticleDynamicDo().getReadingNum());
-            articleOutParams.add(articleOutParam);
-        }
+
         int end = articleInParam.getEnd() - articleInParam.getStart() +1;
 
-        if(end > articleAndUserDos.size()) end = articleAndUserDos.size();
+        if(end > articleOutParams.size()) end = articleOutParams.size();
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
     @PostMapping("/query_by_type")
     public CommonReturnType queryArticleByType(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        List<ArticleAndUserDo> articleAndUserDos =  (ArrayList)articleService.selectArticleByType(articleInParam.getStart(),
+        List<ArticleOutParam> articleOutParams =  (ArrayList)articleService.selectArticleByType(articleInParam.getStart(),
                 articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getType_1()).get("list");
         int sum = (int)articleService.selectArticleByType(articleInParam.getStart(),
                 articleInParam.getEnd()- articleInParam.getStart() + 1, articleInParam.getType_1()).get("sum");
-        List<ArticleOutParam> articleOutParams = new ArrayList<>();
-        //将通过service获取的数据换成要输出的形式
-        for(int i =0;i < articleAndUserDos.size();i++){
-            ArticleOutParam articleOutParam = new ArticleOutParam();
-            articleOutParam.setArticle_id(articleAndUserDos.get(i).getArticleDo().getVirtualId());
-            articleOutParam.setTitle(articleAndUserDos.get(i).getArticleDo().getTitle());
-            articleOutParam.setAuthor_id(articleAndUserDos.get(i).getArticleDo().getArticleId());
-            articleOutParam.setAuthor_nickname(articleAndUserDos.get(i).getUserDo().getNickname());
-            articleOutParam.setType_1(articleAndUserDos.get(i).getArticleDo().getType1());
-            articleOutParam.setType_2(articleAndUserDos.get(i).getArticleDo().getType2());
-            articleOutParam.setLabel_name1(articleAndUserDos.get(i).getLabelDo().getLabelName());//暂时只能返回一个标签
-            articleOutParam.setCover(articleAndUserDos.get(i).getResourceDo().getUrl());//另一张表的url字段
-            articleOutParam.setHidden(articleAndUserDos.get(i).getArticleDo().getHidden());
-            articleOutParam.setContent(articleAndUserDos.get(i).getArticleDo().getContent());
-            articleOutParam.setArticleAbstract(articleAndUserDos.get(i).getArticleDo().getArticleAbstract());
-            articleOutParam.setRelease_time(articleAndUserDos.get(i).getArticleDo().getReleaseTime().getTime());//用getTime将Date转为long型
-            articleOutParam.setThumb(articleAndUserDos.get(i).getArticleDynamicDo().getThumbNum());
-            articleOutParam.setReading(articleAndUserDos.get(i).getArticleDynamicDo().getReadingNum());
-            articleOutParams.add(articleOutParam);
-        }
+
         int end = articleInParam.getEnd() - articleInParam.getStart() +1;
 
-        if(end > articleAndUserDos.size()) end = articleAndUserDos.size();
+        if(end > articleOutParams.size()) end = articleOutParams.size();
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }

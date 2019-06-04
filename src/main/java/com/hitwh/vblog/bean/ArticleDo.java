@@ -11,11 +11,7 @@ public class ArticleDo {
 
     private Integer authorId;
 
-    private Integer type1;
-
-    private Integer type2;
-
-    private Integer cover;
+    private String cover;
 
     private Integer hidden;
 
@@ -59,27 +55,12 @@ public class ArticleDo {
         this.authorId = authorId;
     }
 
-    public Integer getType1() {
-        return type1;
-    }
 
-    public void setType1(Integer type1) {
-        this.type1 = type1;
-    }
-
-    public Integer getType2() {
-        return type2;
-    }
-
-    public void setType2(Integer type2) {
-        this.type2 = type2;
-    }
-
-    public Integer getCover() {
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(Integer cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 

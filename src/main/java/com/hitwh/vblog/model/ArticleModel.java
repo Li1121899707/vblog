@@ -15,7 +15,7 @@ public class ArticleModel {
 
     private Integer type_2;
 
-    private Integer cover;
+    private String cover;
 
     @NotBlank(message = "文章内容不能为空")
     private String content;
@@ -63,11 +63,11 @@ public class ArticleModel {
         this.type_2 = type_2;
     }
 
-    public Integer getCover() {
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(Integer cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 

@@ -9,7 +9,7 @@ public class ArticleInParam extends BaseInParam {
 
     private Integer type_2;
 
-    private Integer cover;
+    private String cover;
 
     private String content;
 
@@ -55,11 +55,11 @@ public class ArticleInParam extends BaseInParam {
         this.type_2 = type_2;
     }
 
-    public Integer getCover() {
+    public String getCover() {
         return cover;
     }
 
-    public void setCover(Integer cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 

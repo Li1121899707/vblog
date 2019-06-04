@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitwh.vblog.mapper.ArticleLabelDoMapper">
+  <resultMap id="AllResultMap" type="com.hitwh.vblog.bean.ArticleLabelDoSimple">
+    <result column="label_id" jdbcType="INTEGER" property="label_id" />
+    <result column="label_name" javaType="String" property="label_name"/>
+  </resultMap>
+
+  <select id="selectAllArticleInterest" resultMap="AllResultMap" parameterType="java.lang.Integer">
+   SELECT vblog_article_label.label_id, label_name
+    FROM vblog_article_label, vblog_label
+    WHERE vblog_article_label.article_id = #{articleId}
+    AND vblog_article_label.label_id = vblog_label.label_id
+  </select>
+</mapper>

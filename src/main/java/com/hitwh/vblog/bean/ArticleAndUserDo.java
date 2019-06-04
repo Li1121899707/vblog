@@ -4,8 +4,6 @@ public class ArticleAndUserDo {
     private ArticleDo articleDo;
     private ArticleDynamicDo articleDynamicDo;
     private UserDo userDo;
-    private LabelDo labelDo;
-    private ResourceDo resourceDo;
 
     public ArticleDo getArticleDo() {
         return articleDo;
@@ -29,21 +27,5 @@ public class ArticleAndUserDo {
 
     public void setUserDo(UserDo userDo) {
         this.userDo = userDo;
-    }
-
-    public LabelDo getLabelDo() {
-        return labelDo;
-    }
-
-    public void setLabelDo(LabelDo labelDo) {
-        this.labelDo = labelDo;
-    }
-
-    public ResourceDo getResourceDo() {
-        return resourceDo;
-    }
-
-    public void setResourceDo(ResourceDo resourceDo) {
-        this.resourceDo = resourceDo;
     }
 }
