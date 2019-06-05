@@ -25,7 +25,7 @@
     values (#{labelId,jdbcType=INTEGER}, #{labelName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.LabelDo">
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.LabelDo" useGeneratedKeys="true" keyProperty="labelId">
     insert into vblog_label
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="labelId != null">

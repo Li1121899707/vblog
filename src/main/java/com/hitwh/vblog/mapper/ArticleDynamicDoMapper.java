@@ -14,4 +14,8 @@ public interface ArticleDynamicDoMapper {
     int updateByPrimaryKeySelective(ArticleDynamicDo record);
 
     int updateByPrimaryKey(ArticleDynamicDo record);
+
+    int addArticleDynamic(ArticleDynamicDo record);
+
+    int subtractArticleDynamic(ArticleDynamicDo record);
 }

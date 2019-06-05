@@ -103,4 +103,48 @@
       comment_num = #{commentNum,jdbcType=INTEGER}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
+
+  <update id="addArticleDynamic" parameterType="com.hitwh.vblog.bean.ArticleDynamicDo">
+    update vblog_article_dynamic
+    <set>
+      <if test="virtualId != null">
+        virtual_id = virtual_id + 1,
+      </if>
+      <if test="readingNum != null">
+        reading_num = reading_num + 1,
+      </if>
+      <if test="thumbNum != null">
+        thumb_num = thumb_num + 1,
+      </if>
+      <if test="collectionNum != null">
+        collection_num = collection_num + 1,
+      </if>
+      <if test="commentNum != null">
+        comment_num = comment_num + 1,
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
+
+  <update id="subtractArticleDynamic" parameterType="com.hitwh.vblog.bean.ArticleDynamicDo">
+    update vblog_article_dynamic
+    <set>
+      <if test="virtualId != null">
+        virtual_id = virtual_id - 1,
+      </if>
+      <if test="readingNum != null">
+        reading_num = reading_num - 1,
+      </if>
+      <if test="thumbNum != null">
+        thumb_num = thumb_num - 1,
+      </if>
+      <if test="collectionNum != null">
+        collection_num = collection_num - 1,
+      </if>
+      <if test="commentNum != null">
+        comment_num = comment_num - 1,
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
 </mapper>

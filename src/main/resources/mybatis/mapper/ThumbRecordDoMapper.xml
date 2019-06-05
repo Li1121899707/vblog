@@ -37,4 +37,13 @@
       </if>
     </trim>
   </insert>
+
+  <delete id="delete" parameterType="com.hitwh.vblog.bean.ThumbRecordDo">
+    delete from vblog_thumb_record where article_id = #{articleId} and thumber_id = #{thumberId}
+  </delete>
+
+  <select id="countThumbNum" resultType="java.lang.Integer">
+    select count(*) from vblog_thumb_record where article_id = #{articleId}
+  </select>
+
 </mapper>
