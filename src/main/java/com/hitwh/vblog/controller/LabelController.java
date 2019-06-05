@@ -2,6 +2,7 @@ package com.hitwh.vblog.controller;
 
 import com.hitwh.vblog.inparam.BaseInParam;
 import com.hitwh.vblog.inparam.LabelInParam;
+import com.hitwh.vblog.model.LabelModel;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
@@ -30,6 +31,25 @@ public class LabelController extends BaseController {
     @PostMapping("/query_all_interests")
     public CommonReturnType queryAllInterests(@RequestBody LabelInParam labelInParam) throws BusinessException {
         return CommonReturnType.create(labelService.queryAllInterests(labelInParam.getStart(), labelInParam.getEnd()));
+    }
+
+    @PostMapping("/admin/insert")
+    public CommonReturnType insertLabel(@RequestBody LabelInParam labelInParam) throws BusinessException {
+        LabelModel labelModel = new LabelModel();
+        labelModel.setLabelName(labelInParam.getLabel_name());
+        labelModel.setDescription(labelInParam.getDescription());
+        labelService.insertLabel(labelModel);
+        return CommonReturnType.success();
+    }
+
+    @PostMapping("/admin/update")
+    public CommonReturnType updateLabel(@RequestBody LabelInParam labelInParam) throws BusinessException{
+        LabelModel labelModel = new LabelModel();
+        labelModel.setLabelId(labelInParam.getLabel_id());
+        labelModel.setLabelName(labelInParam.getLabel_name());
+        labelModel.setDescription(labelInParam.getDescription());
+        labelService.updateLabel(labelModel);
+        return CommonReturnType.success();
     }
 
 

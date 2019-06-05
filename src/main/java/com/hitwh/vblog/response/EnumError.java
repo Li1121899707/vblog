@@ -9,6 +9,7 @@ public enum EnumError implements CommonError {
     USER_NOT_EXIST(1001, "用户不存在"),
     DATABASE_INSERT_ERROR(2001, "数据库添加失败"),
     DATABASE_QUERY_NULL_ERROR(2002, "数据库查询数据为空"),
+    DATABASE_DELETE_ERROR(2003, "数据库删除失败"),
     UNKNOWN_ERROR(4002, "未知错误"),
     PASSWORD_ERROR(1003,"密码错误"),
     MD5_ERROR(4003, "MD5加密错误"),
@@ -49,4 +50,5 @@ public enum EnumError implements CommonError {
         this.errMsg = errMsg;
         return this;
     }
+
 }

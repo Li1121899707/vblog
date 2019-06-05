@@ -5,7 +5,7 @@ public class LabelInParam extends BaseInParam {
 
     private String label_name;
 
-    private String discription;
+    private String description;
 
     private Integer start;
 
@@ -28,12 +28,12 @@ public class LabelInParam extends BaseInParam {
         this.label_name = label_name;
     }
 
-    public String getDiscription() {
-        return discription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getStart() {

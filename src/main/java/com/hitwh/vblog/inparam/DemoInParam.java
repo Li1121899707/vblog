@@ -1,7 +1,7 @@
 package com.hitwh.vblog.inparam;
 
 // 传入参数类，用于接收从前端传来的数据
-public class DemoInParam {
+public class DemoInParam extends BaseInParam {
 
     private long request_time;
 
