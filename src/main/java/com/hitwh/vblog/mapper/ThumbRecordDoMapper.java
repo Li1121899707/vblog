@@ -11,4 +11,6 @@ public interface ThumbRecordDoMapper {
     int delete(ThumbRecordDo record);
 
     int countThumbNum(@Param("articleId") Integer articleId);
+
+    ThumbRecordDo selectIfThumb(ThumbRecordDo record);
 }

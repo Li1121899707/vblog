@@ -49,4 +49,13 @@ public class ThumbController extends BaseController {
         return CommonReturnType.create(thumbService.countThumbNum(thumbInParam.getArticle_id()));
     }
 
+    // 查看是否点赞
+    @PostMapping("/query_if_thumb")
+    public CommonReturnType queryIfThumb(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
+        ThumbModel thumbModel = new ThumbModel();
+        thumbModel.setArticleId(thumbInParam.getArticle_id());
+        thumbModel.setUserId(thumbInParam.getUid());
+        return CommonReturnType.create(thumbService.queryIfThumb(thumbModel));
+    }
+
 }

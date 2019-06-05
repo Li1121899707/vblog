@@ -9,9 +9,11 @@ import com.hitwh.vblog.response.BusinessException;
  * @date 2019/6/517:00
  */
 public interface ThumbService {
-    void insertThumbRecord(ThumbModel thumbRecordModel) throws BusinessException;
+    void insertThumbRecord(ThumbModel thumbModel) throws BusinessException;
 
     Integer countThumbNum(Integer articleId) throws BusinessException;
 
-    void deleteThumbRecord(ThumbModel thumbRecordModel) throws BusinessException;
+    void deleteThumbRecord(ThumbModel thumbModel) throws BusinessException;
+
+    Boolean queryIfThumb(ThumbModel thumbModel) throws BusinessException;
 }
