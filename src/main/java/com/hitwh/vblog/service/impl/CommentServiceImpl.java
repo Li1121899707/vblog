@@ -1,7 +1,9 @@
 package com.hitwh.vblog.service.impl;
 
+import com.hitwh.vblog.bean.ArticleDynamicDo;
 import com.hitwh.vblog.bean.ComAndUserDo;
 import com.hitwh.vblog.bean.CommentDo;
+import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.CommentDoMapper;
 import com.hitwh.vblog.model.CommentModel;
 import com.hitwh.vblog.outparam.CommentOutParam;
@@ -19,11 +21,15 @@ import java.util.Map;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+
+    private ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
     @Autowired
     CommentDoMapper commentDoMapper;
     @Autowired
     ValidatorImpl validator;
 
+    @Autowired
+    ArticleDynamicDoMapper articleDynamicDoMapper;
     /**
      *
      * @param start
@@ -97,6 +103,11 @@ public class CommentServiceImpl implements CommentService {
         if (ifInsert != 1) {
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
         }
+        articleDynamicDo.setArticleId(commentModel.getArticleId());
+        articleDynamicDo.setCommentNum(1);
+        int i = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
+        if(i != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
 
     @Override

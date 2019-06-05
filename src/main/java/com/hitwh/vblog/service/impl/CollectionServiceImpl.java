@@ -24,8 +24,14 @@ import java.util.Map;
  * @author 臧博浩
  * @date 2019/6/5 17:37
  */
+
+/**
+ * 收藏Service
+ */
 @Service
 public class CollectionServiceImpl implements CollectionService {
+
+    private   ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
 
     @Autowired
     ValidatorImpl validator;
@@ -42,8 +48,9 @@ public class CollectionServiceImpl implements CollectionService {
     @Autowired
     ArticleServiceImpl articleService;
 
+//添加收藏
     public void addCollection(CollectionModel collectionModel) throws BusinessException {
-
+        //判断传参是否正确
         if(collectionModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
@@ -56,8 +63,15 @@ public class CollectionServiceImpl implements CollectionService {
         collectionRecordDo.setArticleId(collectionModel.getArticleId());
         collectionRecordDo.setCollectorId(collectionModel.getUserId());
         collectionRecordDo.setCollectTime(new Date(System.currentTimeMillis()));
-
+        //添加收藏信息
         collectionRecordDoMapper.insertSelective(collectionRecordDo);
+        //给文章添加收藏数加1
+        articleDynamicDo.setArticleId(collectionModel.getArticleId());
+        articleDynamicDo.setCollectionNum(1);
+        //判断收藏数加1是否成功
+        Integer insert = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
+        if(insert != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
 
     @Override
@@ -76,6 +90,14 @@ public class CollectionServiceImpl implements CollectionService {
         collectionRecordDo.setCollectorId(collectionModel.getUserId());
 
         collectionRecordDoMapper.delete(collectionRecordDo);
+
+        articleDynamicDo.setArticleId(collectionModel.getArticleId());
+        articleDynamicDo.setCollectionNum(1);
+
+        Integer insert = articleDynamicDoMapper.subtractArticleDynamic(articleDynamicDo);
+        if(insert != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
     }
 
     @Override
