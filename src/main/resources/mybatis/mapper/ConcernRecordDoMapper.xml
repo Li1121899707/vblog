@@ -6,6 +6,14 @@
     <result column="follower_id" jdbcType="INTEGER" property="followerId" />
     <result column="concern_time" jdbcType="TIMESTAMP" property="concernTime" />
   </resultMap>
+  <resultMap id="ConcernMap" type="com.hitwh.vblog.bean.ConcernAndUserDo">
+    <association property="ConcernRecordDo" javaType="com.hitwh.vblog.bean.ConcernRecordDo" resultMap="BaseResultMap" />
+    <association property="userDo" javaType="com.hitwh.vblog.bean.UserDo" resultMap="UserMap"/>
+  </resultMap>
+  <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+  </resultMap>
   <insert id="insert" parameterType="com.hitwh.vblog.bean.ConcernRecordDo">
     insert into vblog_concern_record (target_id, follower_id, concern_time
       )
@@ -37,4 +45,19 @@
       </if>
     </trim>
   </insert>
+  <delete id="delete" parameterType="com.hitwh.vblog.bean.ConcernRecordDo">
+    delete from vblog_concern_record
+    where follower_id = #{followerId,jdbcType=INTEGER}
+    and target_id = #{targetId,jdbcType=INTEGER}
+  </delete>
+  <select id="selectFollower" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select vblog_concern_record.follower_id, vblog_user.user_id, vblog_user.nickname
+    from vblog_concern_record, vblog_user
+    where vblog_concern_record.target_id = #{userId}
+  </select>
+  <select id="selectTarget" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select vblog_concern_record.target_id, vblog_user.user_id, vblog_user.nickname
+    from vblog_concern_record, vblog_user
+    where vblog_concern_record.follower_id = #{userId}
+  </select>
 </mapper>
