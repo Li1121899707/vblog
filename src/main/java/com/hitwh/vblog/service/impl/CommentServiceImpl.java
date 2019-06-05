@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
         commentOutParam.setArticle_id(comAndUserDo.getCommentDo().getArticleId());
         commentOutParam.setUser_nickname(comAndUserDo.getUserDo().getNickname());
         commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
-        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime());
+        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime().getTime()/1000);
         commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
         commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
         commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
@@ -102,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void hideComment(Integer commentId) throws BusinessException {
         //判断control传来的参数的正确性
-        if(commentId <= 0)
+        if(commentId == null || commentId <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
         Integer hideResult = commentDoMapper.updateCommentHide(commentId);

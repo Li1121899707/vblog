@@ -24,6 +24,7 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
   </resultMap>
+
   <resultMap id="ArticleDynamicMap" type="com.hitwh.vblog.bean.ArticleDynamicDo">
     <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="thumb_num" jdbcType="INTEGER" property="thumbNum" />
@@ -261,4 +262,20 @@ SELECT vblog_article_label.article_id, vblog_article_label.label_id , vblog_arti
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
+
+  <select id="queryCollectionArticleByUser" resultMap="ArticleAndUserMap">
+    SELECT vblog_article.article_id, vblog_article.virtual_id, title, author_id,
+    nickname, cover, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num
+    FROM vblog_collection_record
+    RIGHT JOIN vblog_article
+    ON vblog_article.article_id = vblog_collection_record.article_id
+    RIGHT JOIN vblog_article_dynamic
+    ON vblog_article.article_id = vblog_article_dynamic.article_id
+    RIGHT JOIN vblog_user
+    ON vblog_article.author_id = vblog_user.user_id
+    WHERE vblog_collection_record.collector_id = #{userId}
+    limit #{start} ,#{num}
+  </select>
+
 </mapper>
