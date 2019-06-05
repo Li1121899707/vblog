@@ -12,11 +12,13 @@ import com.hitwh.vblog.util.TimestampUtil;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ConcernServiceImpl implements ConcernService {
     @Autowired
     ConcernRecordDoMapper concernRecordDoMapper;
@@ -65,16 +67,6 @@ public class ConcernServiceImpl implements ConcernService {
     @Override
     public List<ConcernOutParam> queryFollower(Integer userId) throws BusinessException {
         List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectFollower(userId);
-        return convertToConcernParam(concernAndUserDos);
-    }
-
-    @Override
-    public List<ConcernOutParam> queryTarget(Integer userId) throws BusinessException {
-        List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectTarget(userId);
-        return convertToConcernParam(concernAndUserDos);
-    }
-
-    public List<ConcernOutParam> convertToConcernParam(List<ConcernAndUserDo> concernAndUserDos){
         List<ConcernOutParam> concernOutParams = new ArrayList<>();
         for (ConcernAndUserDo concernAndUserDo: concernAndUserDos) {
             ConcernOutParam concernOutParam = new ConcernOutParam();
@@ -84,4 +76,18 @@ public class ConcernServiceImpl implements ConcernService {
         }
         return concernOutParams;
     }
+
+    @Override
+    public List<ConcernOutParam> queryTarget(Integer userId) throws BusinessException {
+        List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectTarget(userId);
+        List<ConcernOutParam> concernOutParams = new ArrayList<>();
+        for (ConcernAndUserDo concernAndUserDo: concernAndUserDos) {
+            ConcernOutParam concernOutParam = new ConcernOutParam();
+            concernOutParam.setUser_id(concernAndUserDo.getConcernRecordDo().getTargetId());
+            concernOutParam.setUser_nickname(concernAndUserDo.getUserDo().getNickname());
+            concernOutParams.add(concernOutParam);
+        }
+        return concernOutParams;
+    }
+
 }

@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 public class ConcernInParam {
     private String key;
-    private Integer user_id;
+    private Integer uid;
     private Integer target_id;
 
     public String getKey() {
@@ -15,12 +15,12 @@ public class ConcernInParam {
         this.key = key;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUid() {
+        return uid;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     public Integer getTarget_id() {
