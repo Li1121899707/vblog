@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 /**
- * @author 11218
+ * @author liysuzy
  * @description: 点赞Service
  * @date 2019/6/517:05
  */
@@ -30,17 +30,17 @@ public class ThumbServiceImpl implements ThumbService {
     ArticleDynamicDoMapper articleDynamicDoMapper;
 
     @Override
-    public void insertThumbRecord(ThumbModel thumbRecordModel) throws BusinessException {
-        if(thumbRecordModel == null)
+    public void insertThumbRecord(ThumbModel thumbModel) throws BusinessException {
+        if(thumbModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        ValidationResult result = validator.validate(thumbRecordModel);
+        ValidationResult result = validator.validate(thumbModel);
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
 
         ThumbRecordDo thumbRecordDo = new ThumbRecordDo();
-        thumbRecordDo.setArticleId(thumbRecordModel.getArticleId());
-        thumbRecordDo.setThumberId(thumbRecordModel.getUserId());
+        thumbRecordDo.setArticleId(thumbModel.getArticleId());
+        thumbRecordDo.setThumberId(thumbModel.getUserId());
         thumbRecordDo.setThumbTime(new Date(System.currentTimeMillis()));
 
         Integer column = thumbRecordDoMapper.insertSelective(thumbRecordDo);
@@ -49,7 +49,7 @@ public class ThumbServiceImpl implements ThumbService {
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
         ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
-        articleDynamicDo.setArticleId(thumbRecordModel.getArticleId());
+        articleDynamicDo.setArticleId(thumbModel.getArticleId());
         articleDynamicDo.setThumbNum(1);
 
         // 点赞数加一
@@ -71,17 +71,17 @@ public class ThumbServiceImpl implements ThumbService {
 
 
     @Override
-    public void deleteThumbRecord(ThumbModel thumbRecordModel) throws BusinessException {
-        if(thumbRecordModel == null)
+    public void deleteThumbRecord(ThumbModel thumbModel) throws BusinessException {
+        if(thumbModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        ValidationResult result = validator.validate(thumbRecordModel);
+        ValidationResult result = validator.validate(thumbModel);
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
 
         ThumbRecordDo thumbRecordDo = new ThumbRecordDo();
-        thumbRecordDo.setArticleId(thumbRecordModel.getArticleId());
-        thumbRecordDo.setThumberId(thumbRecordModel.getUserId());
+        thumbRecordDo.setArticleId(thumbModel.getArticleId());
+        thumbRecordDo.setThumberId(thumbModel.getUserId());
 
         Integer column = thumbRecordDoMapper.delete(thumbRecordDo);
 
@@ -89,7 +89,7 @@ public class ThumbServiceImpl implements ThumbService {
             throw new BusinessException(EnumError.DATABASE_DELETE_ERROR);
 
         ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
-        articleDynamicDo.setArticleId(thumbRecordModel.getArticleId());
+        articleDynamicDo.setArticleId(thumbModel.getArticleId());
         articleDynamicDo.setThumbNum(1);
 
         // 点赞数减一
@@ -100,6 +100,24 @@ public class ThumbServiceImpl implements ThumbService {
 
     }
 
+    @Override
+    public Boolean queryIfThumb(ThumbModel thumbModel) throws BusinessException {
+        if(thumbModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
+        ValidationResult result = validator.validate(thumbModel);
+        if(result.isHasErrors())
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
 
+        ThumbRecordDo thumbRecordDo = new ThumbRecordDo();
+        thumbRecordDo.setArticleId(thumbModel.getArticleId());
+        thumbRecordDo.setThumberId(thumbModel.getUserId());
+
+        ThumbRecordDo recordDo = thumbRecordDoMapper.selectIfThumb(thumbRecordDo);
+
+        if(recordDo == null)
+            return false;
+        else
+            return true;
+    }
 }

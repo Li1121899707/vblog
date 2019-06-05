@@ -46,4 +46,8 @@
     select count(*) from vblog_thumb_record where article_id = #{articleId}
   </select>
 
+  <select id="selectIfThumb" resultType="com.hitwh.vblog.bean.ThumbRecordDo">
+    select * from vblog_thumb_record where article_id = #{articleId} and thumber_id = #{thumberId}
+  </select>
+
 </mapper>
