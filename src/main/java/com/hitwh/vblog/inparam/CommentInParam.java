@@ -4,7 +4,6 @@ public class CommentInParam extends BaseInParam {
     private Integer article_id;
     private Integer start;
     private Integer end;
-    private Integer uid;
     private Integer comment_id;
     private String comment;
     private Integer parent_comment_id;
@@ -33,15 +32,7 @@ public class CommentInParam extends BaseInParam {
         this.end = end;
     }
 
-    @Override
-    public Integer getUid() {
-        return uid;
-    }
 
-    @Override
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
 
     public Integer getComment_id() {
         return comment_id;

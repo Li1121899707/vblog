@@ -101,4 +101,9 @@ public class ArticleController extends BaseController {
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
+
+    @PostMapping("/query_random")
+    public CommonReturnType queryRandomArticle() throws BusinessException{
+        return CommonReturnType.create(articleService.queryRandomArticle());
+    }
 }

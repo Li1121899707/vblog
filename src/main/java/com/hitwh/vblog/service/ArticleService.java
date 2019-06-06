@@ -12,6 +12,7 @@ public interface ArticleService {
     void write(ArticleModel articleModel) throws BusinessException;
     void delete(Integer article_id) throws BusinessException;
     void update(ArticleModel articleModel) throws BusinessException;
+    ArticleOutParam queryRandomArticle() throws BusinessException;
     ArticleOutParam queryArticleId(Integer article_id) throws BusinessException;
     Map<String,Object> selectArticleByAuthorId(@Param("start") Integer start,
                                                 @Param("num") Integer num,

@@ -2,21 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hitwh.vblog.mapper.CollectionRecordDoMapper">
   <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.CollectionRecordDo">
-    <result column="artical_id" jdbcType="INTEGER" property="articalId" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="collector_id" jdbcType="INTEGER" property="collectorId" />
     <result column="collect_time" jdbcType="TIMESTAMP" property="collectTime" />
   </resultMap>
   <insert id="insert" parameterType="com.hitwh.vblog.bean.CollectionRecordDo">
-    insert into vblog_collection_record (artical_id, collector_id, collect_time
+    insert into vblog_collection_record (article_id, collector_id, collect_time
       )
-    values (#{articalId,jdbcType=INTEGER}, #{collectorId,jdbcType=INTEGER}, #{collectTime,jdbcType=TIMESTAMP}
+    values (#{articleId,jdbcType=INTEGER}, #{collectorId,jdbcType=INTEGER}, #{collectTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.CollectionRecordDo">
     insert into vblog_collection_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="articalId != null">
-        artical_id,
+      <if test="articleId != null">
+        article_id,
       </if>
       <if test="collectorId != null">
         collector_id,
@@ -26,8 +26,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="articalId != null">
-        #{articalId,jdbcType=INTEGER},
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
       </if>
       <if test="collectorId != null">
         #{collectorId,jdbcType=INTEGER},
@@ -37,4 +37,24 @@
       </if>
     </trim>
   </insert>
+
+  <delete id="delete" parameterType="com.hitwh.vblog.bean.CollectionRecordDo">
+    delete from vblog_collection_record
+    where article_id = #{articleId,jdbcType=INTEGER}
+    and collector_id = #{collectorId,jdbcType=INTEGER}
+  </delete>
+
+  <select id="selectNumByUserId" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_collection_record
+    where collector_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectIfCollected" resultType="com.hitwh.vblog.bean.CollectionRecordDo">
+    select collector_id,article_id
+    from vblog_collection_record
+    where collector_id = #{userId,jdbcType=INTEGER}
+    and article_id = #{articleId,jdbcType=INTEGER}
+  </select>
+
 </mapper>

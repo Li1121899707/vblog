@@ -15,4 +15,6 @@ public interface ConcernService {
     List<ConcernOutParam> queryFollower(Integer userId) throws BusinessException;
 
     List<ConcernOutParam>  queryTarget(Integer userId) throws BusinessException;
+
+    boolean isConcerned(ConcernModel concernModel) throws BusinessException;
 }

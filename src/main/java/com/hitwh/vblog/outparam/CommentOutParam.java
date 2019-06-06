@@ -13,10 +13,18 @@ public class CommentOutParam {
 
     private Integer parent_comment_id;
 
-    private Date comment_time;
+    private long comment_time;
 
     private String avatar_sm;
 
+
+    public long getComment_time() {
+        return comment_time;
+    }
+
+    public void setComment_time(long comment_time) {
+        this.comment_time = comment_time;
+    }
 
     public Integer getArticle_id() {
         return article_id;
@@ -56,14 +64,6 @@ public class CommentOutParam {
 
     public void setParent_comment_id(Integer parent_comment_id) {
         this.parent_comment_id = parent_comment_id;
-    }
-
-    public Date getComment_time() {
-        return comment_time;
-    }
-
-    public void setComment_time(Date comment_time) {
-        this.comment_time = comment_time;
     }
 
     public String getAvatar_sm() {

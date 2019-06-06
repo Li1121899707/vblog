@@ -3,18 +3,18 @@ package com.hitwh.vblog.bean;
 import java.util.Date;
 
 public class CollectionRecordDo {
-    private Integer articalId;
+    private Integer articleId;
 
     private Integer collectorId;
 
     private Date collectTime;
 
-    public Integer getArticalId() {
-        return articalId;
+    public Integer getArticleId() {
+        return articleId;
     }
 
-    public void setArticalId(Integer articalId) {
-        this.articalId = articalId;
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
     }
 
     public Integer getCollectorId() {

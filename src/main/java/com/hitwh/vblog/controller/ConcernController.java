@@ -47,4 +47,12 @@ public class ConcernController extends BaseController {
         Integer targetId = concernInParam.getUid();
         return CommonReturnType.create(PageResponse.create(0,0,0, concernService.queryTarget(targetId)));
     }
+
+    @PostMapping("is_concerned")
+    public CommonReturnType isConcerned(@RequestBody ConcernInParam concernInParam) throws BusinessException{
+        ConcernModel concernModel = new ConcernModel();
+        concernModel.setTargetId(concernInParam.getTarget_id());
+        concernModel.setUserId(concernInParam.getUid());
+        return CommonReturnType.create(concernService.isConcerned(concernModel));
+    }
 }

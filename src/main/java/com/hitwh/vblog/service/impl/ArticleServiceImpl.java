@@ -261,4 +261,14 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return articleOutParams;
     }
+
+    @Override
+    public ArticleOutParam queryRandomArticle() throws BusinessException {
+        int number = articleDoMapper.selectArticleNumber();
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectAllArticle();
+        List<ArticleOutParam> articleOutParams = convertToArticleOutParams(articleAndUserDos);
+        int choice = (int)(Math.random()*number);
+        ArticleOutParam articleOutParam = articleOutParams.get(choice);
+        return articleOutParam;
+    }
 }

@@ -90,4 +90,15 @@ public class ConcernServiceImpl implements ConcernService {
         return concernOutParams;
     }
 
+    @Override
+    public boolean isConcerned(ConcernModel concernModel) throws BusinessException{
+        ConcernRecordDo concernRecordDo = new ConcernRecordDo();
+        concernRecordDo.setTargetId(concernModel.getTargetId());
+        concernRecordDo.setFollowerId(concernModel.getUserId());
+        int result = concernRecordDoMapper.selectIsConcerned(concernRecordDo);
+        if (result != 1)
+            return false;
+        else
+            return true;
+    }
 }

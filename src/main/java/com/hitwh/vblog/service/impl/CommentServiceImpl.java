@@ -1,7 +1,9 @@
 package com.hitwh.vblog.service.impl;
 
+import com.hitwh.vblog.bean.ArticleDynamicDo;
 import com.hitwh.vblog.bean.ComAndUserDo;
 import com.hitwh.vblog.bean.CommentDo;
+import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.CommentDoMapper;
 import com.hitwh.vblog.model.CommentModel;
 import com.hitwh.vblog.outparam.CommentOutParam;
@@ -19,11 +21,15 @@ import java.util.Map;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+
+    private ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
     @Autowired
     CommentDoMapper commentDoMapper;
     @Autowired
     ValidatorImpl validator;
 
+    @Autowired
+    ArticleDynamicDoMapper articleDynamicDoMapper;
     /**
      *
      * @param start
@@ -63,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
         commentOutParam.setArticle_id(comAndUserDo.getCommentDo().getArticleId());
         commentOutParam.setUser_nickname(comAndUserDo.getUserDo().getNickname());
         commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
-        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime());
+        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime().getTime()/1000);
         commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
         commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
         commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
@@ -97,12 +103,17 @@ public class CommentServiceImpl implements CommentService {
         if (ifInsert != 1) {
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
         }
+        articleDynamicDo.setArticleId(commentModel.getArticleId());
+        articleDynamicDo.setCommentNum(1);
+        int i = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
+        if(i != 1)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
 
     @Override
     public void hideComment(Integer commentId) throws BusinessException {
         //判断control传来的参数的正确性
-        if(commentId <= 0)
+        if(commentId == null || commentId <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
         Integer hideResult = commentDoMapper.updateCommentHide(commentId);

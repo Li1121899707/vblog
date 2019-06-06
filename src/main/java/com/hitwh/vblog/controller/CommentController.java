@@ -41,7 +41,7 @@ public class CommentController extends BaseController{
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         //获取需要的评论数据
         List<ComAndUserDo> comAndUserDos =  (ArrayList)commentService.selectDisplayComment(
-                commentInParam.getStart(),
+                commentInParam.getStart() ,
                 commentInParam.getEnd()- commentInParam.getStart() + 1,
                 commentInParam.getArticle_id()).get("list");
         //获取文章的评论总数
@@ -53,7 +53,7 @@ public class CommentController extends BaseController{
             CommentOutParam c = new CommentOutParam();
             c.setUser_id(comAndUserDos.get(i).getUserDo().getUserId());
             c.setParent_comment_id(comAndUserDos.get(i).getCommentDo().getParentCommentId());
-            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime());
+            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime().getTime()/1000);
             c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
             c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
             c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
@@ -96,7 +96,7 @@ public class CommentController extends BaseController{
             CommentOutParam c = new CommentOutParam();
             c.setUser_id(comAndUserDos.get(i).getUserDo().getUserId());
             c.setParent_comment_id(comAndUserDos.get(i).getCommentDo().getParentCommentId());
-            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime());
+            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime().getTime()/1000);
             c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
             c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
             c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
