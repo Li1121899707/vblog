@@ -1,7 +1,6 @@
 package com.hitwh.vblog.service.impl;
 
-import com.hitwh.vblog.bean.ReportRecordDo;
-import com.hitwh.vblog.bean.ThumbRecordDo;
+import com.hitwh.vblog.bean.*;
 import com.hitwh.vblog.mapper.ReportRecordDoMapper;
 import com.hitwh.vblog.model.ReportModel;
 import com.hitwh.vblog.outparam.ReportOutParam;
@@ -12,10 +11,8 @@ import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author liysuzy
@@ -52,25 +49,86 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportOutParam> queryAllReports(Integer start, Integer end) throws BusinessException {
+    public Map<String, Object> queryAllReports(Integer start, Integer end) throws BusinessException {
+        Map<String,Object> map = new HashMap<>();
         if(start == null || end == null || start < 0 || end <= start || end == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        return null;
+        Integer sum = reportRecordDoMapper.selectAllReportRecordsNum();
+        List<ReportAndArticleDo> reportAndArticleDos = reportRecordDoMapper.selectAllReportRecords(start, end-start+1);
+
+        map.put("sum", sum);
+        map.put("list", convertToArticleOutParams(reportAndArticleDos));
+        return map;
     }
 
     @Override
-    public ReportOutParam queryReportByArticleId(Integer start, Integer end, Integer articleId) {
-        return null;
+    public Map<String, Object> queryReportsByArticleId(Integer start, Integer end, Integer articleId) throws BusinessException {
+        Map<String,Object> map = new HashMap<>();
+        if(start == null || end == null || start < 0 || end <= start || end == 0 || articleId == null || articleId == 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        Integer sum = reportRecordDoMapper.selectReportRecordsByArticleIdNum(articleId);
+        List<ReportAndArticleDo> reportAndArticleDos = reportRecordDoMapper.selectReportRecordsByArticleId(start, end-start+1, articleId);
+
+        map.put("sum", sum);
+        map.put("list", convertToArticleOutParams(reportAndArticleDos));
+        return map;
     }
 
     @Override
-    public List<ReportOutParam> queryReportsByHandleResult(Integer start, Integer end) {
-        return null;
+    public Map<String, Object> queryReportsByHandleResult(Integer start, Integer end, Integer handleResult) throws BusinessException {
+        Map<String,Object> map = new HashMap<>();
+        if(start == null || end == null || start < 0 || end <= start || end == 0 || handleResult == null || handleResult > 3 || handleResult < 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        Integer sum = reportRecordDoMapper.selectReportRecordsByHandleResultNum(handleResult);
+        List<ReportAndArticleDo> reportAndArticleDos = reportRecordDoMapper.selectReportRecordsByHandleResult(start, end-start +1, handleResult);
+
+        map.put("sum", sum);
+        map.put("list", convertToArticleOutParams(reportAndArticleDos));
+        return map;
     }
 
+
     @Override
-    public Integer handleReport(ReportModel reportModel) {
-        return null;
+    public void handleReport(ReportModel reportModel) throws BusinessException {
+        if(reportModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        if(reportModel.getArticleId() == null || reportModel.getArticleId() == 0 || reportModel.getHandleResult() == null
+        || reportModel.getHandleResult() <=0 || reportModel.getHandleResult() >2)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        ReportRecordDo reportRecordDo = new ReportRecordDo();
+        reportRecordDo.setArticleId(reportModel.getArticleId());
+        reportRecordDo.setHandleResult(reportModel.getHandleResult());
+
+        Integer column = reportRecordDoMapper.updateByArticleId(reportRecordDo);
+
+        if(column == null || column == 0)
+            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+
+    }
+
+    public List<ReportOutParam> convertToArticleOutParams(List<ReportAndArticleDo> reportAndArticleDos){
+        List<ReportOutParam> reportOutParams = new ArrayList<>();
+        for (ReportAndArticleDo r: reportAndArticleDos
+        ) {
+            ReportOutParam reportOutParam = new ReportOutParam();
+            reportOutParam.setArticle_id(r.getArticleDo().getArticleId());
+            reportOutParam.setVirtual_id(r.getArticleDo().getVirtualId());
+            reportOutParam.setArticle_name(r.getArticleDo().getTitle());
+            reportOutParam.setReporter_id(r.getUserDo().getUserId());
+            reportOutParam.setReport_nickname(r.getUserDo().getNickname());
+            reportOutParam.setAdmin_id(r.getReportRecordDo().getAdminId());
+            reportOutParam.setReason(r.getReportRecordDo().getReason());
+            reportOutParam.setReport_time(r.getReportRecordDo().getReportTime().getTime());
+            if(r.getReportRecordDo().getHandleTime() != null)
+                reportOutParam.setHandle_time(r.getReportRecordDo().getHandleTime().getTime());
+            reportOutParam.setHandle_result(r.getReportRecordDo().getHandleResult());
+            reportOutParams.add(reportOutParam);
+        }
+        return reportOutParams;
     }
 }

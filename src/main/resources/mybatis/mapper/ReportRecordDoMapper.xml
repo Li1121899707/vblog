@@ -10,6 +10,75 @@
     <result column="handle_time" jdbcType="TIMESTAMP" property="handleTime" />
     <result column="handle_result" jdbcType="INTEGER" property="handleResult" />
   </resultMap>
+
+  <resultMap id="ArticleResultMap" type="com.hitwh.vblog.bean.ArticleDo">
+    <id column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="virtual_id" jdbcType="VARCHAR" property="virtualId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+
+  <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+  </resultMap>
+
+  <resultMap id="RecordAndArticleMap" type="com.hitwh.vblog.bean.ReportAndArticleDo">
+    <association property="userDo" javaType="com.hitwh.vblog.bean.UserDo" resultMap="UserMap"/>
+    <association property="articleDo" javaType="com.hitwh.vblog.bean.ArticleDo" resultMap="ArticleResultMap" />
+    <association property="reportRecordDo" javaType="com.hitwh.vblog.bean.ReportRecordDo" resultMap="BaseResultMap" />
+  </resultMap>
+
+
+  <select id="selectAllReportRecords" resultMap="RecordAndArticleMap">
+    SELECT vblog_article.article_id, vblog_article.virtual_id, title, reporter_id,
+    nickname, reason, admin_id, report_time, handle_time, handle_result, vblog_user.user_id
+    FROM vblog_report_record
+    LEFT JOIN vblog_article
+    ON vblog_article.article_id = vblog_report_record.article_id
+    LEFT JOIN vblog_user
+    ON reporter_id = vblog_user.user_id
+    limit #{start} ,#{num}
+  </select>
+  <select id="selectAllReportRecordsNum" resultType="java.lang.Integer">
+    select count(*) from vblog_report_record
+  </select>
+
+  <select id="selectReportRecordsByArticleId" resultMap="RecordAndArticleMap">
+    SELECT vblog_article.article_id, vblog_article.virtual_id, title, reporter_id,
+    nickname, reason, admin_id, report_time, handle_time, handle_result, vblog_user.user_id
+    FROM vblog_report_record
+    LEFT JOIN vblog_article
+    ON vblog_article.article_id = vblog_report_record.article_id
+    LEFT JOIN vblog_user
+    ON reporter_id = vblog_user.user_id
+    where vblog_report_record.article_id = #{articleId}
+    limit #{start} ,#{num}
+  </select>
+  <select id="selectReportRecordsByArticleIdNum" resultType="java.lang.Integer">
+    select count(*) from vblog_report_record where vblog_report_record.article_id = #{articleId}
+  </select>
+
+
+  <select id="selectReportRecordsByHandleResult" resultMap="RecordAndArticleMap">
+    SELECT vblog_article.article_id, vblog_article.virtual_id, title, reporter_id,
+    nickname, reason, admin_id, report_time, handle_time, handle_result, vblog_user.user_id
+    FROM vblog_report_record
+    LEFT JOIN vblog_article
+    ON vblog_article.article_id = vblog_report_record.article_id
+    LEFT JOIN vblog_user
+    ON reporter_id = vblog_user.user_id
+    where vblog_report_record.handle_result = #{handleResult}
+    limit #{start} ,#{num}
+  </select>
+  <select id="selectReportRecordsByHandleResultNum" resultType="java.lang.Integer">
+    select count(*) from vblog_report_record where vblog_report_record.handle_result = #{handleResult}
+  </select>
+
+  <update id="updateByArticleId" parameterType="com.hitwh.vblog.bean.ReportRecordDo">
+    update vblog_report_record set handle_result = #{handleResult} where article_id = #{articleId}
+  </update>
+
+
   <insert id="insert" parameterType="com.hitwh.vblog.bean.ReportRecordDo">
     insert into vblog_report_record (article_id, reporter_id, reason, 
       admin_id, report_time, handle_time, 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/article")
@@ -61,43 +62,42 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/query_by_author")
     public CommonReturnType queryArticleByAuthor(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-         List<ArticleOutParam> articleOutParams = (ArrayList)articleService.selectArticleByAuthorId(articleInParam.getStart(),
-                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getUid()).get("list");
+        Map<String, Object> result = articleService.selectArticleByAuthorId(articleInParam.getStart(),
+                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getUid());
 
-        int sum = (int)articleService.selectArticleByAuthorId(articleInParam.getStart(),
-                articleInParam.getEnd()- articleInParam.getStart() + 1, articleInParam.getUid()).get("sum");
+        ArrayList articleOutParams = (ArrayList) result.get("list");
 
-        int end = articleInParam.getEnd() - articleInParam.getStart() +1;
-
-        if(end > articleOutParams.size()) end = articleOutParams.size();
+        int sum = (int) result.get("sum");
+        int end = articleInParam.getEnd() - articleInParam.getStart();
+        if(end > articleOutParams.size()) end = articleOutParams.size() + articleInParam.getStart() - 1;
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
     @PostMapping("/query_by_title")
     public CommonReturnType queryArticleByTitle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        List<ArticleOutParam> articleOutParams =  (ArrayList)articleService.selectArticleByTitle(articleInParam.getStart(),
-                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getTitle()).get("list");
-        int sum = (int)articleService.selectArticleByTitle(articleInParam.getStart(),
-                articleInParam.getEnd()- articleInParam.getStart() + 1, articleInParam.getTitle()).get("sum");
+        Map<String, Object> result = articleService.selectArticleByTitle(articleInParam.getStart(),
+                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getTitle());
 
-        int end = articleInParam.getEnd() - articleInParam.getStart() +1;
+        ArrayList articleOutParams =  (ArrayList) result.get("list");
 
-        if(end > articleOutParams.size()) end = articleOutParams.size();
+        int sum = (int) result.get("sum");
+        int end = articleInParam.getEnd() - articleInParam.getStart();
+        if(end > articleOutParams.size()) end = articleOutParams.size() + articleInParam.getStart() - 1;
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
     @PostMapping("/query_by_type")
     public CommonReturnType queryArticleByType(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        List<ArticleOutParam> articleOutParams =  (ArrayList)articleService.selectArticleByType(articleInParam.getStart(),
-                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getType_1()).get("list");
-        int sum = (int)articleService.selectArticleByType(articleInParam.getStart(),
-                articleInParam.getEnd()- articleInParam.getStart() + 1, articleInParam.getType_1()).get("sum");
+        Map<String, Object> result = articleService.selectArticleByType(articleInParam.getStart(),
+                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getType_1());
 
-        int end = articleInParam.getEnd() - articleInParam.getStart() +1;
+        ArrayList articleOutParams = (ArrayList) result.get("list");
 
-        if(end > articleOutParams.size()) end = articleOutParams.size();
+        int sum = (int) result.get("sum");
+        int end = articleInParam.getEnd() - articleInParam.getStart();
+        if(end > articleOutParams.size()) end = articleOutParams.size() + articleInParam.getStart() - 1;
 
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }

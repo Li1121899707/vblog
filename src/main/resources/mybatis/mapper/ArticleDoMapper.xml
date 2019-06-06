@@ -102,17 +102,17 @@
     where label_id = #{typeId}
   </select>
   <select id="selectArticleByType" resultMap="ArticleAndUserMap">
-SELECT vblog_article_label.article_id, vblog_article_label.label_id , vblog_article.virtual_id,  title, author_id,
+    select vblog_article_label.article_id, vblog_article_label.label_id , vblog_article.virtual_id,  title, author_id,
     nickname, cover, hidden, content, article_abstract,
     release_time, reading_num, thumb_num
-    FROM vblog_article_label
-    RIGHT JOIN vblog_article
-    ON vblog_article.article_id = vblog_article_label.article_id
-    RIGHT JOIN vblog_user
-    ON vblog_article.author_id = vblog_user.user_id
-    RIGHT JOIN vblog_article_dynamic
-    ON vblog_article.article_id = vblog_article_dynamic.article_id
-    WHERE vblog_article_label.label_id = #{typeId}
+    from vblog_article_label
+    left join vblog_article
+    on vblog_article.article_id = vblog_article_label.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    where vblog_article_label.label_id = #{typeId}
     limit #{start} ,#{num}
   </select>
 

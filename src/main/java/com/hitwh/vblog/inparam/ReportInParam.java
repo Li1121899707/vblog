@@ -6,8 +6,15 @@ package com.hitwh.vblog.inparam;
  * @date 2019/6/522:18
  */
 public class ReportInParam extends BaseInParam {
-    public Integer article_id;
-    public String reason;
+    private Integer article_id;
+
+    private String reason;
+
+    private Integer start;
+
+    private Integer end;
+
+    private Integer handle_result;
 
     public Integer getArticle_id() {
         return article_id;
@@ -23,5 +30,29 @@ public class ReportInParam extends BaseInParam {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public Integer getEnd() {
+        return end;
+    }
+
+    public void setEnd(Integer end) {
+        this.end = end;
+    }
+
+    public Integer getHandle_result() {
+        return handle_result;
+    }
+
+    public void setHandle_result(Integer handle_result) {
+        this.handle_result = handle_result;
     }
 }

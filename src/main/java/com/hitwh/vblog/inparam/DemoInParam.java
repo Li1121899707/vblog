@@ -2,9 +2,6 @@ package com.hitwh.vblog.inparam;
 
 // 传入参数类，用于接收从前端传来的数据
 public class DemoInParam extends BaseInParam {
-
-    private long request_time;
-
     private Integer uid;
 
     private String key;
@@ -47,14 +44,6 @@ public class DemoInParam extends BaseInParam {
 
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
-    }
-
-    public long getRequest_time() {
-        return request_time;
-    }
-
-    public void setRequest_time(long request_time) {
-        this.request_time = request_time;
     }
 
     public Integer getUid() {

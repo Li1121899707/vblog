@@ -1,5 +1,7 @@
 package com.hitwh.vblog.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -8,10 +10,13 @@ import java.util.Date;
  * @date 2019/6/522:18
  */
 public class ReportModel {
+    @NotNull(message = "文章Id不能为空")
     private Integer articleId;
 
+    @NotNull(message = "举报者不能为空")
     private Integer reporterId;
 
+    @NotBlank(message = "举报理由不能为空")
     private String reason;
 
     private Integer adminId;

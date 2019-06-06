@@ -1,17 +1,17 @@
 package com.hitwh.vblog.inparam;
 
 public class BaseInParam {
-    private long request_time;
+    private Long request_time;
 
     private Integer uid;
 
     private String key;
 
-    public long getRequest_time() {
+    public Long getRequest_time() {
         return request_time;
     }
 
-    public void setRequest_time(long request_time) {
+    public void setRequest_time(Long request_time) {
         this.request_time = request_time;
     }
 

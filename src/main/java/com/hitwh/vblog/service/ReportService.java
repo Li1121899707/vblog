@@ -5,6 +5,7 @@ import com.hitwh.vblog.outparam.ReportOutParam;
 import com.hitwh.vblog.response.BusinessException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liysuzy
@@ -14,11 +15,11 @@ import java.util.List;
 public interface ReportService {
     void addReport(ReportModel reportModel) throws BusinessException;
 
-    List<ReportOutParam> queryAllReports(Integer start, Integer end) throws BusinessException;
+    Map<String, Object> queryAllReports(Integer start, Integer end) throws BusinessException;
 
-    ReportOutParam queryReportByArticleId(Integer start, Integer end, Integer articleId);
+    Map<String, Object> queryReportsByArticleId(Integer start, Integer end, Integer articleId) throws BusinessException;
 
-    List<ReportOutParam> queryReportsByHandleResult(Integer start, Integer end);
+    Map<String, Object> queryReportsByHandleResult(Integer start, Integer end, Integer handleResult) throws BusinessException;
 
-    Integer handleReport(ReportModel reportModel);
+    void handleReport(ReportModel reportModel) throws BusinessException;
 }
