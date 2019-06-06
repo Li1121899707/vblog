@@ -24,6 +24,9 @@ public interface ArticleDoMapper {
                                                         @Param("num") Integer num,
                                                         @Param("userId") Integer userId);
 
+    List<ArticleAndUserDo> selectAllArticle();
+
+    int selectArticleNumber();
 
     int selectArticleNumByUserId(@Param("userId")Integer userId);
 

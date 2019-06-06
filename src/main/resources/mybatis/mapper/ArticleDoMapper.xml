@@ -48,6 +48,20 @@
     where author_id = #{userId}
   </select>
 
+  <select id="selectArticleNumber" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_article
+  </select>
+  <select id="selectAllArticle" resultMap="ArticleAndUserMap">
+    select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
+    nickname, cover, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num
+    from vblog_article
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+  </select>
   <!--<select id="selectArticleByUserId" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">-->
     <!--select vblog_article.article_id, vblog_article.virtual_id,  title, author_id,-->
     <!--nickname, cover, hidden, content, article_abstract,-->

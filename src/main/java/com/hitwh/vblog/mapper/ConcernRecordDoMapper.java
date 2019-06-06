@@ -12,6 +12,8 @@ public interface ConcernRecordDoMapper {
 
     int delete(ConcernRecordDo concernRecordDo);
 
+    int selectIsConcerned(ConcernRecordDo concernRecordDo);
+
     List<ConcernAndUserDo> selectFollower(Integer userId);
 
     List<ConcernAndUserDo> selectTarget(Integer userId);
