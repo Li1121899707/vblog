@@ -16,13 +16,18 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
     private ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
+
+    private Integer endForOut;
+
     @Autowired
     CommentDoMapper commentDoMapper;
     @Autowired
@@ -42,21 +47,62 @@ public class CommentServiceImpl implements CommentService {
         //if(commentDoMapper.selectDisplayComment(start,num, articleId) == null)
 
         Map<String,Object> map = new HashMap<>();
+
+        //通过文章的ID查找出所有的评论
         int sum = commentDoMapper.selectByArticleId(articleId).size();
+
+        //查找出要展示的评论
+        List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayComment(
+                start,num, articleId);
+
+        //将格式转换成输出类型
+        List<CommentOutParam> commentOutParamList = new ArrayList<>();
+        for (ComAndUserDo c:comAndUserDoList) {
+            commentOutParamList.add(typeChange(c));
+        }
+
+        //判断是否取到足够的数据
+        if (comAndUserDoList.size() < num)
+            endForOut = start + comAndUserDoList.size() - 1;
+        else endForOut = start + num - 1;
+
+        //将数据进行封装，返回
+        map.put("start",start);
+        map.put("end",endForOut);
         map.put("sum",sum);
-        map.put("list",commentDoMapper.selectDisplayComment(start,num, articleId));
+        map.put("list",commentOutParamList);
         return map;
     }
-
+//通过用户ID来查找评论
     @Override
     public Map<String, Object> selectDisplayCommentById(Integer start, Integer num, Integer userId) {
         Map<String,Object> map = new HashMap<>();
         int sum = commentDoMapper.selectByUserId(userId).size();
+
+        //查找出要展示的评论
+        List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayCommentById(
+                start,num, userId);
+
+        //将格式转换成输出类型
+        List<CommentOutParam> commentOutParamList = new ArrayList<>();
+        for (ComAndUserDo c:comAndUserDoList) {
+            commentOutParamList.add(typeChange(c));
+        }
+
+        //判断是否取到足够的数据
+        if (comAndUserDoList.size() < num)
+            endForOut = start + comAndUserDoList.size() - 1;
+        else endForOut = start + num - 1;
+
+        //将数据进行封装，返回
+        map.put("start",start);
+        map.put("end",endForOut);
         map.put("sum",sum);
-        map.put("list",commentDoMapper.selectDisplayCommentById(start,num, userId));
+        map.put("list",commentOutParamList);
+
         return map;
     }
-
+//查找父评论
     @Override
     public CommentOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
         //通过数据库查询评论
@@ -65,21 +111,14 @@ public class CommentServiceImpl implements CommentService {
         if (comAndUserDo == null)
             return null;
         //转换成commentoutparam
-        CommentOutParam commentOutParam = new CommentOutParam();
-        commentOutParam.setArticle_id(comAndUserDo.getCommentDo().getArticleId());
-        commentOutParam.setUser_nickname(comAndUserDo.getUserDo().getNickname());
-        commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
-        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime().getTime()/1000);
-        commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
-        commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
-        commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
+        CommentOutParam commentOutParam = typeChange(comAndUserDo);
         //判断父评论是否被隐藏
         if(comAndUserDo.getCommentDo().getCommentHide() == 1)
             throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
 
         return commentOutParam;
     }
-
+//添加评论
     @Override
     public void insertComment(CommentModel commentModel) throws BusinessException {
         if (commentModel == null) {
@@ -109,7 +148,7 @@ public class CommentServiceImpl implements CommentService {
         if(i != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
-
+//隐藏评论
     @Override
     public void hideComment(Integer commentId) throws BusinessException {
         //判断control传来的参数的正确性
@@ -121,5 +160,17 @@ public class CommentServiceImpl implements CommentService {
         if(hideResult != 1)
             throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
 
+    }
+    //将数据库查出的类型转换为输出类型
+    public CommentOutParam typeChange(ComAndUserDo comAndUserDo){
+        CommentOutParam commentOutParam = new CommentOutParam();
+        commentOutParam.setArticle_id(comAndUserDo.getCommentDo().getArticleId());
+        commentOutParam.setUser_nickname(comAndUserDo.getUserDo().getNickname());
+        commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
+        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime().getTime()/1000);
+        commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
+        commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
+        commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
+        return commentOutParam;
     }
 }

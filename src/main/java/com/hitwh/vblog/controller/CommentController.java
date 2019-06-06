@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/comment")
@@ -27,6 +25,13 @@ public class CommentController extends BaseController{
     @Autowired
     CommentServiceImpl commentService;
 
+    private Integer startGForOut;
+
+    private Integer endForOut;
+
+    private Integer numForOut;
+
+    private List<CommentOutParam> commentOutParamsForOut;
     /**
      *
      * @param commentInParam
@@ -35,37 +40,25 @@ public class CommentController extends BaseController{
      * 通过文章ID查找评论
      */
     @PostMapping("/article_query")
-    public PageResponse queryByArticle(@RequestBody CommentInParam commentInParam) throws BusinessException {
+    public CommonReturnType queryByArticle(@RequestBody CommentInParam commentInParam) throws BusinessException {
         //判断是否为空抛出异常
         if(commentInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-        //获取需要的评论数据
-        List<ComAndUserDo> comAndUserDos =  (ArrayList)commentService.selectDisplayComment(
+        //获取得到的信息
+        Map<String,Object> map = new HashMap<>();
+        map = commentService.selectDisplayComment(
                 commentInParam.getStart() ,
                 commentInParam.getEnd()- commentInParam.getStart() + 1,
-                commentInParam.getArticle_id()).get("list");
-        //获取文章的评论总数
-        int sum = (int)commentService.selectDisplayComment(commentInParam.getStart(),
-                commentInParam.getEnd()- commentInParam.getStart() + 1, commentInParam.getArticle_id()).get("sum");
-        List<CommentOutParam> commentOutParams = new ArrayList<>();
-        //将通过service获取的数据换成要输出的形式
-        for(int i =0;i < comAndUserDos.size();i++){
-            CommentOutParam c = new CommentOutParam();
-            c.setUser_id(comAndUserDos.get(i).getUserDo().getUserId());
-            c.setParent_comment_id(comAndUserDos.get(i).getCommentDo().getParentCommentId());
-            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime().getTime()/1000);
-            c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
-            c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
-            c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
-            c.setAvatar_sm(comAndUserDos.get(i).getUserDo().getAvatarSm());
-            commentOutParams.add(c);
-        }
-        //判断返回给前端的end的值
-        int end = commentInParam.getEnd() - commentInParam.getStart() +1;
+                commentInParam.getArticle_id()
+        );
 
-        if(end > comAndUserDos.size()) end = comAndUserDos.size();
+        startGForOut = (int)map.get("start");
+        endForOut = (int)map.get("end");
+        numForOut = (int)map.get("sum");
+        commentOutParamsForOut = (ArrayList)map.get("list");
 
-        return PageResponse.create(commentInParam.getStart(),end,sum,commentOutParams);
+        return CommonReturnType.create(PageResponse.create(startGForOut,
+                endForOut,numForOut,commentOutParamsForOut));
     }
 
     /**
@@ -75,40 +68,25 @@ public class CommentController extends BaseController{
      * @throws BusinessException
      */
     @PostMapping("/person_query")
-    public PageResponse queryByPerson(@RequestBody CommentInParam commentInParam) throws BusinessException {
+    public CommonReturnType queryByPerson(@RequestBody CommentInParam commentInParam) throws BusinessException {
         //判断前端传来的参数是否为空
         if(commentInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
-        //通过用户的ID和start和end获取用户的评论信息
-        List<ComAndUserDo> comAndUserDos =  (ArrayList)commentService.selectDisplayCommentById(
+        //获取得到的信息
+        Map<String,Object> map = new HashMap<>();
+        map = commentService.selectDisplayCommentById(
                 commentInParam.getStart(),
                 commentInParam.getEnd()- commentInParam.getStart() + 1,
-                commentInParam.getUid()).get("list");
-        //获取用户的评论总数
-        int sum = (int)commentService.selectDisplayCommentById(commentInParam.getStart(),
-                commentInParam.getEnd()- commentInParam.getStart() + 1,
-                commentInParam.getUid()).get("sum");
-        List<CommentOutParam> commentOutParams = new ArrayList<>();
+                commentInParam.getUid());
 
-        //将通过service获取的数据换成要输出的形式
-        for(int i =0;i < comAndUserDos.size();i++){
-            CommentOutParam c = new CommentOutParam();
-            c.setUser_id(comAndUserDos.get(i).getUserDo().getUserId());
-            c.setParent_comment_id(comAndUserDos.get(i).getCommentDo().getParentCommentId());
-            c.setComment_time(comAndUserDos.get(i).getCommentDo().getCommentTime().getTime()/1000);
-            c.setComment(comAndUserDos.get(i).getCommentDo().getComment());
-            c.setUser_nickname(comAndUserDos.get(i).getUserDo().getNickname());
-            c.setArticle_id(comAndUserDos.get(i).getCommentDo().getArticleId());
-            c.setAvatar_sm(comAndUserDos.get(i).getUserDo().getAvatarSm());
-            commentOutParams.add(c);
-        }
-        //通过查询的条数判断返回给前端的end的值
-        int end = commentInParam.getEnd() - commentInParam.getStart() +1;
+        startGForOut = (int)map.get("start");
+        endForOut = (int)map.get("end");
+        numForOut = (int)map.get("sum");
+        commentOutParamsForOut = (ArrayList)map.get("list");
 
-        if(end > comAndUserDos.size()) end = comAndUserDos.size();
+        return CommonReturnType.create(PageResponse.create(startGForOut,
+                endForOut,numForOut,commentOutParamsForOut));
 
-        return PageResponse.create(commentInParam.getStart(),end,sum,commentOutParams);
     }
 
     @PostMapping("/parent_query")
