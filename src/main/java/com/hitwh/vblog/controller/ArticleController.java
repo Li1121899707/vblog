@@ -63,7 +63,7 @@ public class ArticleController extends BaseController {
     @PostMapping("/query_by_author")
     public CommonReturnType queryArticleByAuthor(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByAuthorId(articleInParam.getStart(),
-                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getUid());
+                articleInParam.getEnd(), articleInParam.getUid());
 
         ArrayList articleOutParams = (ArrayList) result.get("list");
 
@@ -77,7 +77,7 @@ public class ArticleController extends BaseController {
     @PostMapping("/query_by_title")
     public CommonReturnType queryArticleByTitle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByTitle(articleInParam.getStart(),
-                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getTitle());
+                articleInParam.getEnd(), articleInParam.getTitle());
 
         ArrayList articleOutParams =  (ArrayList) result.get("list");
 
@@ -91,7 +91,7 @@ public class ArticleController extends BaseController {
     @PostMapping("/query_by_type")
     public CommonReturnType queryArticleByType(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByType(articleInParam.getStart(),
-                articleInParam.getEnd() - articleInParam.getStart() + 1, articleInParam.getType_1());
+                articleInParam.getEnd(), articleInParam.getType_1());
 
         ArrayList articleOutParams = (ArrayList) result.get("list");
 

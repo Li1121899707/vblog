@@ -210,30 +210,39 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Map<String, Object> selectArticleByAuthorId(Integer start, Integer num, Integer userId) {
+    public Map<String, Object> selectArticleByAuthorId(Integer start, Integer end, Integer userId) throws BusinessException {
+        if(start == null || end == null || start < 0 || end <= start || end == 0 || userId == null || userId == 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByUserId(userId);
-        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByUserId(start, num, userId);
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByUserId(start, end-start+1, userId);
         map.put("sum", sum);
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
     }
 
     @Override
-    public Map<String, Object> selectArticleByType(Integer start, Integer num, Integer typeId) {
+    public Map<String, Object> selectArticleByType(Integer start, Integer end, Integer typeId) throws BusinessException {
+        if(start == null || end == null || start < 0 || end <= start || end == 0 || typeId == null || typeId == 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByType(typeId);
-        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByType(start, num, typeId);
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByType(start, end-start+1, typeId);
         map.put("sum", sum);
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
     }
 
     @Override
-    public Map<String, Object> selectArticleByTitle(Integer start, Integer num, String title) {
+    public Map<String, Object> selectArticleByTitle(Integer start, Integer end, String title) throws BusinessException {
+        if(start == null || end == null || start < 0 || end <= start || end == 0 || title == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByTitle(title);
-        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByTitle(start, num, title);
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByTitle(start, end-start+1, title);
         map.put("sum", sum);
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
