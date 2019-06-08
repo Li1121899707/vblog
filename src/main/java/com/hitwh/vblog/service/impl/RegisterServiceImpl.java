@@ -64,27 +64,26 @@ public class RegisterServiceImpl implements RegisterService {
         if(registerModel.getAvatarSm() != null)
             userDo.setAvatarSm(registerModel.getAvatarSm());
 
-        Integer registerResult = 0;
-        registerResult  = userDoMapper.insertSelective(userDo);
+        Integer registerResult  = userDoMapper.insertSelective(userDo);
 
         if (registerResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
         Integer uid = userDo.getUserId();
 
-        if(registerModel.getInterest1() != null || registerModel.getInterest1() == 0){
+        if(registerModel.getInterest1() != null && registerModel.getInterest1() != 0){
             UserInterestDo userInterestDo = new UserInterestDo();
             userInterestDo.setUserId(uid);
             userInterestDo.setLabelId(registerModel.getInterest1());
             userInterestDoMapper.insertSelective(userInterestDo);
         }
-        if(registerModel.getInterest2() != null || registerModel.getInterest2() == 0){
+        if(registerModel.getInterest2() != null && registerModel.getInterest2() != 0){
             UserInterestDo userInterestDo = new UserInterestDo();
             userInterestDo.setUserId(uid);
             userInterestDo.setLabelId(registerModel.getInterest2());
             userInterestDoMapper.insertSelective(userInterestDo);
         }
-        if(registerModel.getInterest3() != null || registerModel.getInterest3() == 0){
+        if(registerModel.getInterest3() != null && registerModel.getInterest3() != 0){
             UserInterestDo userInterestDo = new UserInterestDo();
             userInterestDo.setUserId(uid);
             userInterestDo.setLabelId(registerModel.getInterest3());

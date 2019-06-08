@@ -37,32 +37,26 @@ public class CollectionController extends BaseController{
 
     @RequestMapping("/add")
     public CommonReturnType addCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
-
-
         CollectionModel collectionModel = new CollectionModel();
         collectionModel.setArticleId(collectionInParam.getArticle_id());
         collectionModel.setUserId(collectionInParam.getUid());
-
         collectionService.addCollection(collectionModel);
+
         return CommonReturnType.success();
     }
 
     @RequestMapping("/delete")
     public CommonReturnType deleteCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
-
-
         CollectionModel collectionModel = new CollectionModel();
         collectionModel.setArticleId(collectionInParam.getArticle_id());
         collectionModel.setUserId(collectionInParam.getUid());
-
         collectionService.deleteCollection(collectionModel);
+
         return CommonReturnType.success();
     }
 
     @RequestMapping("/query_collection_number")
     public CommonReturnType queryCollectionNumber (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
-
-
         CollectionModel collectionModel = new CollectionModel();
         collectionModel.setArticleId(collectionInParam.getArticle_id());
 
@@ -71,7 +65,6 @@ public class CollectionController extends BaseController{
 
     @RequestMapping("/query_collection")
     public CommonReturnType queryCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
-
         Map<String,Object> map = new HashMap<>();
         if(collectionInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -82,6 +75,7 @@ public class CollectionController extends BaseController{
                         collectionInParam.getUid()
                 );
         List<ArticleOutParam> articleOutParams = (ArrayList)map.get("list");
+
         int sum = (int)map.get("sum");
 
         if(articleOutParams.size() ==
@@ -96,11 +90,9 @@ public class CollectionController extends BaseController{
 
     @RequestMapping("/query_if_collected")
     public CommonReturnType queryIfCollected (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
-
         CollectionModel collectionModel = new CollectionModel();
         collectionModel.setUserId(collectionInParam.getUid());
         collectionModel.setArticleId(collectionInParam.getArticle_id());
-
 
         return CommonReturnType.create(collectionService.queryIfCollect(collectionModel));
     }

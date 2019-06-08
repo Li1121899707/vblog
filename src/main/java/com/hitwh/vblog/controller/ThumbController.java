@@ -30,6 +30,7 @@ public class ThumbController extends BaseController {
         thumbModel.setArticleId(thumbInParam.getArticle_id());
         thumbModel.setUserId(thumbInParam.getUid());
         thumbService.insertThumbRecord(thumbModel);
+
         return CommonReturnType.success();
     }
 
@@ -40,6 +41,7 @@ public class ThumbController extends BaseController {
         thumbModel.setArticleId(thumbInParam.getArticle_id());
         thumbModel.setUserId(thumbInParam.getUid());
         thumbService.deleteThumbRecord(thumbModel);
+
         return CommonReturnType.success();
     }
 
@@ -55,6 +57,7 @@ public class ThumbController extends BaseController {
         ThumbModel thumbModel = new ThumbModel();
         thumbModel.setArticleId(thumbInParam.getArticle_id());
         thumbModel.setUserId(thumbInParam.getUid());
+        
         return CommonReturnType.create(thumbService.queryIfThumb(thumbModel));
     }
 

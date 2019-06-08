@@ -25,10 +25,9 @@ public class RegisterController extends BaseController {
     @PostMapping("/register")
     public CommonReturnType register(@RequestBody RegisterInParam registerInParam) throws BusinessException {
         RegisterModel registerModel = new RegisterModel();
-        //将传入参数转换为Model
         registerModel.setAccount(registerInParam.getAccount());
         registerModel.setEmail(registerInParam.getEmail());
-        registerModel.setNickname(registerInParam.getNickname());
+        registerModel.setNickname(registerInParam.getUsername());
         registerModel.setPhone(registerInParam.getPhone());
         registerModel.setPwd(registerInParam.getPwd());
         registerModel.setAvatarLg(registerInParam.getAvatar_lg());
@@ -37,9 +36,7 @@ public class RegisterController extends BaseController {
         registerModel.setInterest1(registerInParam.getInterest_1());
         registerModel.setInterest2(registerInParam.getInterest_2());
         registerModel.setInterest3(registerInParam.getInterest_3());
-        //执行Register
         registerService.register(registerModel);
-        //返回执行结果
         return CommonReturnType.success();
     }
 }

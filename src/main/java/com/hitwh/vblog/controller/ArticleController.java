@@ -33,11 +33,8 @@ public class ArticleController extends BaseController {
     @PostMapping("/write")
     public CommonReturnType writeArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
         ArticleModel articleModel = new ArticleModel();
-        //将传入参数转换为Model
         BeanUtils.copyProperties(articleInParam, articleModel);
-        //执行Register
         articleService.write(articleModel);
-        //返回执行结果
         return CommonReturnType.success();
     }
 
@@ -52,7 +49,7 @@ public class ArticleController extends BaseController {
     @PostMapping("/delete")
     public CommonReturnType deleteArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         articleService.delete(articleInParam.getArticle_id());
-        return CommonReturnType.create(EnumError.SUCCESS);
+        return CommonReturnType.success();
     }
 
     @PostMapping("/query_by_id")

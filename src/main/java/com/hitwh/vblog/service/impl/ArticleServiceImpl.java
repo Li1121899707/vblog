@@ -38,14 +38,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void write(ArticleModel articleModel) throws BusinessException {
-        if(articleModel == null){
+        if(articleModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-        }
 
         ValidationResult result = validator.validate(articleModel);
-        if(result.isHasErrors()){
+        if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
-        }
 
         UserDo userDo = new UserDo();
         ArticleDo articleDo = new ArticleDo();
@@ -61,9 +59,6 @@ public class ArticleServiceImpl implements ArticleService {
         articleDo.setVirtualId(virture);//标题+作者+时间 MD5
         articleDo.setTitle(articleModel.getTitle());
         articleDo.setAuthorId(articleModel.getUid());
-//        articleDo.setType1(articleModel.getType_1());
-//        if (articleModel.getType_2() != null)
-//            articleDo.setType2(articleModel.getType_2());
         articleDo.setCover(articleModel.getCover());
         articleDo.setHidden(articleModel.getHidden());
         articleDo.setContent(articleModel.getContent());
@@ -72,9 +67,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleDo.setReleaseTime(timeStamp);
         articleDo.setUpdateTime(timeStamp);
 
-        Integer writeResult = 0;
-
-        writeResult  = articleDoMapper.insertSelective(articleDo);
+        Integer writeResult = articleDoMapper.insertSelective(articleDo);
 
         if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
@@ -114,16 +107,18 @@ public class ArticleServiceImpl implements ArticleService {
         if (article_id == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        Integer deleteResult = 0;
-        deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
+        Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
+
         if (deleteResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
         deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
+
         if (deleteResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
         deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
+
         if (deleteResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
@@ -132,24 +127,24 @@ public class ArticleServiceImpl implements ArticleService {
     public void update(ArticleModel articleModel) throws BusinessException {
         if (articleModel.getArticle_id() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
         ArticleDo articleDoTest = new ArticleDo();
         ArticleDo articleDo = new ArticleDo();
         ArticleLabelDo articleLabelDo = new ArticleLabelDo();
         articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
+
         if (articleDoTest == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
         ValidationResult result = validator.validate(articleModel);
-        if(result.isHasErrors()){
+
+        if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
-        }
 
         articleDo.setArticleId(articleModel.getArticle_id());
         articleDo.setVirtualId(null);
         articleDo.setTitle(articleModel.getTitle());
         articleDo.setAuthorId(articleModel.getUid());
-//        articleDo.setType1(articleModel.getType_1());
-//        if (articleModel.getType_2() != null)
-//            articleDo.setType2(articleModel.getType_2());
         articleDo.setCover(articleModel.getCover());
         articleDo.setHidden(articleModel.getHidden());
         articleDo.setContent(articleModel.getContent());
@@ -157,9 +152,7 @@ public class ArticleServiceImpl implements ArticleService {
         Timestamp timeStamp = TimestampUtil.getNowTime();
         articleDo.setUpdateTime(timeStamp);
 
-        Integer writeResult = 0;
-
-        writeResult  = articleDoMapper.updateByPrimaryKeySelective(articleDo);
+        Integer writeResult  = articleDoMapper.updateByPrimaryKeySelective(articleDo);
 
         if (writeResult != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
