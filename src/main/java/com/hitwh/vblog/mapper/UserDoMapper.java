@@ -2,6 +2,8 @@ package com.hitwh.vblog.mapper;
 
 import com.hitwh.vblog.bean.UserDo;
 
+import java.util.Set;
+
 public interface UserDoMapper {
     int deleteByPrimaryKey(Integer userId);
 
@@ -26,4 +28,7 @@ public interface UserDoMapper {
     UserDo selectIfPhone(UserDo userDo);
 
     UserDo selectIfEmail(UserDo userDo);
+
+    UserDo selectAdmin(Integer userId);
+
 }

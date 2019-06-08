@@ -5,6 +5,7 @@ import com.hitwh.vblog.bean.ComAndUserDo;
 import com.hitwh.vblog.bean.CommentDo;
 import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.CommentDoMapper;
+import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.CommentModel;
 import com.hitwh.vblog.outparam.CommentOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -32,6 +33,8 @@ public class CommentServiceImpl implements CommentService {
     CommentDoMapper commentDoMapper;
     @Autowired
     ValidatorImpl validator;
+    @Autowired
+    UserDoMapper userDoMapper;
 
     @Autowired
     ArticleDynamicDoMapper articleDynamicDoMapper;
@@ -43,8 +46,11 @@ public class CommentServiceImpl implements CommentService {
      * @return 通过文章ID查找评论
      */
     @Override
-    public Map<String,Object> selectDisplayComment(Integer start, Integer num, Integer articleId) {
-        //if(commentDoMapper.selectDisplayComment(start,num, articleId) == null)
+    public Map<String,Object> selectDisplayComment(Integer start, Integer end, Integer articleId) throws BusinessException {
+        if(start == null || end == null || articleId == null || start < 0|| end < start)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        int num = end - start + 1;
 
         Map<String,Object> map = new HashMap<>();
 
@@ -75,7 +81,12 @@ public class CommentServiceImpl implements CommentService {
     }
 //通过用户ID来查找评论
     @Override
-    public Map<String, Object> selectDisplayCommentById(Integer start, Integer num, Integer userId) {
+    public Map<String, Object> selectDisplayCommentById(Integer start, Integer end, Integer userId) throws BusinessException {
+        if(start == null || end == null || userId == null || start < 0|| end < start)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        int num = end - start + 1;
+
         Map<String,Object> map = new HashMap<>();
         int sum = commentDoMapper.selectByUserId(userId).size();
 
@@ -105,6 +116,8 @@ public class CommentServiceImpl implements CommentService {
 //查找父评论
     @Override
     public CommentOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
+        if(parent_comment_id == null || parent_comment_id <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         //通过数据库查询评论
         ComAndUserDo comAndUserDo = commentDoMapper.selectForParent(parent_comment_id);
         //判断是否为空
@@ -161,6 +174,24 @@ public class CommentServiceImpl implements CommentService {
             throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
 
     }
+
+    @Override
+    public void commentAdminHide(Integer uid, Integer commentId) throws BusinessException {
+        if (uid == null||commentId == null||uid < 0||commentId < 0)
+            throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
+
+        if(userDoMapper.selectAdmin(uid) == null)
+            throw new BusinessException(EnumError.LACK_OF_AUTHORITY);
+
+        else{
+            Integer hideResult = commentDoMapper.updateCommentHide(commentId);
+            //判断是否隐藏成功
+            if(hideResult != 1)
+                throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
+        }
+
+    }
+
     //将数据库查出的类型转换为输出类型
     public CommentOutParam typeChange(ComAndUserDo comAndUserDo){
         CommentOutParam commentOutParam = new CommentOutParam();

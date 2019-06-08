@@ -41,14 +41,11 @@ public class CommentController extends BaseController{
      */
     @PostMapping("/article_query")
     public CommonReturnType queryByArticle(@RequestBody CommentInParam commentInParam) throws BusinessException {
-        //判断是否为空抛出异常
-        if(commentInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         //获取得到的信息
         Map<String,Object> map = new HashMap<>();
         map = commentService.selectDisplayComment(
                 commentInParam.getStart() ,
-                commentInParam.getEnd()- commentInParam.getStart() + 1,
+                commentInParam.getEnd(),
                 commentInParam.getArticle_id()
         );
 
@@ -69,14 +66,11 @@ public class CommentController extends BaseController{
      */
     @PostMapping("/person_query")
     public CommonReturnType queryByPerson(@RequestBody CommentInParam commentInParam) throws BusinessException {
-        //判断前端传来的参数是否为空
-        if(commentInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         //获取得到的信息
         Map<String,Object> map = new HashMap<>();
         map = commentService.selectDisplayCommentById(
                 commentInParam.getStart(),
-                commentInParam.getEnd()- commentInParam.getStart() + 1,
+                commentInParam.getEnd(),
                 commentInParam.getUid());
 
         startGForOut = (int)map.get("start");
@@ -91,19 +85,11 @@ public class CommentController extends BaseController{
 
     @PostMapping("/parent_query")
     public CommonReturnType queryByParent(@RequestBody CommentInParam commentInParam) throws BusinessException {
-        //判断输入是否为空
-        if(commentInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
         return CommonReturnType.create(commentService.selectForParent(commentInParam.getParent_comment_id()));
     }
 
     @PostMapping("/insert")
     public CommonReturnType commentInsert(@RequestBody CommentInParam commentInParam) throws BusinessException {
-
-        if(commentInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
         CommentModel commentModel = new CommentModel();
         commentModel.setArticleId(commentInParam.getArticle_id());
         commentModel.setComment(commentInParam.getComment());
@@ -118,13 +104,13 @@ public class CommentController extends BaseController{
 
     @PostMapping("/hide")
     public CommonReturnType commentHide(@RequestBody CommentInParam commentInParam) throws BusinessException {
-        //判断传入数据是否正确
-        if(commentInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
         commentService.hideComment(commentInParam.getComment_id());
-
         return CommonReturnType.success();
+    }
 
+    @PostMapping("/admin/hide")
+    public CommonReturnType commentAdminHide(@RequestBody CommentInParam commentInParam) throws BusinessException {
+        commentService.commentAdminHide(commentInParam.getUid(),commentInParam.getComment_id());
+        return CommonReturnType.success();
     }
 }

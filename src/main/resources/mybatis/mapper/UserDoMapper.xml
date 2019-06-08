@@ -240,4 +240,10 @@
     from vblog_user
     where email = #{email,jdbcType=VARCHAR}
   </select>
+  <select id="selectAdmin" resultMap="LoginMap">
+    select *
+    from vblog_user
+    where user_id = #{userId}
+    and allowance = 0
+  </select>
 </mapper>

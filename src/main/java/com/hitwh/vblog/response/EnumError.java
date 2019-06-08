@@ -23,7 +23,8 @@ public enum EnumError implements CommonError {
     COMMENT_HIDE_ERROR(3202,"评论隐藏失败"),
     ACCOUNT_NOT_EXIST(1201, "账号不存在或密码错误"),
     PHONE_NOT_EXIST(1202, "手机号不存在或密码错误"),
-    EMAIL_NOT_EXIST(1203, "邮箱不存在或密码错误")
+    EMAIL_NOT_EXIST(1203, "邮箱不存在或密码错误"),
+    LACK_OF_AUTHORITY(10,"权限缺失")
     ;
 
     private int errCode;

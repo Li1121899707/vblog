@@ -9,17 +9,15 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Map;
 
 public interface CommentService {
-    Map<String,Object> selectDisplayComment(@Param("start") Integer start,
-                                            @Param("num") Integer num,
-                                            @Param("articleId")Integer articleId);
+    Map<String,Object> selectDisplayComment(Integer start, Integer end, Integer articleId) throws BusinessException;
 
-    Map<String,Object> selectDisplayCommentById(@Param("start") Integer start,
-                                                @Param("num") Integer num,
-                                                @Param("userId")Integer userId);
+    Map<String,Object> selectDisplayCommentById(Integer start, Integer end, Integer userId) throws BusinessException;
 
     CommentOutParam selectForParent(@Param("parent_comment_id") Integer parent_comment_id) throws BusinessException;
 
     void insertComment(CommentModel commentModel) throws BusinessException;
 
     void hideComment(Integer commentId) throws BusinessException;
+
+    void commentAdminHide(Integer uid, Integer commentId) throws BusinessException;
 }
