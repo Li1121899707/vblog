@@ -144,9 +144,9 @@
   </select>
 
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" >
     delete from vblog_article
-    where article_id = #{articleId,jdbcType=INTEGER}
+    where article_id = #{articleId} and author_id = #{uid}
   </delete>
 
 
@@ -290,6 +290,20 @@
     ON vblog_article.author_id = vblog_user.user_id
     WHERE vblog_collection_record.collector_id = #{userId}
     limit #{start} ,#{num}
+  </select>
+
+
+  <select id="recommend" resultMap="ArticleAndUserMap">
+    select vblog_article.article_id, vblog_article.virtual_id,  title, author_id,
+    nickname, cover, hidden, content, article_abstract,
+    release_time, reading_num, thumb_num
+    from vblog_article
+    left join vblog_article_dynamic
+    on vblog_article.article_id = vblog_article_dynamic.article_id
+    left join vblog_user
+    on vblog_article.author_id = vblog_user.user_id
+    order by thumb_num, reading_num desc
+    limit 0 , 9
   </select>
 
 </mapper>

@@ -37,7 +37,6 @@ public class LoginServiceImpl implements LoginService {
         if(loginModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        //LoginModel loginModel = userDoMapper.selectByPrimaryKey();
         ValidationResult result = validator.validate(loginModel);
         if(result.isHasErrors()){
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
@@ -256,18 +255,15 @@ public class LoginServiceImpl implements LoginService {
         return returnInt;
     }
 
-//        if(loginModel.getPhone() != null){
-//            userDo.setPhone(loginModel.getPhone());
-//            if(userDoMapper.selectIfPhone(userDo) == null)
-//                returnInt[1] = 1;
-//            else returnInt[1] = 0;
-//        }
-//
-//        if(loginModel.getEmail() != null){
-//            userDo.setEmail(loginModel.getEmail());
-//            if(userDoMapper.selectIfEmail(userDo) == null)
-//                returnInt[2] = 1;
-//            else returnInt[2] = 0;
-//        }
+    @Override
+    public Boolean adminValidate(Integer uid) {
+        if(uid == null || uid <= 0)
+            return false;
 
+        UserDo userDo = userDoMapper.selectAdmin(uid);
+        if(userDo == null || userDo.getUserId() != uid)
+            return false;
+        else
+            return true;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface ArticleService {
     void write(ArticleModel articleModel) throws BusinessException;
-    void delete(Integer article_id) throws BusinessException;
+    void delete(Integer article_id, Integer uid) throws BusinessException;
     void update(ArticleModel articleModel) throws BusinessException;
     ArticleOutParam queryRandomArticle() throws BusinessException;
     ArticleOutParam queryArticleId(Integer article_id) throws BusinessException;
@@ -23,4 +23,6 @@ public interface ArticleService {
     Map<String,Object> selectArticleByTitle(@Param("start") Integer start,
                                          @Param("num") Integer num,
                                          @Param("title")String title) throws BusinessException;
+
+    Map<String, Object> recommend();
 }

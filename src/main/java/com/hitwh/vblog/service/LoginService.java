@@ -3,6 +3,7 @@ package com.hitwh.vblog.service;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.model.LoginModel;
 import com.hitwh.vblog.response.BusinessException;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.Map;
 
@@ -22,4 +23,6 @@ public interface LoginService {
     Integer loginValidateByPhone(LoginModel loginModel) throws BusinessException;
 
     Integer loginValidateByEmail(LoginModel loginModel) throws BusinessException;
+
+    Boolean adminValidate(Integer uid);
 }

@@ -57,7 +57,7 @@ public class ThumbController extends BaseController {
         ThumbModel thumbModel = new ThumbModel();
         thumbModel.setArticleId(thumbInParam.getArticle_id());
         thumbModel.setUserId(thumbInParam.getUid());
-        
+
         return CommonReturnType.create(thumbService.queryIfThumb(thumbModel));
     }
 

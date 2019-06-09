@@ -33,9 +33,7 @@ public class RegisterController extends BaseController {
         registerModel.setAvatarLg(registerInParam.getAvatar_lg());
         registerModel.setAvatarMd(registerInParam.getAvatar_md());
         registerModel.setAvatarSm(registerInParam.getAvatar_sm());
-        registerModel.setInterest1(registerInParam.getInterest_1());
-        registerModel.setInterest2(registerInParam.getInterest_2());
-        registerModel.setInterest3(registerInParam.getInterest_3());
+        registerModel.setInterest(registerInParam.getInterest());
         registerService.register(registerModel);
         return CommonReturnType.success();
     }

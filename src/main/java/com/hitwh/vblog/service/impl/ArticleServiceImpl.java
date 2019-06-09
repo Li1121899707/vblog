@@ -14,6 +14,8 @@ import com.hitwh.vblog.util.MyMd5;
 import com.hitwh.vblog.util.TimestampUtil;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
+import org.omg.CORBA.INTERNAL;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,24 +105,20 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void delete(Integer article_id) throws BusinessException {
-        if (article_id == null)
+    public void delete(Integer article_id, Integer uid) throws BusinessException {
+        if (article_id == null || uid == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
-        Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
+        Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id, uid);
 
         if (deleteResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.DATABASE_DELETE_ERROR);
 
         deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
 
         if (deleteResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.DATABASE_DELETE_ERROR);
 
-        deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
-
-        if (deleteResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
 
     @Override
@@ -244,6 +242,15 @@ public class ArticleServiceImpl implements ArticleService {
         return map;
     }
 
+    @Override
+    public Map<String, Object> recommend() {
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.recommend();
+        Map<String,Object> map = new HashMap<>();
+        map.put("sum", articleAndUserDos.size());
+        map.put("list", convertToArticleOutParams(articleAndUserDos));
+        return map;
+    }
+
     public List<ArticleOutParam> convertToArticleOutParams(List<ArticleAndUserDo> articleAndUserDos){
         List<ArticleOutParam> articleOutParams = new ArrayList<>();
         for (ArticleAndUserDo a: articleAndUserDos
@@ -276,4 +283,8 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleOutParam articleOutParam = articleOutParams.get(choice);
         return articleOutParam;
     }
+
+
+
+
 }

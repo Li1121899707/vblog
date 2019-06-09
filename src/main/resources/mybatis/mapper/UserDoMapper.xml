@@ -246,4 +246,5 @@
     where user_id = #{userId}
     and allowance = 0
   </select>
+
 </mapper>

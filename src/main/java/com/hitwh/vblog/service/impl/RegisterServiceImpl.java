@@ -54,7 +54,6 @@ public class RegisterServiceImpl implements RegisterService {
         userDo.setNickname(registerModel.getNickname());
         userDo.setEmail(registerModel.getEmail());
         userDo.setPhone(registerModel.getPhone());
-        userDo.setInterest1(0);
         userDo.setRegisterTime(TimestampUtil.getNowTime());
         userDo.setSalt(salt);
         if(registerModel.getAvatarLg() != null)
@@ -71,23 +70,15 @@ public class RegisterServiceImpl implements RegisterService {
 
         Integer uid = userDo.getUserId();
 
-        if(registerModel.getInterest1() != null && registerModel.getInterest1() != 0){
-            UserInterestDo userInterestDo = new UserInterestDo();
-            userInterestDo.setUserId(uid);
-            userInterestDo.setLabelId(registerModel.getInterest1());
-            userInterestDoMapper.insertSelective(userInterestDo);
+        for (int i=0; i<registerModel.getInterest().size(); i++){
+            Integer id = registerModel.getInterest().get(i);
+            if(id != null){
+                UserInterestDo userInterestDo = new UserInterestDo();
+                userInterestDo.setUserId(uid);
+                userInterestDo.setLabelId(id);
+                userInterestDoMapper.insertSelective(userInterestDo);
+            }
         }
-        if(registerModel.getInterest2() != null && registerModel.getInterest2() != 0){
-            UserInterestDo userInterestDo = new UserInterestDo();
-            userInterestDo.setUserId(uid);
-            userInterestDo.setLabelId(registerModel.getInterest2());
-            userInterestDoMapper.insertSelective(userInterestDo);
-        }
-        if(registerModel.getInterest3() != null && registerModel.getInterest3() != 0){
-            UserInterestDo userInterestDo = new UserInterestDo();
-            userInterestDo.setUserId(uid);
-            userInterestDo.setLabelId(registerModel.getInterest3());
-            userInterestDoMapper.insertSelective(userInterestDo);
-        }
+
     }
 }

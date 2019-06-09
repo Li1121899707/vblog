@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ConcernServiceImpl implements ConcernService {
@@ -26,9 +28,8 @@ public class ConcernServiceImpl implements ConcernService {
     ValidatorImpl validator;
     @Override
     public void insert(ConcernModel concernModel) throws BusinessException {
-        if(concernModel == null){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-        }
+        if(concernModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(concernModel);
         if(result.isHasErrors()){
@@ -48,9 +49,8 @@ public class ConcernServiceImpl implements ConcernService {
 
     @Override
     public void delete(ConcernModel concernModel) throws BusinessException {
-        if(concernModel == null){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-        }
+        if(concernModel == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(concernModel);
         if(result.isHasErrors()){
@@ -65,8 +65,11 @@ public class ConcernServiceImpl implements ConcernService {
     }
 
     @Override
-    public List<ConcernOutParam> queryFollower(Integer userId) throws BusinessException {
-        List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectFollower(userId);
+    public Map<String, Object> queryFollower(Integer start, Integer end, Integer userId) throws BusinessException {
+        if(start == null || end == null || userId == null || start < 0 || end < start || userId <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectFollower(start, end-start+1, userId);
         List<ConcernOutParam> concernOutParams = new ArrayList<>();
         for (ConcernAndUserDo concernAndUserDo: concernAndUserDos) {
             ConcernOutParam concernOutParam = new ConcernOutParam();
@@ -74,12 +77,19 @@ public class ConcernServiceImpl implements ConcernService {
             concernOutParam.setUser_nickname(concernAndUserDo.getUserDo().getNickname());
             concernOutParams.add(concernOutParam);
         }
-        return concernOutParams;
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", concernOutParams);
+        map.put("sum", concernRecordDoMapper.selectFollowerNum(userId));
+        return map;
     }
 
     @Override
-    public List<ConcernOutParam> queryTarget(Integer userId) throws BusinessException {
-        List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectTarget(userId);
+    public Map<String, Object> queryTarget(Integer start, Integer end, Integer userId) throws BusinessException {
+        if(start == null || end == null || userId == null || start < 0 || end < start || userId <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectTarget(start, end-start+1, userId);
         List<ConcernOutParam> concernOutParams = new ArrayList<>();
         for (ConcernAndUserDo concernAndUserDo: concernAndUserDos) {
             ConcernOutParam concernOutParam = new ConcernOutParam();
@@ -87,7 +97,12 @@ public class ConcernServiceImpl implements ConcernService {
             concernOutParam.setUser_nickname(concernAndUserDo.getUserDo().getNickname());
             concernOutParams.add(concernOutParam);
         }
-        return concernOutParams;
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", concernOutParams);
+        map.put("sum", concernRecordDoMapper.selectTargetNum(userId));
+
+        return map;
     }
 
     @Override

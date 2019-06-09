@@ -2,26 +2,13 @@ package com.hitwh.vblog.inparam;
 
 import org.apache.ibatis.annotations.Param;
 
-public class ConcernInParam {
-    private String key;
-    private Integer uid;
+public class ConcernInParam extends BaseInParam {
     private Integer target_id;
 
-    public String getKey() {
-        return key;
-    }
+    private Integer start;
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+    private Integer end;
 
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
 
     public Integer getTarget_id() {
         return target_id;
@@ -29,5 +16,21 @@ public class ConcernInParam {
 
     public void setTarget_id(Integer target_id) {
         this.target_id = target_id;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public Integer getEnd() {
+        return end;
+    }
+
+    public void setEnd(Integer end) {
+        this.end = end;
     }
 }

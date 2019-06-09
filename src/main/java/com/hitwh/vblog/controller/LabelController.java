@@ -7,6 +7,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.LabelService;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,7 @@ public class LabelController extends BaseController {
         return CommonReturnType.create(labelService.queryAllInterests(labelInParam.getStart(), labelInParam.getEnd()));
     }
 
+    //@LoginRequired(admin = true)
     @PostMapping("/admin/insert")
     public CommonReturnType insertLabel(@RequestBody LabelInParam labelInParam) throws BusinessException {
         LabelModel labelModel = new LabelModel();
@@ -42,6 +44,7 @@ public class LabelController extends BaseController {
         return CommonReturnType.success();
     }
 
+    //@LoginRequired(admin = true)description
     @PostMapping("/admin/update")
     public CommonReturnType updateLabel(@RequestBody LabelInParam labelInParam) throws BusinessException{
         LabelModel labelModel = new LabelModel();

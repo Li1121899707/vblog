@@ -49,18 +49,19 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         HandlerMethod method = (HandlerMethod) handler;
         boolean hasLoginAnnotation = method.getMethod().isAnnotationPresent(LoginRequired.class);
-        if (!hasLoginAnnotation) {
-            //不存在LoginRequired注解，则直接通过
+        //不存在LoginRequired注解，则直接通过
+        if (!hasLoginAnnotation)
             return true;
-        }
+
+        LoginRequired loginRequired = method.getMethod().getAnnotation(LoginRequired.class);
 
         response.setHeader("Content-type", "application/json;charset=UTF-8");
 
         //请求方法
         String requestMethord = request.getRequestURI();
-        if (requestMethord == null) {
+        if (requestMethord == null)
             return false;
-        }
+
         //获取请求参数
         JSONObject parameterMap = null;
         try {
@@ -96,9 +97,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         Boolean result = loginService.tokenValidate(key, uid, request_time);
 
-        if (result)
+        // result为false，代表token验证失败，直接返回
+        if(!result)
+            throw new BusinessException(EnumError.TOKEN_ERROR);
+
+        // result为true，代表token验证成功，需要判断是否需要管理员权限
+        // 不需要管理员权限，直接返回
+        if(!loginRequired.admin())
+            return true;
+
+        Boolean adminResult = loginService.adminValidate(uid);
+        if(adminResult)
             return true;
         else
-            throw new BusinessException(EnumError.TOKEN_ERROR);
+            throw new BusinessException(EnumError.PERMISSION_DENIED);
     }
 }

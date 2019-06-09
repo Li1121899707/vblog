@@ -15,5 +15,6 @@ import java.lang.annotation.*;
 @Documented                             //javac 注释
 @Inherited                              //可被继承
 public @interface LoginRequired {
-//    boolean required() default false;
+    // 是否为管理员权限
+    boolean admin() default false;
 }

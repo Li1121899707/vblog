@@ -56,8 +56,8 @@ public class LabelServiceImpl implements LabelService {
         if(start == null && end == null){
             labelDos = labelDoMapper.selectAllInterests();
         }
-        else if(start != null && end != null && start > 0 && end > start){
-            labelDos = labelDoMapper.selectAllInterestsWithPage(start, end);
+        else if(start != null && end != null && start >= 0 && end >= start){
+            labelDos = labelDoMapper.selectAllInterestsWithPage(start, end-start+1);
         }else
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
@@ -76,7 +76,9 @@ public class LabelServiceImpl implements LabelService {
         if(resultStart == null)
             resultStart = 0;
         if(resultEnd == null)
-            resultEnd = labelDos.size();
+            resultEnd = labelDos.size() - 1;
+        if(resultEnd < labelDos.size() - 1)
+            resultEnd = resultStart + labelDos.size() - 1;
 
         resultNum = labelDoMapper.interestsPageCount();
 

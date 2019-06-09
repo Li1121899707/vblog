@@ -26,6 +26,8 @@ public interface ArticleDoMapper {
 
     List<ArticleAndUserDo> selectAllArticle();
 
+    List<ArticleAndUserDo> recommend();
+
     int selectArticleNumber();
 
     int selectArticleNumByUserId(@Param("userId")Integer userId);
@@ -36,7 +38,7 @@ public interface ArticleDoMapper {
 
     ArticleAndUserDo selectSingleArticle(Integer articleId);
 
-    int deleteByPrimaryKey(Integer articleId);
+    int deleteByPrimaryKey(@Param("articleId")Integer articleId, @Param("uid")Integer uid);
 
     int insert(ArticleDo record);
 

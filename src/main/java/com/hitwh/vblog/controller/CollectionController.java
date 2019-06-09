@@ -65,13 +65,9 @@ public class CollectionController extends BaseController{
 
     @RequestMapping("/query_collection")
     public CommonReturnType queryCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
-        Map<String,Object> map = new HashMap<>();
-        if(collectionInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
-        map = collectionService.queryCollection(
+        Map<String,Object> map = collectionService.queryCollection(
                         collectionInParam.getStart(),
-                        collectionInParam.getEnd() - collectionInParam.getStart() + 1,
+                        collectionInParam.getEnd(),
                         collectionInParam.getUid()
                 );
         List<ArticleOutParam> articleOutParams = (ArrayList)map.get("list");

@@ -48,7 +48,7 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/delete")
     public CommonReturnType deleteArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        articleService.delete(articleInParam.getArticle_id());
+        articleService.delete(articleInParam.getArticle_id(), articleInParam.getUid());
         return CommonReturnType.success();
     }
 
@@ -101,6 +101,11 @@ public class ArticleController extends BaseController {
 
     @PostMapping("/query_random")
     public CommonReturnType queryRandomArticle() throws BusinessException{
-        return CommonReturnType.create(articleService.queryRandomArticle());
+        return CommonReturnType.create(articleService.queryRandomArticle().getArticle_id());
+    }
+
+    @PostMapping("/recommend")
+    public CommonReturnType recommend() throws BusinessException{
+        return CommonReturnType.create(articleService.recommend());
     }
 }

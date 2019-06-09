@@ -50,18 +50,35 @@
     where follower_id = #{followerId,jdbcType=INTEGER}
     and target_id = #{targetId,jdbcType=INTEGER}
   </delete>
+
   <select id="selectFollower" parameterType="java.lang.Integer" resultMap="ConcernMap">
     select vblog_concern_record.follower_id, vblog_user.user_id, vblog_user.nickname
     from vblog_concern_record, vblog_user
     where vblog_concern_record.target_id = #{userId}
     and vblog_user.user_id = vblog_concern_record.follower_id
+    limit #{start}, #{num}
   </select>
+  <select id="selectFollowerNum" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_concern_record
+    where vblog_concern_record.target_id = #{userId}
+  </select>
+
+
   <select id="selectTarget" parameterType="java.lang.Integer" resultMap="ConcernMap">
     select vblog_concern_record.target_id, vblog_user.user_id, vblog_user.nickname
     from vblog_concern_record, vblog_user
     where vblog_concern_record.follower_id = #{userId}
     and vblog_user.user_id = vblog_concern_record.target_id
+    limit #{start}, #{num}
   </select>
+  <select id="selectTargetNum" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_concern_record
+     where vblog_concern_record.follower_id = #{userId}
+  </select>
+
+
   <select id="selectIsConcerned" parameterType="com.hitwh.vblog.bean.ConcernRecordDo" resultType="java.lang.Integer">
     select count(*)
     from vblog_concern_record

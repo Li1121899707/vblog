@@ -1,6 +1,9 @@
 package com.hitwh.vblog.model;
 
+import com.hitwh.vblog.inparam.LabelInParam;
+
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 
 public class RegisterModel {
     @NotBlank(message = "账号不能为空")
@@ -24,12 +27,15 @@ public class RegisterModel {
 
     private String avatarSm;
 
-    private Integer interest1;
+    private ArrayList<Integer> interest;
 
-    private Integer interest2;
+    public ArrayList<Integer> getInterest() {
+        return interest;
+    }
 
-    private Integer interest3;
-
+    public void setInterest(ArrayList<Integer> interest) {
+        this.interest = interest;
+    }
 
     public String getAccount() {
         return account;
@@ -95,27 +101,4 @@ public class RegisterModel {
         this.avatarSm = avatarSm;
     }
 
-    public Integer getInterest1() {
-        return interest1;
-    }
-
-    public void setInterest1(Integer interest1) {
-        this.interest1 = interest1;
-    }
-
-    public Integer getInterest2() {
-        return interest2;
-    }
-
-    public void setInterest2(Integer interest2) {
-        this.interest2 = interest2;
-    }
-
-    public Integer getInterest3() {
-        return interest3;
-    }
-
-    public void setInterest3(Integer interest3) {
-        this.interest3 = interest3;
-    }
 }

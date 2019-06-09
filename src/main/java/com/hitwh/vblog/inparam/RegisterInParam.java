@@ -1,5 +1,9 @@
 package com.hitwh.vblog.inparam;
 
+import com.hitwh.vblog.model.LabelModel;
+
+import java.util.ArrayList;
+
 public class RegisterInParam extends BaseInParam {
     private String account;
 
@@ -17,34 +21,14 @@ public class RegisterInParam extends BaseInParam {
 
     private String avatar_sm;
 
-    private Integer interest_1;
+    private ArrayList<Integer> interest;
 
-    private Integer interest_2;
-
-    private Integer interest_3;
-
-    public Integer getInterest_1() {
-        return interest_1;
+    public ArrayList<Integer> getInterest() {
+        return interest;
     }
 
-    public void setInterest_1(Integer interest_1) {
-        this.interest_1 = interest_1;
-    }
-
-    public Integer getInterest_2() {
-        return interest_2;
-    }
-
-    public void setInterest_2(Integer interest_2) {
-        this.interest_2 = interest_2;
-    }
-
-    public Integer getInterest_3() {
-        return interest_3;
-    }
-
-    public void setInterest_3(Integer interest_3) {
-        this.interest_3 = interest_3;
+    public void setInterest(ArrayList<Integer> interest) {
+        this.interest = interest;
     }
 
     public String getAccount() {

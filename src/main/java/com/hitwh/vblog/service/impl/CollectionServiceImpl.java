@@ -52,7 +52,7 @@ public class CollectionServiceImpl implements CollectionService {
     public void addCollection(CollectionModel collectionModel) throws BusinessException {
         //判断传参是否正确
         if(collectionModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(collectionModel);
         if(result.isHasErrors()){
@@ -69,7 +69,7 @@ public class CollectionServiceImpl implements CollectionService {
         articleDynamicDo.setArticleId(collectionModel.getArticleId());
         articleDynamicDo.setCollectionNum(1);
         //判断收藏数加1是否成功
-        Integer insert = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
+        int insert = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
         if(insert != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
     }
@@ -78,7 +78,7 @@ public class CollectionServiceImpl implements CollectionService {
     public void deleteCollection(CollectionModel collectionModel) throws BusinessException {
 
         if(collectionModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(collectionModel);
         if(result.isHasErrors()){
@@ -94,7 +94,7 @@ public class CollectionServiceImpl implements CollectionService {
         articleDynamicDo.setArticleId(collectionModel.getArticleId());
         articleDynamicDo.setCollectionNum(1);
 
-        Integer insert = articleDynamicDoMapper.subtractArticleDynamic(articleDynamicDo);
+        int insert = articleDynamicDoMapper.subtractArticleDynamic(articleDynamicDo);
         if(insert != 1)
             throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
 
@@ -104,7 +104,7 @@ public class CollectionServiceImpl implements CollectionService {
     public Integer queryCollectionNum(CollectionModel collectionModel) throws BusinessException {
 
         if(collectionModel == null || collectionModel.getArticleId() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ArticleDynamicDo FromTable =  articleDynamicDoMapper.selectByPrimaryKey(
                 collectionModel.getArticleId());
@@ -113,15 +113,15 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Map<String,Object> queryCollection(Integer start, Integer num, Integer userID) throws BusinessException {
+    public Map<String,Object> queryCollection(Integer start, Integer end, Integer userID) throws BusinessException {
 
         Map<String,Object> map = new HashMap<>();
 
-        if(start < 0 || num <= 0 || userID <= 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        if(start == null || end == null || userID == null || start < 0 || end < start || userID <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         List<ArticleAndUserDo> articleAndUserDo =
-                articleDoMapper.queryCollectionArticleByUser(start,num,userID);
+                articleDoMapper.queryCollectionArticleByUser(start,end-start+1,userID);
 
 
         int sum = collectionRecordDoMapper.selectNumByUserId(userID);
