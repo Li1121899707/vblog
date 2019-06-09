@@ -1,6 +1,10 @@
 package com.hitwh.vblog.mapper;
 
 import com.hitwh.vblog.bean.UserInterestDo;
+import com.hitwh.vblog.bean.UserInterestDoOut;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author 臧博浩
@@ -11,4 +15,6 @@ public interface UserInterestDoMapper {
     int insert(UserInterestDo record);
 
     int insertSelective(UserInterestDo record);
+
+    List<UserInterestDoOut> queryAllInterestsByUserId(@Param("userId") Integer userId);
 }

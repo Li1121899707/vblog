@@ -19,9 +19,6 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="signature" jdbcType="VARCHAR" property="signature" />
-<!--    <result column="interest_1" jdbcType="INTEGER" property="interest1" />-->
-<!--    <result column="interest_2" jdbcType="INTEGER" property="interest2" />-->
-<!--    <result column="interest_3" jdbcType="INTEGER" property="interest3" />-->
     <result column="allowance" jdbcType="INTEGER" property="allowance" />
     <result column="ban" jdbcType="INTEGER" property="ban" />
     <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
@@ -211,17 +208,20 @@
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <select id="selectIfLogin" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
-    select user_id,account,pwd,salt,ban,allowance
+    select
+    <include refid="Base_Column_List" />
     from vblog_user
     where account = #{account,jdbcType=VARCHAR}
   </select>
   <select id="selectIfLoginByPhone" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
-    select user_id,account,phone,pwd,salt,ban,allowance
+    select
+    <include refid="Base_Column_List" />
     from vblog_user
     where phone = #{phone,jdbcType=VARCHAR}
   </select>
   <select id="selectIfLoginByEmail" parameterType="com.hitwh.vblog.bean.UserDo" resultMap="LoginMap">
-    select user_id,account,email,pwd,salt,ban,allowance
+    select
+    <include refid="Base_Column_List" />
     from vblog_user
     where email = #{email,jdbcType=VARCHAR}
   </select>
@@ -245,6 +245,32 @@
     from vblog_user
     where user_id = #{userId}
     and allowance = 0
+  </select>
+
+  <select id="selectAllUserByLabel" resultMap="BaseResultMap">
+    SELECT *
+    FROM vblog_user_interest
+    LEFT JOIN vblog_user
+    ON vblog_user_interest.user_id = vblog_user.user_id
+    WHERE vblog_user_interest.label_id = #{labelId}
+    limit #{start}, #{num}
+  </select>
+
+  <select id="selectAllUserByLabelNum" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_user_interest
+    where label_id = #{labelId}
+  </select>
+
+  <select id="selectAllUser" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from vblog_user
+    limit #{start}, #{num}
+  </select>
+
+  <select id="selectAllUserNum" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_user
   </select>
 
 </mapper>

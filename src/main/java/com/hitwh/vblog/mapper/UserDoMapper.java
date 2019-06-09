@@ -1,17 +1,19 @@
 package com.hitwh.vblog.mapper;
 
 import com.hitwh.vblog.bean.UserDo;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Set;
 
 public interface UserDoMapper {
-    int deleteByPrimaryKey(Integer userId);
+    int deleteByPrimaryKey(@Param("userId") Integer userId);
 
     int insert(UserDo record);
 
     int insertSelective(UserDo record);
 
-    UserDo selectByPrimaryKey(Integer userId);
+    UserDo selectByPrimaryKey(@Param("userId") Integer userId);
 
     int updateByPrimaryKeySelective(UserDo record);
 
@@ -29,6 +31,14 @@ public interface UserDoMapper {
 
     UserDo selectIfEmail(UserDo userDo);
 
-    UserDo selectAdmin(Integer userId);
+    UserDo selectAdmin(@Param("userId") Integer userId);
+
+    List<UserDo> selectAllUserByLabel(@Param("start")Integer start, @Param("num") Integer num, @Param("labelId")Integer labelId);
+
+    Integer selectAllUserByLabelNum(@Param("labelId")Integer labelId);
+
+    List<UserDo> selectAllUser(@Param("start")Integer start, @Param("num") Integer num);
+
+    Integer selectAllUserNum();
 
 }

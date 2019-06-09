@@ -5,6 +5,12 @@
         <result column="user_id" jdbcType="INTEGER" property="userId" />
         <result column="label_id" jdbcType="INTEGER" property="labelId" />
     </resultMap>
+
+    <resultMap id="UserInterestOut" type="com.hitwh.vblog.bean.UserInterestDoOut">
+        <result column="label_id" jdbcType="INTEGER" property="label_id" />
+        <result column="label_name" jdbcType="INTEGER" property="label_name" />
+    </resultMap>
+
     <insert id="insert" parameterType="com.hitwh.vblog.bean.UserInterestDo">
     insert into vblog_user_interest (user_id,label_id)
     values (#{userId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER})
@@ -30,4 +36,11 @@
 
         </trim>
     </insert>
+
+    <select id="queryAllInterestsByUserId" resultMap="UserInterestOut">
+        select user_id, vblog_label.label_id, label_name
+        from vblog_user_interest, vblog_label
+        where vblog_user_interest.label_id = vblog_label.label_id
+        and user_id = #{userId}
+    </select>
 </mapper>
