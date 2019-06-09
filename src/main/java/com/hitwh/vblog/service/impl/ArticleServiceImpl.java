@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void write(ArticleModel articleModel) throws BusinessException {
         if(articleModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
         ValidationResult result = validator.validate(articleModel);
         if(result.isHasErrors())
@@ -105,7 +105,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void delete(Integer article_id) throws BusinessException {
         if (article_id == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
         Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id);
 
@@ -126,7 +126,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void update(ArticleModel articleModel) throws BusinessException {
         if (articleModel.getArticle_id() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
         ArticleDo articleDoTest = new ArticleDo();
         ArticleDo articleDo = new ArticleDo();
@@ -134,7 +134,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
 
         if (articleDoTest == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, EnumError.PARAMETER_VALIDATION_ERROR.getErrMsg());
 
         ValidationResult result = validator.validate(articleModel);
 
@@ -179,10 +179,13 @@ public class ArticleServiceImpl implements ArticleService {
     // 查询单条记录
     @Override
     public ArticleOutParam queryArticleId(Integer article_id) throws BusinessException {
+        if(article_id == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "文章id不合法");
+
         ArticleAndUserDo articleAndUserDo = new ArticleAndUserDo();
         articleAndUserDo = articleDoMapper.selectSingleArticle(article_id);
         if (articleAndUserDo == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            return null;
 
         ArticleOutParam articleOutParam = new ArticleOutParam();
         articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getArticleId());
@@ -205,7 +208,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> selectArticleByAuthorId(Integer start, Integer end, Integer userId) throws BusinessException {
         if(start == null || end == null || start < 0 || end <= start || end == 0 || userId == null || userId == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByUserId(userId);
@@ -218,7 +221,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> selectArticleByType(Integer start, Integer end, Integer typeId) throws BusinessException {
         if(start == null || end == null || start < 0 || end <= start || end == 0 || typeId == null || typeId == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByType(typeId);
@@ -231,7 +234,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> selectArticleByTitle(Integer start, Integer end, String title) throws BusinessException {
         if(start == null || end == null || start < 0 || end <= start || end == 0 || title == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByTitle(title);
