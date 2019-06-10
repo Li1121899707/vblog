@@ -145,6 +145,7 @@
 
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.hitwh.vblog.bean.UserDo">
     update vblog_user
     <set>
@@ -179,13 +180,13 @@
         salt = #{salt,jdbcType=INTEGER},
       </if>
       <if test="avatarLg != null">
-        #{avatarLg,jdbcType=VARCHAR},
+        avatar_lg = #{avatarLg,jdbcType=VARCHAR},
       </if>
       <if test="avatarMd != null">
-        #{avatarMd,jdbcType=VARCHAR},
+        avatar_md = #{avatarMd,jdbcType=VARCHAR},
       </if>
       <if test="avatarSm != null">
-        #{avatarSm,jdbcType=VARCHAR},
+        avatar_sm = #{avatarSm,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}

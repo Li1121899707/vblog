@@ -70,8 +70,8 @@ public class RegisterServiceImpl implements RegisterService {
 
         Integer uid = userDo.getUserId();
 
-//        if(registerModel.getInterest() == null)
-//            return;
+        if(registerModel.getInterest() == null)
+            return;
 
         for (int i=0; i<registerModel.getInterest().size(); i++){
             Integer id = registerModel.getInterest().get(i);

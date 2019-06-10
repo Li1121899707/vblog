@@ -17,4 +17,6 @@ public interface UserInterestDoMapper {
     int insertSelective(UserInterestDo record);
 
     List<UserInterestDoOut> queryAllInterestsByUserId(@Param("userId") Integer userId);
+
+    Integer deleteInterestByUserId(@Param("userId") Integer userId);
 }

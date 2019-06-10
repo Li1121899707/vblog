@@ -1,6 +1,8 @@
 package com.hitwh.vblog.controller;
 
+import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.inparam.UserInparam;
+import com.hitwh.vblog.model.UserModel;
 import com.hitwh.vblog.outparam.ConcernOutParam;
 import com.hitwh.vblog.outparam.UserOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -41,12 +43,12 @@ public class UserController extends BaseController {
 
     @PostMapping("/query_by_email")
     public CommonReturnType queryUserByEmail(@RequestBody UserInparam userInparam) throws BusinessException {
-        return CommonReturnType.create(userService.queryByEmail(userInparam.getAccount()));
+        return CommonReturnType.create(userService.queryByEmail(userInparam.getEmail()));
     }
 
     @PostMapping("/query_by_phone")
     public CommonReturnType queryUserByPhone(@RequestBody UserInparam userInparam) throws BusinessException {
-        return CommonReturnType.create(userService.queryByPhone(userInparam.getAccount()));
+        return CommonReturnType.create(userService.queryByPhone(userInparam.getPhone()));
     }
 
     @PostMapping("/admin/query_by_label")
@@ -87,6 +89,26 @@ public class UserController extends BaseController {
             return CommonReturnType.create(PageResponse.create(userInparam.getStart(),
                     userInparam.getStart() + userOutParams.size() - 1
                     ,sum,userOutParams));
+    }
+
+    @RequestMapping("/update")
+    public CommonReturnType updateUserInfo(@RequestBody UserInparam userInparam) throws BusinessException {
+        UserDo userDo = new UserDo();
+        userDo.setUserId(userInparam.getUid());
+        userDo.setAccount(userInparam.getAccount());
+        userDo.setEmail(userInparam.getEmail());
+        userDo.setNickname(userInparam.getUsername());
+        userDo.setSignature(userInparam.getSignature());
+        userDo.setPhone(userInparam.getPhone());
+        userDo.setPwd(userInparam.getPwd());
+        userDo.setAvatarLg(userInparam.getAvatar_lg());
+        userDo.setAvatarMd(userInparam.getAvatar_md());
+        userDo.setAvatarSm(userInparam.getAvatar_sm());
+        userService.updateUserInfo(userDo);
+
+        List<Integer> interest = userInparam.getInterest();
+        userService.updateUserInterest(interest, userInparam.getUid());
+        return CommonReturnType.success();
     }
 
 }

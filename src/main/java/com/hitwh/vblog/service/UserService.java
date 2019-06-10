@@ -1,9 +1,12 @@
 package com.hitwh.vblog.service;
 
+import com.hitwh.vblog.bean.UserDo;
+import com.hitwh.vblog.bean.UserInterestDo;
 import com.hitwh.vblog.model.UserModel;
 import com.hitwh.vblog.outparam.UserOutParam;
 import com.hitwh.vblog.response.BusinessException;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,5 +27,7 @@ public interface UserService {
 
     Map<String, Object> queryAllUser(Integer start, Integer end) throws BusinessException;
 
-    void updateUser(UserModel userModel);
+    void updateUserInfo(UserDo userDo) throws BusinessException;
+
+    void updateUserInterest(List<Integer> userInterestDos, Integer userId) throws BusinessException;
 }

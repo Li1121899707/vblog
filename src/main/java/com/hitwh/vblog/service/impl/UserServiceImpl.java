@@ -2,6 +2,7 @@ package com.hitwh.vblog.service.impl;
 
 import com.hitwh.vblog.bean.ArticleAndUserDo;
 import com.hitwh.vblog.bean.UserDo;
+import com.hitwh.vblog.bean.UserInterestDo;
 import com.hitwh.vblog.bean.UserInterestDoOut;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.mapper.UserInterestDoMapper;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         UserDo userDo = new UserDo();
         userDo.setAccount(account);
-        UserDo userResult = userDoMapper.selectIfAccount(userDo);
+        UserDo userResult = userDoMapper.selectIfLogin(userDo);
 
         if(userResult == null)
             return null;
@@ -118,9 +119,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserModel userModel) {
+    public void updateUserInfo(UserDo userDo) throws BusinessException {
+        if(userDo.getUserId() == null || userDo.getUserId() <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        userDoMapper.updateByPrimaryKeySelective(userDo);
     }
+
+    @Override
+    public void updateUserInterest(List<Integer> userInterestDos, Integer userId) throws BusinessException {
+        if(userInterestDos == null || userInterestDos.size() == 0)
+            return;
+
+        userInterestDoMapper.deleteInterestByUserId(userId);
+
+        for(int i=0; i<userInterestDos.size(); i++){
+            UserInterestDo userInterestDo = new UserInterestDo();
+            userInterestDo.setUserId(userId);
+            userInterestDo.setLabelId(userInterestDos.get(i));
+            userInterestDoMapper.insert(userInterestDo);
+        }
+    }
+
 
     public UserOutParam convertUserDoToUserOutParam(UserDo userDo){
         UserOutParam userOutParam = new UserOutParam();
@@ -128,7 +148,7 @@ public class UserServiceImpl implements UserService {
         userOutParam.setAccount(userDo.getAccount());
         userOutParam.setEmail(userDo.getEmail());
         userOutParam.setPhone(userDo.getPhone());
-        userOutParam.setNickname(userDo.getSignature());
+        userOutParam.setNickname(userDo.getNickname());
         userOutParam.setAvatar_lg(userDo.getAvatarLg());
         userOutParam.setAvatar_md(userDo.getAvatarMd());
         userOutParam.setAvatar_sm(userDo.getAvatarSm());
@@ -147,7 +167,7 @@ public class UserServiceImpl implements UserService {
             userOutParam.setAccount(userDo.getAccount());
             userOutParam.setEmail(userDo.getEmail());
             userOutParam.setPhone(userDo.getPhone());
-            userOutParam.setNickname(userDo.getSignature());
+            userOutParam.setNickname(userDo.getNickname());
             userOutParam.setAvatar_lg(userDo.getAvatarLg());
             userOutParam.setAvatar_md(userDo.getAvatarMd());
             userOutParam.setAvatar_sm(userDo.getAvatarSm());

@@ -43,4 +43,8 @@
         where vblog_user_interest.label_id = vblog_label.label_id
         and user_id = #{userId}
     </select>
+
+    <delete id="deleteInterestByUserId" >
+        delete vblog_user_interest where user_id = #{userId}
+    </delete>
 </mapper>

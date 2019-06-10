@@ -1,5 +1,7 @@
 package com.hitwh.vblog.inparam;
 
+import java.util.ArrayList;
+
 /**
  * @author liysuzy
  * @description: TODO
@@ -17,6 +19,20 @@ public class UserInparam extends BaseInParam {
     private Integer end;
 
     private Integer label_id;
+
+    private String pwd;
+
+    private String username;
+
+    private String avatar_lg;
+
+    private String avatar_md;
+
+    private String avatar_sm;
+
+    private String signature;
+
+    private ArrayList<Integer> interest;
 
     public Integer getLabel_id() {
         return label_id;
@@ -65,5 +81,62 @@ public class UserInparam extends BaseInParam {
 
     public void setEnd(Integer end) {
         this.end = end;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAvatar_lg() {
+        return avatar_lg;
+    }
+
+    public void setAvatar_lg(String avatar_lg) {
+        this.avatar_lg = avatar_lg;
+    }
+
+    public String getAvatar_md() {
+        return avatar_md;
+    }
+
+    public void setAvatar_md(String avatar_md) {
+        this.avatar_md = avatar_md;
+    }
+
+    public String getAvatar_sm() {
+        return avatar_sm;
+    }
+
+    public void setAvatar_sm(String avatar_sm) {
+        this.avatar_sm = avatar_sm;
+    }
+
+    public ArrayList<Integer> getInterest() {
+        return interest;
+    }
+
+    public void setInterest(ArrayList<Integer> interest) {
+        this.interest = interest;
+    }
+
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }
