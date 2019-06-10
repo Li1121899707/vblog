@@ -132,7 +132,9 @@ public class UserServiceImpl implements UserService {
         if(userInterestDos == null || userInterestDos.size() == 0)
             return;
 
-        userInterestDoMapper.deleteInterestByUserId(userId);
+        Integer interestNum = userInterestDoMapper.queryByUserIdNum(userId);
+        if(interestNum > 0)
+            userInterestDoMapper.deleteInterestByUserId(userId);
 
         for(int i=0; i<userInterestDos.size(); i++){
             UserInterestDo userInterestDo = new UserInterestDo();

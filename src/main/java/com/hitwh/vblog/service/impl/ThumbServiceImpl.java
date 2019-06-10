@@ -64,9 +64,10 @@ public class ThumbServiceImpl implements ThumbService {
         if(articleId == null || articleId == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        Integer num = thumbRecordDoMapper.countThumbNum(articleId);
-
-        return num;
+        ArticleDynamicDo articleDynamicDo = articleDynamicDoMapper.selectByPrimaryKey(articleId);
+        if(articleDynamicDo == null || articleDynamicDo.getThumbNum() == null )
+            throw  new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+        return articleDynamicDo.getThumbNum();
     }
 
 

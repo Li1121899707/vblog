@@ -102,7 +102,9 @@ public class ReportServiceImpl implements ReportService {
 
         ReportRecordDo reportRecordDo = new ReportRecordDo();
         reportRecordDo.setArticleId(reportModel.getArticleId());
+        reportRecordDo.setAdminId(reportModel.getAdminId());
         reportRecordDo.setHandleResult(reportModel.getHandleResult());
+        reportRecordDo.setHandleTime(new Date(System.currentTimeMillis()));
 
         Integer column = reportRecordDoMapper.updateByArticleId(reportRecordDo);
 

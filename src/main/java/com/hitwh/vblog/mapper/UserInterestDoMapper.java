@@ -19,4 +19,6 @@ public interface UserInterestDoMapper {
     List<UserInterestDoOut> queryAllInterestsByUserId(@Param("userId") Integer userId);
 
     Integer deleteInterestByUserId(@Param("userId") Integer userId);
+
+    Integer queryByUserIdNum(@Param("userId") Integer userId);
 }

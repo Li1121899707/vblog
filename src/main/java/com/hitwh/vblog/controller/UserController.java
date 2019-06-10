@@ -52,8 +52,8 @@ public class UserController extends BaseController {
         return CommonReturnType.create(userService.queryByPhone(userInparam.getPhone()));
     }
 
-    @LoginRequired(admin = true)
-    @PostMapping("/admin/query_by_label")
+    @LoginRequired
+    @PostMapping("/query_by_label")
     public CommonReturnType queryAllUserByLabel(@RequestBody UserInparam userInparam) throws BusinessException {
         Map<String, Object> map = userService.queryAllUserByLabel(userInparam.getStart(), userInparam.getEnd(), userInparam.getLabel_id());
 

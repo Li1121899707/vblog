@@ -119,6 +119,11 @@ public class ArticleServiceImpl implements ArticleService {
         if (deleteResult != 1)
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
+        deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
+
+        if(deleteResult != 1)
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+
     }
 
     @Override

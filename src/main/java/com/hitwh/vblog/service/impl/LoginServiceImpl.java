@@ -300,10 +300,14 @@ public class LoginServiceImpl implements LoginService {
         if(uid == null || uid <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        Integer result = tokenDoMapper.deleteByPrimaryKey(uid);
+        TokenDo tokenDo = new TokenDo();
+        tokenDo.setUserId(uid);
+        tokenDo.setToken("0");
+
+        Integer result = tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
+
         if (result != 1)
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
-
     }
 
 }

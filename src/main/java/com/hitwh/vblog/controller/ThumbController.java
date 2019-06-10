@@ -25,7 +25,7 @@ public class ThumbController extends BaseController {
     ThumbService thumbService;
 
     // 添加点赞
-    @LoginRequired
+    //@LoginRequired
     @PostMapping("/add")
     public CommonReturnType insertThumb(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
         ThumbModel thumbModel = new ThumbModel();
