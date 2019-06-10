@@ -89,10 +89,11 @@ public class DemoController extends BaseController{
         return CommonReturnType.success();
     }
 
-//    @RequestMapping("/query_all")
-//    public CommonReturnType queryAll(){
-//        return CommonReturnType.create(demoService.queryAll());
-//    }
+    @LoginRequired(admin = true)
+    @RequestMapping("/update")
+    public CommonReturnType queryAll(){
+        return CommonReturnType.success();
+    }
 
     @RequestMapping("/userinfoselect")
     public CommonReturnType select(){

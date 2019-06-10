@@ -26,9 +26,10 @@ public enum EnumError implements CommonError {
     //UNKNOWN_ERROR(4002, "未知错误"),
 
     //MD5_ERROR(4003, "MD5加密错误"),
-    TOKEN_ERROR(2, "Token 错误"),
+    KEY_ERROR(2, "Key 错误"),
     TOKEN_OVERDUE(3,"Token 已过期"),
-    TOKEN_VALIDATE_PARAM_ERROR(4, "验证Token时参数错误"),
+    KEY_VALIDATE_PARAM_ERROR(4, "验证Token时参数错误"),
+    TOKEN_RENEW_FAILED(5, "验证Token时参数错误"),
     //TOKEN_UID_NOT_FOUND(5, "验证 Token，用户ID参数错误"),
     //TOKEN_TIME_NOT_FOUND(6, "验证 Token，时间参数错误"),
     //TOKEN_KEY_NOT_FOUND(7, "验证 Token ，key参数错误"),

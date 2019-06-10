@@ -45,6 +45,7 @@ public class LoginServiceImpl implements LoginService {
         UserDo userDo = new UserDo();
         BeanUtils.copyProperties(loginModel, userDo);
 
+        //查询用户信息
         UserDo userDoFromTable = userDoMapper.selectIfLogin(userDo);
         if(userDoFromTable == null)
             throw new BusinessException(EnumError.ACCOUNT_NOT_EXIST);
@@ -55,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
             throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
 
         TokenDo tokenDo = new TokenDo();
-        Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
+        Map<String,Object> map = MyMd5.GetToken(String.valueOf(userDo.getUserId()));
         tokenDo.setUserId(userDoFromTable.getUserId());
         long current = Long.valueOf(map.get("currentTime").toString());
         tokenDo.setToken(map.get("token").toString());
@@ -70,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Boolean tokenValidate(String key, Integer uid, long Request_time) {
+    public Boolean keyValidate(String key, Integer uid, long Request_time) {
         TokenDo tokenDo = tokenDoMapper.selectByPrimaryKey(uid);
         if(tokenDo == null)
             return false;
@@ -114,6 +115,36 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    @Override
+    public Boolean tokenValidate(Integer uid, long Request_time) {
+        TokenDo tokenDo = tokenDoMapper.selectByPrimaryKey(uid);
+        if(tokenDo == null)
+            return false;
+        if(Request_time > tokenDo.getExpiryTime().getTime())
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public String renewToken(Integer uid, String token) throws BusinessException {
+        TokenDo tokenDo1 = tokenDoMapper.selectByPrimaryKey(uid);
+        if(token.equals(tokenDo1.getToken()))
+            throw new BusinessException(EnumError.TOKEN_RENEW_FAILED);
+
+        Map<String,Object> returnMap = new HashMap<>();
+
+        TokenDo tokenDo = new TokenDo();
+        Map<String,Object> map = MyMd5.GetToken(String.valueOf(uid));
+        tokenDo.setUserId(uid);
+        long current = Long.valueOf(map.get("currentTime").toString());
+        tokenDo.setToken(map.get("token").toString());
+        tokenDo.setCreateTime(new Date(current));
+        tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
+        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
+        return tokenDo.getToken();
+    }
+
     public Map<String,Object> returnMap(UserDo userDo) throws BusinessException {
         Map<String,Object> returnMap = new HashMap<>();
 
@@ -134,7 +165,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Map<String, Object> getLoginInfoByPhone(LoginModel loginModel) throws BusinessException {
-
         //判断电话和密码不为空
         if(loginModel.getPhone() == null || loginModel.getPwd() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
@@ -161,7 +191,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Map<String, Object> getLoginInfoByEmail(LoginModel loginModel) throws BusinessException {
-
         //判断邮箱和密码不为空
         if(loginModel.getEmail() == null || loginModel.getPwd() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
@@ -188,7 +217,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Integer loginValidateByAccount(LoginModel loginModel) throws BusinessException {
-
         Integer returnInt  = 0;
 
         if(loginModel == null)
@@ -211,7 +239,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Integer loginValidateByPhone(LoginModel loginModel) throws BusinessException {
-
         Integer returnInt  = 0;
 
         if(loginModel == null)
@@ -234,7 +261,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Integer loginValidateByEmail(LoginModel loginModel) throws BusinessException {
-
         Integer returnInt  = 0;
 
         if(loginModel == null)
@@ -274,9 +300,7 @@ public class LoginServiceImpl implements LoginService {
 
         Integer result = tokenDoMapper.deleteByPrimaryKey(uid);
         if (result != 1)
-        {
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
-        }
 
     }
 

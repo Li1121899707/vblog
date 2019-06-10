@@ -1,5 +1,6 @@
 package com.hitwh.vblog.service.impl;
 
+import com.hitwh.vblog.bean.TokenDo;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.bean.UserInterestDo;
 import com.hitwh.vblog.mapper.UserDoMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +70,12 @@ public class RegisterServiceImpl implements RegisterService {
         if (registerResult != 1)
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
+        TokenDo tokenDo = new TokenDo();
+        tokenDo.setUserId(userDo.getUserId());
+        tokenDo.setToken("0");
+        tokenDo.setCreateTime(new Date(System.currentTimeMillis()));
+        tokenDo.setExpiryTime(new Date(System.currentTimeMillis()));
+
         Integer uid = userDo.getUserId();
 
         if(registerModel.getInterest() == null)
@@ -82,6 +90,5 @@ public class RegisterServiceImpl implements RegisterService {
                 userInterestDoMapper.insertSelective(userInterestDo);
             }
         }
-
     }
 }

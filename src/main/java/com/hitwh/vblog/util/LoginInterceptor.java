@@ -6,6 +6,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.LoginService;
 import com.hitwh.vblog.service.impl.LoginServiceImpl;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,29 +78,34 @@ public class LoginInterceptor implements HandlerInterceptor {
         //long request_time = (long) parameterMap.get("request_time");
         //request_time = 1559483686339L;
         if(parameterMap == null)
-            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
+            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
 
         try {
             request_time = (long) parameterMap.get("request_time");
         }catch (Exception e){
-            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
+            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
         }
 
         key = String.valueOf(parameterMap.get("key"));
         if(key == null || key.equals("") || key.equals("null"))
-            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
+            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
 
         uid = (Integer) parameterMap.get("uid");
         if(uid == null || uid.equals(0))
-            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
+            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
 
         LoginService loginService = (LoginService) SpringUtil.getBean(LoginService.class);
 
-        Boolean result = loginService.tokenValidate(key, uid, request_time);
+        Boolean keyValidateResult = loginService.keyValidate(key, uid, request_time);
 
         // result为false，代表token验证失败，直接返回
-        if(!result)
-            throw new BusinessException(EnumError.TOKEN_ERROR);
+        if(!keyValidateResult)
+            throw new BusinessException(EnumError.KEY_ERROR);
+
+        Boolean tokenValidateResult = loginService.tokenValidate(uid, request_time);
+
+        if(!tokenValidateResult)
+            throw new BusinessException(EnumError.TOKEN_OVERDUE);
 
         // result为true，代表token验证成功，需要判断是否需要管理员权限
         // 不需要管理员权限，直接返回

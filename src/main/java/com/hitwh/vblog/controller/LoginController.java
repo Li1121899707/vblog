@@ -1,6 +1,7 @@
 package com.hitwh.vblog.controller;
 
 import com.hitwh.vblog.inparam.LoginInParam;
+import com.hitwh.vblog.inparam.TokenRenewParam;
 import com.hitwh.vblog.model.LoginModel;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
@@ -11,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -111,5 +113,10 @@ public class  LoginController extends BaseController{
 
         loginService.logOut(loginInParam.getUid());
         return CommonReturnType.success();
+    }
+
+    @PostMapping("/token_renew")
+    public CommonReturnType tokenRenew(@RequestBody TokenRenewParam tokenRenewParam) throws BusinessException {
+        return CommonReturnType.create(loginService.renewToken(tokenRenewParam.getUid(), tokenRenewParam.getToken()));
     }
 }
