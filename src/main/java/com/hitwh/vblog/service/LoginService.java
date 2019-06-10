@@ -25,4 +25,6 @@ public interface LoginService {
     Integer loginValidateByEmail(LoginModel loginModel) throws BusinessException;
 
     Boolean adminValidate(Integer uid);
+
+    void logOut(Integer uid) throws BusinessException;
 }

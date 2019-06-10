@@ -266,4 +266,18 @@ public class LoginServiceImpl implements LoginService {
         else
             return true;
     }
+
+    @Override
+    public void logOut(Integer uid) throws BusinessException {
+        if(uid == null || uid <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        Integer result = tokenDoMapper.deleteByPrimaryKey(uid);
+        if (result != 1)
+        {
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }
