@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hitwh.vblog.mapper.ArticleLabelDoMapper">
-  <resultMap id="AllResultMap" type="com.hitwh.vblog.bean.ArticleLabelDoSimple">
-    <result column="label_id" jdbcType="INTEGER" property="label_id" />
-    <result column="label_name" javaType="String" property="label_name"/>
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.ArticleLabelDo">
+        <result column="article_id" jdbcType="INTEGER" property="articleId"/>
+        <result column="label_id" jdbcType="INTEGER" property="labelId"/>
+        <result column="label_add_time" jdbcType="TIMESTAMP" property="labelAddTime"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleLabelDo">
+    insert into vblog_article_label (article_id, label_id, label_add_time
+      )
+    values (#{articleId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER}, #{labelAddTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.ArticleLabelDo">
+        insert into vblog_article_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">
+                article_id,
+            </if>
+            <if test="labelId != null">
+                label_id,
+            </if>
+            <if test="labelAddTime != null">
+                label_add_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">
+                #{articleId,jdbcType=INTEGER},
+            </if>
+            <if test="labelId != null">
+                #{labelId,jdbcType=INTEGER},
+            </if>
+            <if test="labelAddTime != null">
+                #{labelAddTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="selectAllArticleInterest" resultMap="AllResultMap" parameterType="java.lang.Integer">
+    <resultMap id="AllResultMap" type="com.hitwh.vblog.bean.ArticleLabelDoSimple">
+        <result column="label_id" jdbcType="INTEGER" property="label_id"/>
+        <result column="label_name" javaType="String" property="label_name"/>
+    </resultMap>
+
+    <select id="selectAllArticleInterest" parameterType="java.lang.Integer" resultMap="AllResultMap">
    SELECT vblog_article_label.label_id, label_name
     FROM vblog_article_label, vblog_label
     WHERE vblog_article_label.article_id = #{articleId}
     AND vblog_article_label.label_id = vblog_label.label_id
   </select>
-    <insert id="insert" parameterType="com.hitwh.vblog.bean.ArticleLabelDo">
-        insert into vblog_article_label (article_id, label_id, label_add_time)
-    values (#{articleId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER}, #{labelAddTime,jdbcType=TIMESTAMP})
-    </insert>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from vblog_article_label
     where article_id = #{articleId,jdbcType=INTEGER}

@@ -30,7 +30,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void addReport(ReportModel reportModel) throws BusinessException {
         if(reportModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(reportModel);
         if(result.isHasErrors())
@@ -45,14 +45,14 @@ public class ReportServiceImpl implements ReportService {
         Integer column = reportRecordDoMapper.insertSelective(reportRecordDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
     @Override
     public Map<String, Object> queryAllReports(Integer start, Integer end) throws BusinessException {
         Map<String,Object> map = new HashMap<>();
         if(start == null || end == null || start < 0 || end <= start || end == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Integer sum = reportRecordDoMapper.selectAllReportRecordsNum();
         List<ReportAndArticleDo> reportAndArticleDos = reportRecordDoMapper.selectAllReportRecords(start, end-start+1);
@@ -66,7 +66,7 @@ public class ReportServiceImpl implements ReportService {
     public Map<String, Object> queryReportsByArticleId(Integer start, Integer end, Integer articleId) throws BusinessException {
         Map<String,Object> map = new HashMap<>();
         if(start == null || end == null || start < 0 || end <= start || end == 0 || articleId == null || articleId == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Integer sum = reportRecordDoMapper.selectReportRecordsByArticleIdNum(articleId);
         List<ReportAndArticleDo> reportAndArticleDos = reportRecordDoMapper.selectReportRecordsByArticleId(start, end-start+1, articleId);
@@ -80,7 +80,7 @@ public class ReportServiceImpl implements ReportService {
     public Map<String, Object> queryReportsByHandleResult(Integer start, Integer end, Integer handleResult) throws BusinessException {
         Map<String,Object> map = new HashMap<>();
         if(start == null || end == null || start < 0 || end <= start || end == 0 || handleResult == null || handleResult > 3 || handleResult < 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Integer sum = reportRecordDoMapper.selectReportRecordsByHandleResultNum(handleResult);
         List<ReportAndArticleDo> reportAndArticleDos = reportRecordDoMapper.selectReportRecordsByHandleResult(start, end-start +1, handleResult);
@@ -94,11 +94,11 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void handleReport(ReportModel reportModel) throws BusinessException {
         if(reportModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(reportModel.getArticleId() == null || reportModel.getArticleId() == 0 || reportModel.getHandleResult() == null
         || reportModel.getHandleResult() <=0 || reportModel.getHandleResult() >2)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ReportRecordDo reportRecordDo = new ReportRecordDo();
         reportRecordDo.setArticleId(reportModel.getArticleId());
@@ -107,7 +107,7 @@ public class ReportServiceImpl implements ReportService {
         Integer column = reportRecordDoMapper.updateByArticleId(reportRecordDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
     }
 

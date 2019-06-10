@@ -31,7 +31,7 @@ public class LabelServiceImpl implements LabelService {
     @Override
     public LabelOutParam queryLabelById(Integer id) throws BusinessException {
         if(id == null || id <=0 )
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         LabelDo labelDo = labelDoMapper.selectByPrimaryKey(id);
 
@@ -59,7 +59,7 @@ public class LabelServiceImpl implements LabelService {
         else if(start != null && end != null && start >= 0 && end >= start){
             labelDos = labelDoMapper.selectAllInterestsWithPage(start, end-start+1);
         }else
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(labelDos == null || labelDos.size() == 0)
             return null;
@@ -88,7 +88,7 @@ public class LabelServiceImpl implements LabelService {
     @Override
     public void insertLabel(LabelModel labelModel) throws BusinessException {
         if(labelModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(labelModel);
         if(result.isHasErrors()){
@@ -102,16 +102,16 @@ public class LabelServiceImpl implements LabelService {
         Integer column = labelDoMapper.insert(labelDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
     @Override
     public void updateLabel(LabelModel labelModel) throws BusinessException {
         if(labelModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(labelModel.getLabelId() == null || labelModel.getLabelId() <= 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(labelModel);
         if(result.isHasErrors()){
@@ -126,7 +126,7 @@ public class LabelServiceImpl implements LabelService {
         Integer column = labelDoMapper.updateByPrimaryKeySelective(labelDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
 

@@ -21,7 +21,9 @@ public class MyMd5 {
         try {
             result = DigestUtils.md5DigestAsHex(plainText.getBytes());
         }catch (Exception e){
-            throw new BusinessException(EnumError.MD5_ERROR);
+            //throw new BusinessException(EnumError.MD5_ERROR);
+            System.out.println("MD5 ERROR");
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
         return result;
     }
@@ -35,7 +37,8 @@ public class MyMd5 {
             String md5pwd = DigestUtils.md5DigestAsHex(plainText.getBytes());
             result = DigestUtils.md5DigestAsHex((md5pwd + md5salt).getBytes());
         }catch (Exception e){
-            throw new BusinessException(EnumError.MD5_ERROR);
+            System.out.println("MD5 ERROR");
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
         System.out.println(salt);
         Map<String,Object> map = new HashMap<>();
@@ -55,7 +58,8 @@ public class MyMd5 {
             String plainTextMD5 = DigestUtils.md5DigestAsHex(plainText.getBytes());
             token = DigestUtils.md5DigestAsHex((currentTimeMD5 + plainTextMD5).getBytes());
         }catch (Exception e){
-            throw new BusinessException(EnumError.MD5_ERROR);
+            System.out.println("MD5 ERROR");
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
         Map<String,Object> map = new HashMap<>();
         map.put("token",token);

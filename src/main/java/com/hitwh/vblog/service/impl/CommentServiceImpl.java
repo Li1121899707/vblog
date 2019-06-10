@@ -38,17 +38,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     ArticleDynamicDoMapper articleDynamicDoMapper;
-    /**
-     *
-     * @param start
-     * @param num
-     * @param articleId
-     * @return 通过文章ID查找评论
-     */
+
+
     @Override
     public Map<String,Object> selectDisplayComment(Integer start, Integer end, Integer articleId) throws BusinessException {
         if(start == null || end == null || articleId == null || start < 0|| end < start)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         int num = end - start + 1;
 
@@ -83,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Map<String, Object> selectDisplayCommentById(Integer start, Integer end, Integer userId) throws BusinessException {
         if(start == null || end == null || userId == null || start < 0|| end < start)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         int num = end - start + 1;
 
@@ -117,7 +112,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
         if(parent_comment_id == null || parent_comment_id <= 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         //通过数据库查询评论
         ComAndUserDo comAndUserDo = commentDoMapper.selectForParent(parent_comment_id);
         //判断是否为空
@@ -135,7 +130,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void insertComment(CommentModel commentModel) throws BusinessException {
         if (commentModel == null) {
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         }
 
         ValidationResult result = validator.validate(commentModel);
@@ -149,47 +144,46 @@ public class CommentServiceImpl implements CommentService {
         try {
             ifInsert = commentDoMapper.insertSelective(commentDo);
         } catch (Exception e) {
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
         //返回值不为1则抛出错误
         if (ifInsert != 1) {
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
         articleDynamicDo.setArticleId(commentModel.getArticleId());
         articleDynamicDo.setCommentNum(1);
         int i = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
         if(i != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 //隐藏评论
     @Override
     public void hideComment(Integer commentId) throws BusinessException {
         //判断control传来的参数的正确性
         if(commentId == null || commentId <= 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Integer hideResult = commentDoMapper.updateCommentHide(commentId);
         //判断是否隐藏成功
         if(hideResult != 1)
-            throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
     }
 
     @Override
     public void commentAdminHide(Integer uid, Integer commentId) throws BusinessException {
         if (uid == null||commentId == null||uid < 0||commentId < 0)
-            throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         if(userDoMapper.selectAdmin(uid) == null)
-            throw new BusinessException(EnumError.LACK_OF_AUTHORITY);
+            throw new BusinessException(EnumError.UNAUTHORIZED);
 
         else{
             Integer hideResult = commentDoMapper.updateCommentHide(commentId);
             //判断是否隐藏成功
             if(hideResult != 1)
-                throw new BusinessException(EnumError.COMMENT_HIDE_ERROR);
+                throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     //将数据库查出的类型转换为输出类型

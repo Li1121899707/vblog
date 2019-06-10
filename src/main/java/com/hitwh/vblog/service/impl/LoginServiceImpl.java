@@ -35,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
         Map<String,Object> returnMap = new HashMap<>();
 
         if(loginModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(loginModel);
         if(result.isHasErrors()){
@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
         Integer salt = userDoFromTable.getSalt();
         String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
-            throw new BusinessException(EnumError.PASSWORD_ERROR);
+            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
 
         TokenDo tokenDo = new TokenDo();
         Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
@@ -64,7 +64,7 @@ public class LoginServiceImpl implements LoginService {
         //tokenDoMapper.insert(tokenDo);
         tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
         returnMap.put("allowance",userDoFromTable.getAllowance());
-        returnMap.put("userId",userDoFromTable.getUserId());
+        returnMap.put("uid",userDoFromTable.getUserId());
         returnMap.put("token",map.get("token").toString());
         return returnMap;
     }
@@ -127,7 +127,7 @@ public class LoginServiceImpl implements LoginService {
 
         tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
         returnMap.put("allowance",userDo.getAllowance());
-        returnMap.put("userId",userDo.getUserId());
+        returnMap.put("uid",userDo.getUserId());
         returnMap.put("token",map.get("token").toString());
         return returnMap;
     }
@@ -137,7 +137,7 @@ public class LoginServiceImpl implements LoginService {
 
         //判断电话和密码不为空
         if(loginModel.getPhone() == null || loginModel.getPwd() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         //将model中的数据封装到userDo
         UserDo userDo = new UserDo();
         userDo.setPhone(loginModel.getPhone());
@@ -152,7 +152,7 @@ public class LoginServiceImpl implements LoginService {
         Integer salt = userDoFromTable.getSalt();
         String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
-            throw new BusinessException(EnumError.PASSWORD_ERROR);
+            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
 
         Map<String,Object> map = returnMap(userDoFromTable);
 
@@ -164,7 +164,7 @@ public class LoginServiceImpl implements LoginService {
 
         //判断邮箱和密码不为空
         if(loginModel.getEmail() == null || loginModel.getPwd() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         //将model中的数据封装到userDo
         UserDo userDo = new UserDo();
         userDo.setEmail(loginModel.getEmail());
@@ -179,7 +179,7 @@ public class LoginServiceImpl implements LoginService {
         Integer salt = userDoFromTable.getSalt();
         String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
-            throw new BusinessException(EnumError.PASSWORD_ERROR);
+            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
 
         Map<String,Object> map = returnMap(userDoFromTable);
 
@@ -192,10 +192,10 @@ public class LoginServiceImpl implements LoginService {
         Integer returnInt  = 0;
 
         if(loginModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(loginModel.getAccount() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         UserDo userDo = new UserDo();
 
@@ -215,10 +215,10 @@ public class LoginServiceImpl implements LoginService {
         Integer returnInt  = 0;
 
         if(loginModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(loginModel.getPhone() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         UserDo userDo = new UserDo();
 
@@ -238,10 +238,10 @@ public class LoginServiceImpl implements LoginService {
         Integer returnInt  = 0;
 
         if(loginModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(loginModel.getEmail() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         UserDo userDo = new UserDo();
 

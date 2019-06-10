@@ -37,7 +37,7 @@ public class DemoServiceImpl implements DemoService {
     @Transactional
     public Integer demoRegister(DemoModel demoModel) throws BusinessException {
         if(demoModel == null){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         }
 
         // 验证数据是否合法，不合法抛出数据不合法异常，由于使用了插件，所以result中包含的是所有参数不合法的信息
@@ -53,7 +53,7 @@ public class DemoServiceImpl implements DemoService {
 
         // 插入数据返回的数值，代表影响的行数
         if(usercolumn != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         // 领域模型更新，将userId插入
         demoModel.setUserId(demoUserDo.getUserId());
@@ -65,7 +65,7 @@ public class DemoServiceImpl implements DemoService {
 
         // 插入数据返回的数值，代表影响的行数
         if(pwdcolumn != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         return 1;
     }

@@ -41,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void write(ArticleModel articleModel) throws BusinessException {
         if(articleModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(articleModel);
         if(result.isHasErrors())
@@ -72,7 +72,7 @@ public class ArticleServiceImpl implements ArticleService {
         Integer writeResult = articleDoMapper.insertSelective(articleDo);
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         articleDynamicDo.setArticleId(articleDo.getArticleId());
         articleDynamicDo.setVirtualId(virture);
@@ -80,7 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult = articleDynamicDoMapper.insertSelective(articleDynamicDo);
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         articleLabelDo.setArticleId(articleDo.getArticleId());
         articleLabelDo.setLabelId(articleModel.getType_1());
@@ -89,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult = articleLabelDoMapper.insert(articleLabelDo);
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         if (articleModel.getType_2() != null)
         {
@@ -100,31 +100,31 @@ public class ArticleServiceImpl implements ArticleService {
             writeResult = articleLabelDoMapper.insert(articleLabelDo);
 
             if (writeResult != 1)
-                throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+                throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public void delete(Integer article_id, Integer uid) throws BusinessException {
         if (article_id == null || uid == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id, uid);
 
         if (deleteResult != 1)
-            throw new BusinessException(EnumError.DATABASE_DELETE_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
 
         if (deleteResult != 1)
-            throw new BusinessException(EnumError.DATABASE_DELETE_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
     }
 
     @Override
     public void update(ArticleModel articleModel) throws BusinessException {
         if (articleModel.getArticle_id() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ArticleDo articleDoTest = new ArticleDo();
         ArticleDo articleDo = new ArticleDo();
@@ -153,7 +153,7 @@ public class ArticleServiceImpl implements ArticleService {
         Integer writeResult  = articleDoMapper.updateByPrimaryKeySelective(articleDo);
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         articleLabelDo.setArticleId(articleModel.getArticle_id());
         articleLabelDo.setLabelId(articleModel.getType_1());
@@ -162,7 +162,7 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult = articleLabelDoMapper.deleteByPrimaryKey(articleLabelDo.getArticleId());
         writeResult = articleLabelDoMapper.insert(articleLabelDo);
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         if (articleModel.getType_2() != null)
         {
             articleLabelDo.setArticleId(articleModel.getArticle_id());
@@ -170,7 +170,7 @@ public class ArticleServiceImpl implements ArticleService {
 
             writeResult = articleLabelDoMapper.insert(articleLabelDo);
             if (writeResult != 1)
-                throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+                throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -206,7 +206,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> selectArticleByAuthorId(Integer start, Integer end, Integer userId) throws BusinessException {
         if(start == null || end == null || start < 0 || end <= start || end == 0 || userId == null || userId == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByUserId(userId);
@@ -219,7 +219,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> selectArticleByType(Integer start, Integer end, Integer typeId) throws BusinessException {
         if(start == null || end == null || start < 0 || end <= start || end == 0 || typeId == null || typeId == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByType(typeId);
@@ -232,7 +232,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> selectArticleByTitle(Integer start, Integer end, String title) throws BusinessException {
         if(start == null || end == null || start < 0 || end <= start || end == 0 || title == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByTitle(title);
@@ -283,8 +283,4 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleOutParam articleOutParam = articleOutParams.get(choice);
         return articleOutParam;
     }
-
-
-
-
 }

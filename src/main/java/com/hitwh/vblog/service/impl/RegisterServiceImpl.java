@@ -36,7 +36,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public void register(RegisterModel registerModel) throws BusinessException {
         if(registerModel == null){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         }
 
         ValidationResult result = validator.validate(registerModel);
@@ -66,9 +66,12 @@ public class RegisterServiceImpl implements RegisterService {
         Integer registerResult  = userDoMapper.insertSelective(userDo);
 
         if (registerResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         Integer uid = userDo.getUserId();
+
+//        if(registerModel.getInterest() == null)
+//            return;
 
         for (int i=0; i<registerModel.getInterest().size(); i++){
             Integer id = registerModel.getInterest().get(i);

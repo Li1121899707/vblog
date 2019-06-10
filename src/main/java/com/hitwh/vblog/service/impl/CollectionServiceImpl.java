@@ -71,7 +71,7 @@ public class CollectionServiceImpl implements CollectionService {
         //判断收藏数加1是否成功
         int insert = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
         if(insert != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class CollectionServiceImpl implements CollectionService {
 
         int insert = articleDynamicDoMapper.subtractArticleDynamic(articleDynamicDo);
         if(insert != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -136,7 +136,7 @@ public class CollectionServiceImpl implements CollectionService {
     public Boolean queryIfCollect(CollectionModel collectionModel) throws BusinessException {
 
         if(collectionModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(collectionModel);
         if(result.isHasErrors()){

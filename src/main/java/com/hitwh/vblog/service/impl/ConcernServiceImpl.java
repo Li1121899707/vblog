@@ -44,7 +44,7 @@ public class ConcernServiceImpl implements ConcernService {
 
         int writeResult = concernRecordDoMapper.insertSelective(concernRecordDo);
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ConcernServiceImpl implements ConcernService {
         concernRecordDo.setTargetId(concernModel.getTargetId());
         int writeResult = concernRecordDoMapper.delete(concernRecordDo);
         if (writeResult != 1)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
     @Override

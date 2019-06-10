@@ -32,7 +32,7 @@ public class ThumbServiceImpl implements ThumbService {
     @Override
     public void insertThumbRecord(ThumbModel thumbModel) throws BusinessException {
         if(thumbModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(thumbModel);
         if(result.isHasErrors())
@@ -46,7 +46,7 @@ public class ThumbServiceImpl implements ThumbService {
         Integer column = thumbRecordDoMapper.insertSelective(thumbRecordDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
         articleDynamicDo.setArticleId(thumbModel.getArticleId());
@@ -56,13 +56,13 @@ public class ThumbServiceImpl implements ThumbService {
         Integer addColum = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
 
         if(addColum == null || addColum == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
     }
 
     @Override
     public Integer countThumbNum(Integer articleId) throws BusinessException {
         if(articleId == null || articleId == 0)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Integer num = thumbRecordDoMapper.countThumbNum(articleId);
 
@@ -73,7 +73,7 @@ public class ThumbServiceImpl implements ThumbService {
     @Override
     public void deleteThumbRecord(ThumbModel thumbModel) throws BusinessException {
         if(thumbModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(thumbModel);
         if(result.isHasErrors())
@@ -86,7 +86,7 @@ public class ThumbServiceImpl implements ThumbService {
         Integer column = thumbRecordDoMapper.delete(thumbRecordDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.DATABASE_DELETE_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
         ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
         articleDynamicDo.setArticleId(thumbModel.getArticleId());
@@ -96,14 +96,14 @@ public class ThumbServiceImpl implements ThumbService {
         Integer addColum = articleDynamicDoMapper.subtractArticleDynamic(articleDynamicDo);
 
         if(addColum == null || addColum == 0)
-            throw new BusinessException(EnumError.DATABASE_INSERT_ERROR);
+            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
     }
 
     @Override
     public Boolean queryIfThumb(ThumbModel thumbModel) throws BusinessException {
         if(thumbModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(thumbModel);
         if(result.isHasErrors())

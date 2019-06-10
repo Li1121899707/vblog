@@ -52,7 +52,7 @@ public class ArticleController extends BaseController {
         return CommonReturnType.success();
     }
 
-    @PostMapping("/query_by_id")
+    @RequestMapping("/query_by_id")
     public CommonReturnType queryArticleById(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         return CommonReturnType.create(articleService.queryArticleId(articleInParam.getArticle_id()));
     }

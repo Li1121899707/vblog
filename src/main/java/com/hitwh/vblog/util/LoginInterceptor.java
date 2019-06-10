@@ -77,21 +77,21 @@ public class LoginInterceptor implements HandlerInterceptor {
         //long request_time = (long) parameterMap.get("request_time");
         //request_time = 1559483686339L;
         if(parameterMap == null)
-            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_NOT_FOUND);
+            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
 
         try {
             request_time = (long) parameterMap.get("request_time");
         }catch (Exception e){
-            throw new BusinessException(EnumError.TOKEN_TIME_NOT_FOUND);
+            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
         }
 
         key = String.valueOf(parameterMap.get("key"));
         if(key == null || key.equals("") || key.equals("null"))
-            throw new BusinessException(EnumError.TOKEN_KEY_NOT_FOUND);
+            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
 
         uid = (Integer) parameterMap.get("uid");
         if(uid == null || uid.equals(0))
-            throw new BusinessException(EnumError.TOKEN_UID_NOT_FOUND);
+            throw new BusinessException(EnumError.TOKEN_VALIDATE_PARAM_ERROR);
 
         LoginService loginService = (LoginService) SpringUtil.getBean(LoginService.class);
 
@@ -110,6 +110,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(adminResult)
             return true;
         else
-            throw new BusinessException(EnumError.PERMISSION_DENIED);
+            throw new BusinessException(EnumError.UNAUTHORIZED);
     }
 }

@@ -18,6 +18,12 @@ public class  LoginController extends BaseController{
     @Autowired
     LoginService loginService;
 
+    /**
+     * @description 使用账户登录
+     * @param loginInParam
+     * @return
+     * @throws BusinessException
+     */
     @PostMapping("/login_account")
     public CommonReturnType loginAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
         //String pwd = MyMd5.md5Encryption(loginInParam.getPwd());
@@ -29,9 +35,15 @@ public class  LoginController extends BaseController{
         loginModel.setAccount(loginInParam.getAccount());
         loginModel.setPwd(loginInParam.getPwd());
 
-
         return CommonReturnType.create(loginService.getLoginInfoByAccout(loginModel));
     }
+
+    /**
+     * @description 使用手机号登陆
+     * @param loginInParam
+     * @return
+     * @throws BusinessException
+     */
 
     @PostMapping("/login_phone")
     public CommonReturnType loginPhone(@RequestBody LoginInParam loginInParam) throws BusinessException {
