@@ -2,6 +2,7 @@ package com.hitwh.vblog.service;
 
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.bean.UserInterestDo;
+import com.hitwh.vblog.inparam.UserInparam;
 import com.hitwh.vblog.model.UserModel;
 import com.hitwh.vblog.outparam.UserOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -30,4 +31,6 @@ public interface UserService {
     void updateUserInfo(UserDo userDo) throws BusinessException;
 
     void updateUserInterest(List<Integer> userInterestDos, Integer userId) throws BusinessException;
+
+    void banUser(UserInparam userInparam) throws BusinessException;
 }

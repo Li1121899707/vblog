@@ -111,4 +111,9 @@ public class UserController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @PostMapping("/admin/ban_user")
+    public CommonReturnType banUser(@RequestBody UserInparam userInparam) throws BusinessException {
+        userService.banUser(userInparam);
+        return CommonReturnType.success();
+    }
 }

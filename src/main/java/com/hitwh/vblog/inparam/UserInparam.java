@@ -34,6 +34,16 @@ public class UserInparam extends BaseInParam {
 
     private ArrayList<Integer> interest;
 
+    private Integer ban_user_id;
+
+    public Integer getBan_user_id() {
+        return ban_user_id;
+    }
+
+    public void setBan_user_id(Integer ban_user_id) {
+        this.ban_user_id = ban_user_id;
+    }
+
     public Integer getLabel_id() {
         return label_id;
     }

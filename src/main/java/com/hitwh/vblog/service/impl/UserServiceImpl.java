@@ -4,6 +4,7 @@ import com.hitwh.vblog.bean.ArticleAndUserDo;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.bean.UserInterestDo;
 import com.hitwh.vblog.bean.UserInterestDoOut;
+import com.hitwh.vblog.inparam.UserInparam;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.mapper.UserInterestDoMapper;
 import com.hitwh.vblog.model.UserModel;
@@ -139,6 +140,22 @@ public class UserServiceImpl implements UserService {
             userInterestDo.setLabelId(userInterestDos.get(i));
             userInterestDoMapper.insert(userInterestDo);
         }
+    }
+
+    @Override
+    public void banUser(UserInparam userInparam) throws BusinessException {
+        if (userInparam.getUid() == null || userInparam.getBan_user_id() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        UserDo userDo = userDoMapper.selectAdmin(userInparam.getUid());
+        if (userDo == null || userDo.getUserId() == null)
+            throw new BusinessException(EnumError.UNAUTHORIZED);
+
+        UserDo userDo1 = new UserDo();
+        userDo1.setUserId(userInparam.getBan_user_id());
+        userDo1.setBan(1);
+        userDoMapper.updateByPrimaryKeySelective(userDo1);
+
     }
 
 
