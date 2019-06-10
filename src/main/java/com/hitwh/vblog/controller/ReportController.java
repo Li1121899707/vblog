@@ -8,6 +8,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.ReportService;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class ReportController extends BaseController{
     @Autowired
     ReportService reportService;
 
+    @LoginRequired
     @PostMapping("/article")
     public CommonReturnType reportArticle(@RequestBody ReportInParam reportInParam) throws BusinessException {
         ReportModel reportModel = new ReportModel();
@@ -39,6 +41,7 @@ public class ReportController extends BaseController{
         return CommonReturnType.success();
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/query_all")
     public CommonReturnType queryAllReport(@RequestBody ReportInParam reportInParam) throws BusinessException {
         Map<String,Object> result = reportService.queryAllReports(reportInParam.getStart(),
@@ -57,6 +60,7 @@ public class ReportController extends BaseController{
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/query_by_article")
     public CommonReturnType queryReportByArticle(@RequestBody ReportInParam reportInParam) throws BusinessException {
         Map<String,Object> result = reportService.queryReportsByArticleId(reportInParam.getStart(),
@@ -74,6 +78,7 @@ public class ReportController extends BaseController{
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/query_by_handle_result")
     public CommonReturnType queryReportByHandleResult(@RequestBody ReportInParam reportInParam) throws BusinessException {
         Map<String,Object> result = reportService.queryReportsByHandleResult(reportInParam.getStart(),
@@ -92,6 +97,7 @@ public class ReportController extends BaseController{
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/handle")
     public CommonReturnType handleReport(@RequestBody ReportInParam reportInParam) throws BusinessException {
         ReportModel reportModel = new ReportModel();

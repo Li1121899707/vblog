@@ -128,8 +128,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String renewToken(Integer uid, String token) throws BusinessException {
-        TokenDo tokenDo1 = tokenDoMapper.selectByPrimaryKey(uid);
-        if(token.equals(tokenDo1.getToken()))
+        TokenDo oldtokenDo = tokenDoMapper.selectByPrimaryKey(uid);
+        System.out.println("old token : " + oldtokenDo.getToken());
+        System.out.println("new token : " + oldtokenDo.getToken());
+        if(!token.equals(oldtokenDo.getToken()))
             throw new BusinessException(EnumError.TOKEN_RENEW_FAILED);
 
         Map<String,Object> returnMap = new HashMap<>();

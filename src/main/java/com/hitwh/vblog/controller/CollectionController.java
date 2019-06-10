@@ -10,6 +10,7 @@ import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.CollectionService;
 import com.hitwh.vblog.service.impl.CollectionServiceImpl;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ public class CollectionController extends BaseController{
     @Autowired
     CollectionServiceImpl collectionService;
 
+    @LoginRequired
     @RequestMapping("/add")
     public CommonReturnType addCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
         CollectionModel collectionModel = new CollectionModel();
@@ -45,6 +47,7 @@ public class CollectionController extends BaseController{
         return CommonReturnType.success();
     }
 
+    @LoginRequired
     @RequestMapping("/delete")
     public CommonReturnType deleteCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
         CollectionModel collectionModel = new CollectionModel();

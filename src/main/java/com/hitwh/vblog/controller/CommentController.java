@@ -9,6 +9,7 @@ import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.impl.CommentServiceImpl;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -88,6 +89,7 @@ public class CommentController extends BaseController{
         return CommonReturnType.create(commentService.selectForParent(commentInParam.getParent_comment_id()));
     }
 
+    @LoginRequired
     @PostMapping("/insert")
     public CommonReturnType commentInsert(@RequestBody CommentInParam commentInParam) throws BusinessException {
         CommentModel commentModel = new CommentModel();
@@ -102,12 +104,14 @@ public class CommentController extends BaseController{
         return CommonReturnType.success();
     }
 
+    @LoginRequired
     @PostMapping("/hide")
     public CommonReturnType commentHide(@RequestBody CommentInParam commentInParam) throws BusinessException {
         commentService.hideComment(commentInParam.getComment_id());
         return CommonReturnType.success();
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/hide")
     public CommonReturnType commentAdminHide(@RequestBody CommentInParam commentInParam) throws BusinessException {
         commentService.commentAdminHide(commentInParam.getUid(),commentInParam.getComment_id());

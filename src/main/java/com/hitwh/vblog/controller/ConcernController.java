@@ -8,6 +8,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.ConcernService;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ public class ConcernController extends BaseController {
     @Autowired
     ConcernService concernService;
 
+    @LoginRequired
     @PostMapping("/add")
     public CommonReturnType addConcern(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         ConcernModel concernModel = new ConcernModel();
@@ -33,6 +35,7 @@ public class ConcernController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @LoginRequired
     @PostMapping("/delete")
     public CommonReturnType deleteConcern(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         ConcernModel concernModel = new ConcernModel();
@@ -42,6 +45,7 @@ public class ConcernController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @LoginRequired
     @PostMapping("/query_concern_follower")
     public CommonReturnType queryConcernFollower(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         Map<String, Object> map = concernService.queryFollower(concernInParam.getStart(), concernInParam.getEnd(), concernInParam.getUid());
@@ -62,6 +66,7 @@ public class ConcernController extends BaseController {
                     ,sum,concernOutParams));
     }
 
+    @LoginRequired
     @PostMapping("/query_concern_target")
     public CommonReturnType queryConcernTarget(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         Map<String, Object> map = concernService.queryTarget(concernInParam.getStart(), concernInParam.getEnd(), concernInParam.getUid());

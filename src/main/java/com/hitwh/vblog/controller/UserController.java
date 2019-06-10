@@ -9,6 +9,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.UserService;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +52,7 @@ public class UserController extends BaseController {
         return CommonReturnType.create(userService.queryByPhone(userInparam.getPhone()));
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/query_by_label")
     public CommonReturnType queryAllUserByLabel(@RequestBody UserInparam userInparam) throws BusinessException {
         Map<String, Object> map = userService.queryAllUserByLabel(userInparam.getStart(), userInparam.getEnd(), userInparam.getLabel_id());
@@ -71,6 +73,7 @@ public class UserController extends BaseController {
                     ,sum,userOutParams));
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/query_all")
     public CommonReturnType queryAllUser(@RequestBody UserInparam userInparam) throws BusinessException {
         Map<String, Object> map = userService.queryAllUser(userInparam.getStart(), userInparam.getEnd());
@@ -91,6 +94,7 @@ public class UserController extends BaseController {
                     ,sum,userOutParams));
     }
 
+    @LoginRequired
     @RequestMapping("/update")
     public CommonReturnType updateUserInfo(@RequestBody UserInparam userInparam) throws BusinessException {
         UserDo userDo = new UserDo();
@@ -111,6 +115,7 @@ public class UserController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @LoginRequired(admin = true)
     @PostMapping("/admin/ban_user")
     public CommonReturnType banUser(@RequestBody UserInparam userInparam) throws BusinessException {
         userService.banUser(userInparam);
