@@ -9,6 +9,7 @@ import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
 import com.hitwh.vblog.service.ArticleService;
+import com.hitwh.vblog.util.LoginRequired;
 import com.hitwh.vblog.util.TimestampUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class ArticleController extends BaseController {
     @Autowired
     TimestampUtil timestampUtil;
 
+    @LoginRequired
     @PostMapping("/write")
     public CommonReturnType writeArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
         ArticleModel articleModel = new ArticleModel();
@@ -38,6 +40,7 @@ public class ArticleController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @LoginRequired
     @PostMapping("/update")
     public CommonReturnType updateArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
         ArticleModel articleModel = new ArticleModel();
@@ -46,11 +49,13 @@ public class ArticleController extends BaseController {
         return CommonReturnType.success();
     }
 
+    @LoginRequired
     @PostMapping("/delete")
     public CommonReturnType deleteArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         articleService.delete(articleInParam.getArticle_id(), articleInParam.getUid());
         return CommonReturnType.success();
     }
+
 
     @RequestMapping("/query_by_id")
     public CommonReturnType queryArticleById(@RequestBody ArticleInParam articleInParam) throws BusinessException{

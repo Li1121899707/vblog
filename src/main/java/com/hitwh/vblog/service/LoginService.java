@@ -3,14 +3,17 @@ package com.hitwh.vblog.service;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.model.LoginModel;
 import com.hitwh.vblog.response.BusinessException;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.Map;
 
 public interface LoginService {
     Map<String,Object> getLoginInfoByAccout(LoginModel loginModel) throws BusinessException;
 
-    Boolean tokenValidate(String key,Integer uid,long Request_time);
+    Boolean keyValidate(String key,Integer uid,long Request_time);
+
+    Boolean tokenValidate(Integer uid, long Request_time);
+
+    String renewToken(Integer uid, String token) throws BusinessException;
 
     Map<String,Object> getLoginInfoByPhone(LoginModel loginModel) throws BusinessException;
 

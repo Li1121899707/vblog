@@ -6,6 +6,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.service.ThumbService;
 import com.hitwh.vblog.service.impl.ThumbServiceImpl;
+import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ public class ThumbController extends BaseController {
     ThumbService thumbService;
 
     // 添加点赞
+    @LoginRequired
     @PostMapping("/add")
     public CommonReturnType insertThumb(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
         ThumbModel thumbModel = new ThumbModel();
@@ -35,6 +37,7 @@ public class ThumbController extends BaseController {
     }
 
     // 取消点赞
+    @LoginRequired
     @PostMapping("/delete")
     public CommonReturnType deleteThumb(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
         ThumbModel thumbModel = new ThumbModel();

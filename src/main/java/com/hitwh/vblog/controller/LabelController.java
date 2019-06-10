@@ -34,7 +34,7 @@ public class LabelController extends BaseController {
         return CommonReturnType.create(labelService.queryAllInterests(labelInParam.getStart(), labelInParam.getEnd()));
     }
 
-    //@LoginRequired(admin = true)
+    @LoginRequired(admin = true)
     @PostMapping("/admin/insert")
     public CommonReturnType insertLabel(@RequestBody LabelInParam labelInParam) throws BusinessException {
         LabelModel labelModel = new LabelModel();
@@ -44,7 +44,7 @@ public class LabelController extends BaseController {
         return CommonReturnType.success();
     }
 
-    //@LoginRequired(admin = true)description
+    @LoginRequired(admin = true)
     @PostMapping("/admin/update")
     public CommonReturnType updateLabel(@RequestBody LabelInParam labelInParam) throws BusinessException{
         LabelModel labelModel = new LabelModel();
