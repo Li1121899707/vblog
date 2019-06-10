@@ -79,4 +79,9 @@
       expiry_time = #{expiryTime,jdbcType=TIMESTAMP}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
+  <update id="updateForLogout" >
+    update vblog_token
+    set token = "0"
+    where user_id = #{userId}
+  </update>
 </mapper>
