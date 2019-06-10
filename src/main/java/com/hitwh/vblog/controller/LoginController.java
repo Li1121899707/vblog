@@ -103,4 +103,13 @@ public class  LoginController extends BaseController{
 
         return CommonReturnType.create(loginService.loginValidateByEmail(loginModel));
     }
+
+    @PostMapping("/log_out")
+    public CommonReturnType logout(@RequestBody LoginInParam loginInParam) throws BusinessException {
+        if(loginInParam.getUid() == null || loginInParam.getUid() <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        loginService.logOut(loginInParam.getUid());
+        return CommonReturnType.success();
+    }
 }
