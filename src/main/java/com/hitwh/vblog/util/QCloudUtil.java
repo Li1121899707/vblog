@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class QCloudUtil {
@@ -46,7 +48,9 @@ public class QCloudUtil {
 //        Date expiration = new Date(new Date().getTime() + 5 * 60 * 10000);
 //        URL url = cosClient.generatePresignedUrl(bucketName, key, expiration);
         String url="https://"+bucketName+".cos."+region+".myqcloud.com/"+key;
-        return CommonReturnType.create(url);
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", url);
+        return CommonReturnType.create(map);
     }
 
 }

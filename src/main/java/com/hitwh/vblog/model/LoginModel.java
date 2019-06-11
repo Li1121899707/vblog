@@ -16,6 +16,16 @@ public class LoginModel {
 
     private String email;
 
+    private String loginInfo;
+
+    public String getLoginInfo() {
+        return loginInfo;
+    }
+
+    public void setLoginInfo(String loginInfo) {
+        this.loginInfo = loginInfo;
+    }
+
     public String getPhone() {
         return phone;
     }

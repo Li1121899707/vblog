@@ -38,8 +38,7 @@ public class CosController {
         CommonReturnType result = qCloudUtil.uploadFile(tempFile,"image/" + virtualFileName);
         //程序结束时，删除临时文件
         deleteFile(tempFile);
-
-        //返回图片名称
+        //返回图片url
         return result;
     }
 

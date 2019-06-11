@@ -70,6 +70,9 @@ public class ArticleController extends BaseController {
         Map<String, Object> result = articleService.selectArticleByAuthorId(articleInParam.getStart(),
                 articleInParam.getEnd(), articleInParam.getAuthor_id());
 
+        if(result == null)
+            return CommonReturnType.success();
+
         ArrayList articleOutParams = (ArrayList) result.get("list");
 
         int sum = (int) result.get("sum");
@@ -83,6 +86,9 @@ public class ArticleController extends BaseController {
     public CommonReturnType queryArticleByTitle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByTitle(articleInParam.getStart(),
                 articleInParam.getEnd(), articleInParam.getTitle());
+
+        if(result == null)
+            return CommonReturnType.success();
 
         ArrayList articleOutParams =  (ArrayList) result.get("list");
 
@@ -98,6 +104,9 @@ public class ArticleController extends BaseController {
         Map<String, Object> result = articleService.selectArticleByType(articleInParam.getStart(),
                 articleInParam.getEnd(), articleInParam.getType_1());
 
+        if(result == null)
+            return CommonReturnType.success();
+
         ArrayList articleOutParams = (ArrayList) result.get("list");
 
         int sum = (int) result.get("sum");
@@ -109,7 +118,9 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/query_random")
     public CommonReturnType queryRandomArticle() throws BusinessException{
-        return CommonReturnType.create(articleService.queryRandomArticle().getArticle_id());
+        Map<String, Object> map = new HashMap<>();
+        map.put("article_id", articleService.queryRandomArticle().getArticle_id());
+        return CommonReturnType.create(map);
     }
 
     @RequestMapping("/query_all")

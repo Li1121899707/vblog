@@ -42,8 +42,6 @@
     where article_id = #{articleId,jdbcType=INTEGER}
   </select>
 
-
-
   <select id="selectArticleNumber" resultType="java.lang.Integer">
     select count(*)
     from vblog_article where hidden = 0
@@ -56,14 +54,14 @@
     left join vblog_article_dynamic
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
-    on vblog_article.author_id = vblog_user.user_id where hidden = 0
+    on vblog_article.author_id = vblog_user.user_id
     limit #{start} ,#{num}
   </select>
 
   <select id="selectArticleNumByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select count(*)
     from vblog_article
-    where author_id = #{userId} and hidden = 0
+    where author_id = #{userId}
   </select>
   <select id="selectArticleByUserId" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
@@ -74,7 +72,7 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    where vblog_article.author_id = #{userId} and hidden = 0
+    where vblog_article.author_id = #{userId}
     limit #{start} ,#{num}
   </select>
 
@@ -93,14 +91,14 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    where vblog_article.title like CONCAT('%',#{title},'%') and hidden = 0
+    where vblog_article.title like CONCAT('%',#{title},'%')
     limit #{start} ,#{num}
   </select>
 
   <select id="selectArticleNumByType" resultType="java.lang.Integer">
     select count(*)
     from vblog_article_label
-    where label_id = #{typeId} and hidden = 0
+    where label_id = #{typeId}
   </select>
   <select id="selectArticleByType" resultMap="ArticleAndUserMap">
     select vblog_article_label.article_id, vblog_article_label.label_id , vblog_article.virtual_id,  title, author_id,
@@ -113,7 +111,7 @@
     on vblog_article.author_id = vblog_user.user_id
     left join vblog_article_dynamic
     on vblog_article.article_id = vblog_article_dynamic.article_id
-    where vblog_article_label.label_id = #{typeId} and hidden = 0
+    where vblog_article_label.label_id = #{typeId}
     limit #{start} ,#{num}
   </select>
 

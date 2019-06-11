@@ -5,6 +5,7 @@ import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.mapper.TokenDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.LoginModel;
+import com.hitwh.vblog.outparam.LoginOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.LoginService;
@@ -29,49 +30,51 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private TokenDoMapper tokenDoMapper;
 
-    @Override
-    public Map<String,Object> getLoginInfoByAccout(LoginModel loginModel) throws BusinessException {
 
-        Map<String,Object> returnMap = new HashMap<>();
 
-        if(loginModel == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
-
-        ValidationResult result = validator.validate(loginModel);
-        if(result.isHasErrors()){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
-        }
-        //判断用户密码是否正确
-        UserDo userDo = new UserDo();
-        BeanUtils.copyProperties(loginModel, userDo);
-
-        //查询用户信息
-        UserDo userDoFromTable = userDoMapper.selectIfLogin(userDo);
-        if(userDoFromTable == null)
-            throw new BusinessException(EnumError.ACCOUNT_NOT_EXIST);
-
-        Integer salt = userDoFromTable.getSalt();
-        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
-        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
-            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
-
-        if(userDoFromTable.getBan() == 1)
-            throw new BusinessException(EnumError.USER_HIDDEN);
-
-        TokenDo tokenDo = new TokenDo();
-        Map<String,Object> map = MyMd5.GetToken(String.valueOf(userDo.getUserId()));
-        tokenDo.setUserId(userDoFromTable.getUserId());
-        long current = Long.valueOf(map.get("currentTime").toString());
-        tokenDo.setToken(map.get("token").toString());
-        tokenDo.setCreateTime(new Date(current));
-        tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
-        //tokenDoMapper.insert(tokenDo);
-        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
-        returnMap.put("allowance",userDoFromTable.getAllowance());
-        returnMap.put("uid",userDoFromTable.getUserId());
-        returnMap.put("token",map.get("token").toString());
-        return returnMap;
-    }
+//    @Override
+//    public Map<String,Object> getLoginInfoByAccout(LoginModel loginModel) throws BusinessException {
+//
+//        Map<String,Object> returnMap = new HashMap<>();
+//
+//        if(loginModel == null)
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+//
+//        ValidationResult result = validator.validate(loginModel);
+//        if(result.isHasErrors()){
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+//        }
+//        //判断用户密码是否正确
+//        UserDo userDo = new UserDo();
+//        BeanUtils.copyProperties(loginModel, userDo);
+//
+//        //查询用户信息
+//        UserDo userDoFromTable = userDoMapper.selectIfLogin(userDo);
+//        if(userDoFromTable == null)
+//            throw new BusinessException(EnumError.ACCOUNT_NOT_EXIST);
+//
+//        Integer salt = userDoFromTable.getSalt();
+//        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
+//        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
+//            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
+//
+//        if(userDoFromTable.getBan() == 1)
+//            throw new BusinessException(EnumError.USER_HIDDEN);
+//
+//        TokenDo tokenDo = new TokenDo();
+//        Map<String,Object> map = MyMd5.GetToken(String.valueOf(userDo.getUserId()));
+//        tokenDo.setUserId(userDoFromTable.getUserId());
+//        long current = Long.valueOf(map.get("currentTime").toString());
+//        tokenDo.setToken(map.get("token").toString());
+//        tokenDo.setCreateTime(new Date(current));
+//        tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
+//        //tokenDoMapper.insert(tokenDo);
+//        tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
+//        returnMap.put("allowance",userDoFromTable.getAllowance());
+//        returnMap.put("uid",userDoFromTable.getUserId());
+//        returnMap.put("token",map.get("token").toString());
+//        return returnMap;
+//    }
 
     @Override
     public Boolean keyValidate(String key, Integer uid, long Request_time) {
@@ -133,7 +136,7 @@ public class LoginServiceImpl implements LoginService {
     public String renewToken(Integer uid, String token) throws BusinessException {
         TokenDo oldtokenDo = tokenDoMapper.selectByPrimaryKey(uid);
         System.out.println("old token : " + oldtokenDo.getToken());
-        System.out.println("new token : " + oldtokenDo.getToken());
+        System.out.println("token : " + token);
         if(!token.equals(oldtokenDo.getToken()))
             throw new BusinessException(EnumError.TOKEN_RENEW_FAILED);
 
@@ -150,9 +153,9 @@ public class LoginServiceImpl implements LoginService {
         return tokenDo.getToken();
     }
 
-    public Map<String,Object> returnMap(UserDo userDo) throws BusinessException {
-        Map<String,Object> returnMap = new HashMap<>();
-
+    public LoginOutParam returnMap(UserDo userDo) throws BusinessException {
+//        Map<String,Object> returnMap = new HashMap<>();
+        LoginOutParam loginOutParam = new LoginOutParam();
         TokenDo tokenDo = new TokenDo();
         Map<String,Object> map = MyMd5.GetToken(userDo.getAccount());
         tokenDo.setUserId(userDo.getUserId());
@@ -162,69 +165,75 @@ public class LoginServiceImpl implements LoginService {
         tokenDo.setExpiryTime(new Date(Long.valueOf(map.get("expiryTime").toString())));
 
         tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
-        returnMap.put("allowance",userDo.getAllowance());
-        returnMap.put("uid",userDo.getUserId());
-        returnMap.put("token",map.get("token").toString());
-        return returnMap;
+
+        loginOutParam.setAllowance(userDo.getAllowance());
+        loginOutParam.setUid(userDo.getUserId());
+        loginOutParam.setToken(map.get("token").toString());
+
+
+//        returnMap.put("allowance",userDo.getAllowance());
+//        returnMap.put("uid",userDo.getUserId());
+//        returnMap.put("token",map.get("token").toString());
+        return loginOutParam;
     }
 
-    @Override
-    public Map<String, Object> getLoginInfoByPhone(LoginModel loginModel) throws BusinessException {
-        //判断电话和密码不为空
-        if(loginModel.getPhone() == null || loginModel.getPwd() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
-        //将model中的数据封装到userDo
-        UserDo userDo = new UserDo();
-        userDo.setPhone(loginModel.getPhone());
-        userDo.setPwd(loginModel.getPwd());
-        //利用phone查询用户信息
-        UserDo userDoFromTable = userDoMapper.selectIfLoginByPhone(userDo);
+//    @Override
+//    public Map<String, Object> getLoginInfoByPhone(LoginModel loginModel) throws BusinessException {
+//        //判断电话和密码不为空
+//        if(loginModel.getPhone() == null || loginModel.getPwd() == null)
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+//        //将model中的数据封装到userDo
+//        UserDo userDo = new UserDo();
+//        userDo.setPhone(loginModel.getPhone());
+//        userDo.setPwd(loginModel.getPwd());
+//        //利用phone查询用户信息
+//        UserDo userDoFromTable = userDoMapper.selectIfLoginByPhone(userDo);
+//
+//        if(userDoFromTable == null)
+//            throw new BusinessException(EnumError.PHONE_NOT_EXIST);
+//
+//        System.out.println(userDoFromTable.getAccount());
+//        Integer salt = userDoFromTable.getSalt();
+//        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
+//        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
+//            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
+//
+//        if(userDoFromTable.getBan() == 1)
+//            throw new BusinessException(EnumError.USER_HIDDEN);
+//
+//        Map<String,Object> map = returnMap(userDoFromTable);
+//
+//        return map;
+//    }
 
-        if(userDoFromTable == null)
-            throw new BusinessException(EnumError.PHONE_NOT_EXIST);
-
-        System.out.println(userDoFromTable.getAccount());
-        Integer salt = userDoFromTable.getSalt();
-        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
-        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
-            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
-
-        if(userDoFromTable.getBan() == 1)
-            throw new BusinessException(EnumError.USER_HIDDEN);
-
-        Map<String,Object> map = returnMap(userDoFromTable);
-
-        return map;
-    }
-
-    @Override
-    public Map<String, Object> getLoginInfoByEmail(LoginModel loginModel) throws BusinessException {
-        //判断邮箱和密码不为空
-        if(loginModel.getEmail() == null || loginModel.getPwd() == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
-        //将model中的数据封装到userDo
-        UserDo userDo = new UserDo();
-        userDo.setEmail(loginModel.getEmail());
-        userDo.setPwd(loginModel.getPwd());
-        //利用phone查询用户信息
-        UserDo userDoFromTable = userDoMapper.selectIfLoginByEmail(userDo);
-
-        if(userDoFromTable == null)
-            throw new BusinessException(EnumError.EMAIL_NOT_EXIST);
-
-        System.out.println(userDoFromTable.getAccount());
-        Integer salt = userDoFromTable.getSalt();
-        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
-        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
-            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
-
-        if(userDoFromTable.getBan() == 1)
-            throw new BusinessException(EnumError.USER_HIDDEN);
-
-        Map<String,Object> map = returnMap(userDoFromTable);
-
-        return map;
-    }
+//    @Override
+//    public Map<String, Object> getLoginInfoByEmail(LoginModel loginModel) throws BusinessException {
+//        //判断邮箱和密码不为空
+//        if(loginModel.getEmail() == null || loginModel.getPwd() == null)
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+//        //将model中的数据封装到userDo
+//        UserDo userDo = new UserDo();
+//        userDo.setEmail(loginModel.getEmail());
+//        userDo.setPwd(loginModel.getPwd());
+//        //利用phone查询用户信息
+//        UserDo userDoFromTable = userDoMapper.selectIfLoginByEmail(userDo);
+//
+//        if(userDoFromTable == null)
+//            throw new BusinessException(EnumError.EMAIL_NOT_EXIST);
+//
+//        System.out.println(userDoFromTable.getAccount());
+//        Integer salt = userDoFromTable.getSalt();
+//        String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
+//        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
+//            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
+//
+//        if(userDoFromTable.getBan() == 1)
+//            throw new BusinessException(EnumError.USER_HIDDEN);
+//
+//        Map<String,Object> map = returnMap(userDoFromTable);
+//
+//        return map;
+//    }
 
     @Override
     public Integer loginValidateByAccount(LoginModel loginModel) throws BusinessException {
@@ -317,6 +326,59 @@ public class LoginServiceImpl implements LoginService {
 
         if (result != 1)
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public LoginOutParam login(LoginModel loginModel) throws BusinessException {
+        //判断登录信息和密码不为空
+        if(loginModel.getLoginInfo() == null || loginModel.getPwd() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        LoginOutParam loginOutParam = new LoginOutParam();
+        String password = loginModel.getPwd();
+        //将model中的数据封装到userDo
+        UserDo userDo = new UserDo();
+        userDo.setAccount(loginModel.getLoginInfo());
+        userDo.setPwd(loginModel.getPwd());
+
+        UserDo userDoFromTable = userDoMapper.selectIfLogin(userDo);
+
+        if(userDoFromTable == null){
+            userDo.setPhone(loginModel.getLoginInfo());
+            UserDo userDoFromTable1 = userDoMapper.selectIfLoginByPhone(userDo);
+
+            if(userDoFromTable1 == null){
+                userDo.setEmail(loginModel.getLoginInfo());
+                UserDo userDoFromTable2 = userDoMapper.selectIfLoginByEmail(userDo);
+
+                if (userDoFromTable2 == null)
+                    throw new BusinessException(EnumError.USER_NOT_EXIST);
+                else
+                    loginOutParam = OutLoginParam(userDoFromTable2,password,userDo);
+
+            }
+            else loginOutParam = OutLoginParam(userDoFromTable1,password,userDo);
+        }
+        else loginOutParam = OutLoginParam(userDoFromTable,password,userDo);
+
+
+        return loginOutParam;
+    }
+
+    @Override
+    public LoginOutParam OutLoginParam(UserDo userDoFromTable,String password,UserDo userDo) throws BusinessException {
+        Integer salt = userDoFromTable.getSalt();
+        String saltPassword = MyMd5.md5Encryption(password) + MyMd5.md5Encryption(salt.toString());
+        if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
+            throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
+
+        if(userDoFromTable.getBan() == 1)
+            throw new BusinessException(EnumError.USER_HIDDEN);
+
+        LoginOutParam loginOutParam = returnMap(userDoFromTable);
+
+        return loginOutParam;
+
     }
 
 }

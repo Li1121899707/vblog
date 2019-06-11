@@ -5,7 +5,7 @@ public enum EnumError implements CommonError {
     SUCCESS(0, "success"),
     // 通用错误类型
     PARAMETER_VALIDATION_ERROR(1, "传入参数错误"),
-    UNAUTHORIZED(401, "用户没有权限"),
+
     INTERNAL_SERVER_ERROR(500, "服务器内部错误"),
     // 10000开头为用户信息相关错误定义
     USER_NOT_EXIST(1001, "用户不存在"),
@@ -17,6 +17,7 @@ public enum EnumError implements CommonError {
 
     ARTICLE_NOT_EXIST(2001, "文章不存在"),
     ARTICLE_HIDDEN(2002, "文章被隐藏"),
+    ARTICLE_DELETE_FAILED(2004, "文章删除失败"),
 
     PARENT_COMMENT_HIDDEN(3001,"评论被隐藏"),
     //COMMENT_HIDE_ERROR(3002,"评论隐藏失败"),
@@ -29,7 +30,10 @@ public enum EnumError implements CommonError {
     KEY_ERROR(2, "Key 错误"),
     TOKEN_OVERDUE(3,"Token 已过期"),
     KEY_VALIDATE_PARAM_ERROR(4, "验证Token时参数错误"),
-    TOKEN_RENEW_FAILED(5, "刷新Token时参数错误"),
+    TOKEN_RENEW_FAILED(5, "刷新Token"),
+    QUERY_NOT_EXIST(6,"查询项不存在"),
+    UNAUTHORIZED(7, "用户没有权限"),
+
     //TOKEN_UID_NOT_FOUND(5, "验证 Token，用户ID参数错误"),
     //TOKEN_TIME_NOT_FOUND(6, "验证 Token，时间参数错误"),
     //TOKEN_KEY_NOT_FOUND(7, "验证 Token ，key参数错误"),

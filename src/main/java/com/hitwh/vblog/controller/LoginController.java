@@ -7,6 +7,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.LoginService;
+import com.hitwh.vblog.util.LoginRequired;
 import com.hitwh.vblog.util.MyMd5;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +30,28 @@ public class  LoginController extends BaseController{
      * @return
      * @throws BusinessException
      */
-    @RequestMapping("/login_account")
-    public CommonReturnType loginAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
-        //String pwd = MyMd5.md5Encryption(loginInParam.getPwd());
-        if(loginInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
+    @RequestMapping("/login")
+    public CommonReturnType login(@RequestBody LoginInParam loginInParam) throws BusinessException {
         LoginModel loginModel = new LoginModel();
-
-        loginModel.setAccount(loginInParam.getAccount());
+        loginModel.setLoginInfo(loginInParam.getLoginInfo());
         loginModel.setPwd(loginInParam.getPwd());
 
-        return CommonReturnType.create(loginService.getLoginInfoByAccout(loginModel));
+
+        return CommonReturnType.create(loginService.login(loginModel));
     }
+//    @RequestMapping("/login_account")
+//    public CommonReturnType loginAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
+//        //String pwd = MyMd5.md5Encryption(loginInParam.getPwd());
+//        if(loginInParam == null)
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+//
+//        LoginModel loginModel = new LoginModel();
+//
+//        loginModel.setAccount(loginInParam.getAccount());
+//        loginModel.setPwd(loginInParam.getPwd());
+//
+//        return CommonReturnType.create(loginService.getLoginInfoByAccout(loginModel));
+//    }
 
     /**
      * @description 使用手机号登陆
@@ -50,30 +60,30 @@ public class  LoginController extends BaseController{
      * @throws BusinessException
      */
 
-    @RequestMapping("/login_phone")
-    public CommonReturnType loginPhone(@RequestBody LoginInParam loginInParam) throws BusinessException {
-        if(loginInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+//    @RequestMapping("/login_phone")
+//    public CommonReturnType loginPhone(@RequestBody LoginInParam loginInParam) throws BusinessException {
+//        if(loginInParam == null)
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+//
+//        LoginModel loginModel = new LoginModel();
+//        loginModel.setPwd(loginInParam.getPwd());
+//        loginModel.setPhone(loginInParam.getPhone());
+//
+//        return CommonReturnType.create(loginService.getLoginInfoByPhone(loginModel));
+//
+//    }
 
-        LoginModel loginModel = new LoginModel();
-        loginModel.setPwd(loginInParam.getPwd());
-        loginModel.setPhone(loginInParam.getPhone());
-
-        return CommonReturnType.create(loginService.getLoginInfoByPhone(loginModel));
-
-    }
-
-    @RequestMapping("/login_email")
-    public CommonReturnType loginEmail(@RequestBody LoginInParam loginInParam) throws BusinessException {
-        if(loginInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
-        LoginModel loginModel = new LoginModel();
-        loginModel.setPwd(loginInParam.getPwd());
-        loginModel.setEmail(loginInParam.getEmail());
-
-        return CommonReturnType.create(loginService.getLoginInfoByEmail(loginModel));
-    }
+//    @RequestMapping("/login_email")
+//    public CommonReturnType loginEmail(@RequestBody LoginInParam loginInParam) throws BusinessException {
+//        if(loginInParam == null)
+//            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+//
+//        LoginModel loginModel = new LoginModel();
+//        loginModel.setPwd(loginInParam.getPwd());
+//        loginModel.setEmail(loginInParam.getEmail());
+//
+//        return CommonReturnType.create(loginService.getLoginInfoByEmail(loginModel));
+//    }
 
     @RequestMapping("/login_validate_account")
     public CommonReturnType loginValidateByAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
@@ -120,6 +130,7 @@ public class  LoginController extends BaseController{
         return CommonReturnType.create(outResult);
     }
 
+    @LoginRequired
     @RequestMapping("/logout")
     public CommonReturnType logout(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam.getUid() == null || loginInParam.getUid() <= 0)

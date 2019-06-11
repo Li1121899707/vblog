@@ -109,20 +109,35 @@ public class ArticleServiceImpl implements ArticleService {
         if (article_id == null || uid == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        ArticleDo articleDo = articleDoMapper.selectByPrimaryKey(article_id);
+        if(articleDo == null)
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+
+        if(articleDo.getAuthorId() != uid)
+            throw new BusinessException(EnumError.UNAUTHORIZED);
+
         Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id, uid);
 
+        boolean deletedTA = true, deletedTB = true, deleteTC = true;
+
+        deletedTA = deleteResult == 1;
         if (deleteResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_DELETE_FAILED);
 
         deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
+        deletedTB = deleteResult == 1;
+
+//        if(deletedTA && deletedTB) // success
+//            else
+//                // failed
 
         if (deleteResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_DELETE_FAILED);
 
         deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
-
-        if(deleteResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+        deletedTB = deleteResult == 1;
+        if(deleteResult < 1)
+            throw new BusinessException(EnumError.ARTICLE_DELETE_FAILED);
 
     }
 
@@ -142,6 +157,8 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
         if(articleDoTest.getHidden() == 1)
             throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+        if(articleDoTest.getAuthorId() != articleModel.getUid())
+            throw new BusinessException(EnumError.UNAUTHORIZED);
 
         ArticleDo articleDo = new ArticleDo();
         articleDo.setArticleId(articleModel.getArticle_id());
@@ -213,7 +230,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Map<String, Object> selectArticleByAuthorId(Integer start, Integer end, Integer authorId) throws BusinessException {
-        if(start == null || end == null || start < 0 || end <= start || end == 0 || authorId == null || authorId == 0)
+        if(start == null || end == null || start < 0 || end < start || end == 0 || authorId == null || authorId == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
@@ -229,7 +246,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Map<String, Object> selectArticleByType(Integer start, Integer end, Integer typeId) throws BusinessException {
-        if(start == null || end == null || start < 0 || end <= start || end == 0 || typeId == null || typeId == 0)
+        if(start == null || end == null || start < 0 || end < start || end == 0 || typeId == null || typeId == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
@@ -244,7 +261,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Map<String, Object> selectArticleByTitle(Integer start, Integer end, String title) throws BusinessException {
-        if(start == null || end == null || start < 0 || end <= start || end == 0 || title == null)
+        if(start == null || end == null || start < 0 || end < start || end == 0 || title == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
@@ -259,7 +276,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Map<String, Object> selectAllArticle(Integer start, Integer end) throws BusinessException {
-        if(start == null || end == null || start < 0 || end <= start || end == 0 )
+        if(start == null || end == null || start < 0 || end < start || end == 0 )
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
