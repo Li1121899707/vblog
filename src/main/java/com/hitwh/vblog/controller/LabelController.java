@@ -23,9 +23,6 @@ public class LabelController extends BaseController {
 
     @PostMapping("/query_by_id")
     public CommonReturnType queryLabelById(@RequestBody LabelInParam labelInParam) throws BusinessException {
-        if(labelInParam == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-
         return CommonReturnType.create(labelService.queryLabelById(labelInParam.getLabel_id()));
     }
 

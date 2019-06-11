@@ -17,7 +17,7 @@ public interface CollectionService  {
 
     void deleteCollection(CollectionModel collectionModel) throws BusinessException;
 
-    Integer queryCollectionNum(CollectionModel collectionModel) throws BusinessException;
+    Map<String,Object> queryCollectionNum(CollectionModel collectionModel) throws BusinessException;
 
     Map<String,Object> queryCollection(Integer start, Integer num, Integer userID) throws BusinessException;
 

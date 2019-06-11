@@ -101,7 +101,7 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Integer queryCollectionNum(CollectionModel collectionModel) throws BusinessException {
+    public Map<String, Object> queryCollectionNum(CollectionModel collectionModel) throws BusinessException {
 
         if(collectionModel == null || collectionModel.getArticleId() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
@@ -109,7 +109,10 @@ public class CollectionServiceImpl implements CollectionService {
         ArticleDynamicDo FromTable =  articleDynamicDoMapper.selectByPrimaryKey(
                 collectionModel.getArticleId());
 
-        return FromTable.getCollectionNum();
+        Map<String, Object> map = new HashMap<>();
+        map.put("number", FromTable.getCollectionNum());
+
+        return map;
     }
 
     @Override

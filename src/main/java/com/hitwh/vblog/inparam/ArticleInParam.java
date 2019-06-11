@@ -24,7 +24,7 @@ public class ArticleInParam extends BaseInParam {
 
     private Integer hidden;
 
-    private String articleAbstract;
+    private String article_abstract;
 
     private Integer article_id;
 
@@ -80,12 +80,12 @@ public class ArticleInParam extends BaseInParam {
         this.hidden = hidden;
     }
 
-    public String getArticleAbstract() {
-        return articleAbstract;
+    public String getArticle_abstract() {
+        return article_abstract;
     }
 
-    public void setArticleAbstract(String articleAbstract) {
-        this.articleAbstract = articleAbstract;
+    public void setArticle_abstract(String article_abstract) {
+        this.article_abstract = article_abstract;
     }
 
     public Integer getArticle_id() {

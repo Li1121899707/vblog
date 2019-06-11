@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class ArticleController extends BaseController {
     public CommonReturnType writeArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
         ArticleModel articleModel = new ArticleModel();
         BeanUtils.copyProperties(articleInParam, articleModel);
+        articleModel.setArticleAbstract(articleInParam.getArticle_abstract());
         articleService.write(articleModel);
         return CommonReturnType.success();
     }
@@ -45,6 +47,7 @@ public class ArticleController extends BaseController {
     public CommonReturnType updateArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
         ArticleModel articleModel = new ArticleModel();
         BeanUtils.copyProperties(articleInParam, articleModel);
+        articleModel.setArticleAbstract(articleInParam.getArticle_abstract());
         articleService.update(articleModel);
         return CommonReturnType.success();
     }

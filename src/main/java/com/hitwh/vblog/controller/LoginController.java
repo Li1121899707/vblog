@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class  LoginController extends BaseController{
     @Autowired
@@ -70,7 +73,6 @@ public class  LoginController extends BaseController{
         loginModel.setEmail(loginInParam.getEmail());
 
         return CommonReturnType.create(loginService.getLoginInfoByEmail(loginModel));
-
     }
 
     @RequestMapping("/login_validate_account")
@@ -81,7 +83,11 @@ public class  LoginController extends BaseController{
         LoginModel loginModel = new LoginModel();
         loginModel.setAccount(loginInParam.getAccount());
 
-        return CommonReturnType.create(loginService.loginValidateByAccount(loginModel));
+        Integer result = loginService.loginValidateByAccount(loginModel);
+        Map<String,Object> outResult = new HashMap<>();
+        outResult.put("validate_result", result);
+
+        return CommonReturnType.create(outResult);
     }
 
     @RequestMapping("/login_validate_phone")
@@ -92,7 +98,11 @@ public class  LoginController extends BaseController{
         LoginModel loginModel = new LoginModel();
         loginModel.setPhone(loginInParam.getPhone());
 
-        return CommonReturnType.create(loginService.loginValidateByPhone(loginModel));
+        Integer result = loginService.loginValidateByPhone(loginModel);
+        Map<String,Object> outResult = new HashMap<>();
+        outResult.put("validate_result", result);
+
+        return CommonReturnType.create(outResult);
     }
 
     @RequestMapping("/login_validate_email")
@@ -103,7 +113,11 @@ public class  LoginController extends BaseController{
         LoginModel loginModel = new LoginModel();
         loginModel.setEmail(loginInParam.getEmail());
 
-        return CommonReturnType.create(loginService.loginValidateByEmail(loginModel));
+        Integer result = loginService.loginValidateByEmail(loginModel);
+        Map<String,Object> outResult = new HashMap<>();
+        outResult.put("validate_result", result);
+
+        return CommonReturnType.create(outResult);
     }
 
     @RequestMapping("/logout")
