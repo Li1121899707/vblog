@@ -12,6 +12,7 @@ import com.hitwh.vblog.service.CollectionService;
 import com.hitwh.vblog.service.impl.CollectionServiceImpl;
 import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,7 @@ public class CollectionController extends BaseController{
     CollectionServiceImpl collectionService;
 
     @LoginRequired
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public CommonReturnType addCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
         CollectionModel collectionModel = new CollectionModel();
         collectionModel.setArticleId(collectionInParam.getArticle_id());
@@ -48,7 +49,7 @@ public class CollectionController extends BaseController{
     }
 
     @LoginRequired
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     public CommonReturnType deleteCollection (@RequestBody CollectionInParam collectionInParam) throws BusinessException {
         CollectionModel collectionModel = new CollectionModel();
         collectionModel.setArticleId(collectionInParam.getArticle_id());

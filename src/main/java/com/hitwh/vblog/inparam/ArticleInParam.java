@@ -1,13 +1,22 @@
 package com.hitwh.vblog.inparam;
 
 public class ArticleInParam extends BaseInParam {
-    private Integer uid;
 
     private String title;
 
     private Integer type_1;
 
     private Integer type_2;
+
+    private Integer author_id;
+
+    public Integer getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(Integer author_id) {
+        this.author_id = author_id;
+    }
 
     private String cover;
 
@@ -22,14 +31,6 @@ public class ArticleInParam extends BaseInParam {
     private Integer start;
 
     private Integer end;
-
-    public Integer getUid() {
-        return uid;
-    }
-
-    public void setUid(Integer uid) {
-        this.uid = uid;
-    }
 
     public String getTitle() {
         return title;

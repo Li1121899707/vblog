@@ -26,7 +26,7 @@ public class  LoginController extends BaseController{
      * @return
      * @throws BusinessException
      */
-    @PostMapping("/login_account")
+    @RequestMapping("/login_account")
     public CommonReturnType loginAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
         //String pwd = MyMd5.md5Encryption(loginInParam.getPwd());
         if(loginInParam == null)
@@ -47,7 +47,7 @@ public class  LoginController extends BaseController{
      * @throws BusinessException
      */
 
-    @PostMapping("/login_phone")
+    @RequestMapping("/login_phone")
     public CommonReturnType loginPhone(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -60,7 +60,7 @@ public class  LoginController extends BaseController{
 
     }
 
-    @PostMapping("/login_email")
+    @RequestMapping("/login_email")
     public CommonReturnType loginEmail(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -73,7 +73,7 @@ public class  LoginController extends BaseController{
 
     }
 
-    @PostMapping("/login_validate_account")
+    @RequestMapping("/login_validate_account")
     public CommonReturnType loginValidateByAccount(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -84,7 +84,7 @@ public class  LoginController extends BaseController{
         return CommonReturnType.create(loginService.loginValidateByAccount(loginModel));
     }
 
-    @PostMapping("/login_validate_phone")
+    @RequestMapping("/login_validate_phone")
     public CommonReturnType loginValidateByPhone(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -95,7 +95,7 @@ public class  LoginController extends BaseController{
         return CommonReturnType.create(loginService.loginValidateByPhone(loginModel));
     }
 
-    @PostMapping("/login_validate_email")
+    @RequestMapping("/login_validate_email")
     public CommonReturnType loginValidateByEmail(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -106,7 +106,7 @@ public class  LoginController extends BaseController{
         return CommonReturnType.create(loginService.loginValidateByEmail(loginModel));
     }
 
-    @PostMapping("/logout")
+    @RequestMapping("/logout")
     public CommonReturnType logout(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam.getUid() == null || loginInParam.getUid() <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
@@ -115,7 +115,7 @@ public class  LoginController extends BaseController{
         return CommonReturnType.success();
     }
 
-    @PostMapping("/token_renew")
+    @RequestMapping("/token_renew")
     public CommonReturnType tokenRenew(@RequestBody TokenRenewParam tokenRenewParam) throws BusinessException {
         return CommonReturnType.create(loginService.renewToken(tokenRenewParam.getUid(), tokenRenewParam.getToken()));
     }

@@ -55,6 +55,9 @@ public class LoginServiceImpl implements LoginService {
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
             throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
 
+        if(userDoFromTable.getBan() == 1)
+            throw new BusinessException(EnumError.USER_HIDDEN);
+
         TokenDo tokenDo = new TokenDo();
         Map<String,Object> map = MyMd5.GetToken(String.valueOf(userDo.getUserId()));
         tokenDo.setUserId(userDoFromTable.getUserId());
@@ -186,6 +189,9 @@ public class LoginServiceImpl implements LoginService {
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
             throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
 
+        if(userDoFromTable.getBan() == 1)
+            throw new BusinessException(EnumError.USER_HIDDEN);
+
         Map<String,Object> map = returnMap(userDoFromTable);
 
         return map;
@@ -211,6 +217,9 @@ public class LoginServiceImpl implements LoginService {
         String saltPassword = MyMd5.md5Encryption(userDo.getPwd()) + MyMd5.md5Encryption(salt.toString());
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
             throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
+
+        if(userDoFromTable.getBan() == 1)
+            throw new BusinessException(EnumError.USER_HIDDEN);
 
         Map<String,Object> map = returnMap(userDoFromTable);
 

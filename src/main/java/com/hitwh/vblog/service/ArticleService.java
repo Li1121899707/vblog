@@ -14,15 +14,11 @@ public interface ArticleService {
     void update(ArticleModel articleModel) throws BusinessException;
     ArticleOutParam queryRandomArticle() throws BusinessException;
     ArticleOutParam queryArticleId(Integer article_id) throws BusinessException;
-    Map<String,Object> selectArticleByAuthorId(@Param("start") Integer start,
-                                                @Param("num") Integer num,
-                                                @Param("userId")Integer userId) throws BusinessException;
-    Map<String,Object> selectArticleByType(@Param("start") Integer start,
-                                         @Param("num") Integer num,
-                                         @Param("typeId")Integer typeId) throws BusinessException;
-    Map<String,Object> selectArticleByTitle(@Param("start") Integer start,
-                                         @Param("num") Integer num,
-                                         @Param("title")String title) throws BusinessException;
+    Map<String,Object> selectArticleByAuthorId(Integer start, Integer end, Integer userId) throws BusinessException;
+    Map<String,Object> selectArticleByType(Integer start, Integer end, Integer typeId) throws BusinessException;
+    Map<String,Object> selectArticleByTitle(Integer start, Integer end, String title) throws BusinessException;
+
+    Map<String,Object> selectAllArticle(Integer start, Integer end) throws BusinessException;
 
     Map<String, Object> recommend();
 }

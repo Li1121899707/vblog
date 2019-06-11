@@ -48,7 +48,7 @@
         delete vblog_user_interest where user_id = #{userId}
     </delete>
 
-    <select id="queryByUserIdNum">
+    <select id="queryByUserIdNum" resultType="java.lang.Integer">
         select count(*) from vblog_user_interest where user_id = #{userId}
     </select>
 </mapper>

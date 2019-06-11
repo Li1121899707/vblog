@@ -40,7 +40,7 @@ public class CommentController extends BaseController{
      * @throws BusinessException
      * 通过文章ID查找评论
      */
-    @PostMapping("/article_query")
+    @RequestMapping("/article_query")
     public CommonReturnType queryByArticle(@RequestBody CommentInParam commentInParam) throws BusinessException {
         //获取得到的信息
         Map<String,Object> map = new HashMap<>();
@@ -65,7 +65,7 @@ public class CommentController extends BaseController{
      * @return
      * @throws BusinessException
      */
-    @PostMapping("/person_query")
+    @RequestMapping("/person_query")
     public CommonReturnType queryByPerson(@RequestBody CommentInParam commentInParam) throws BusinessException {
         //获取得到的信息
         Map<String,Object> map = new HashMap<>();
@@ -84,7 +84,7 @@ public class CommentController extends BaseController{
 
     }
 
-    @PostMapping("/parent_query")
+    @RequestMapping("/parent_query")
     public CommonReturnType queryByParent(@RequestBody CommentInParam commentInParam) throws BusinessException {
         return CommonReturnType.create(commentService.selectForParent(commentInParam.getParent_comment_id()));
     }

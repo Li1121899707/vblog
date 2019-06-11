@@ -42,15 +42,11 @@
     where article_id = #{articleId,jdbcType=INTEGER}
   </select>
 
-  <select id="selectArticleNumByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    select count(*)
-    from vblog_article
-    where author_id = #{userId}
-  </select>
+
 
   <select id="selectArticleNumber" resultType="java.lang.Integer">
     select count(*)
-    from vblog_article
+    from vblog_article where hidden = 0
   </select>
   <select id="selectAllArticle" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
@@ -60,25 +56,15 @@
     left join vblog_article_dynamic
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
-    on vblog_article.author_id = vblog_user.user_id
+    on vblog_article.author_id = vblog_user.user_id where hidden = 0
+    limit #{start} ,#{num}
   </select>
-  <!--<select id="selectArticleByUserId" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">-->
-    <!--select vblog_article.article_id, vblog_article.virtual_id,  title, author_id,-->
-    <!--nickname, cover, hidden, content, article_abstract,-->
-    <!--release_time, reading_num, thumb_num, vblog_label.label_id, label_name-->
-    <!--from vblog_article_label-->
-    <!--right join vblog_article-->
-    <!--on vblog_article_label.article_id = vblog_article.article_id-->
-    <!--right join vblog_article_dynamic-->
-    <!--on vblog_article.article_id = vblog_article_dynamic.article_id-->
-    <!--right join vblog_user-->
-    <!--on vblog_article.author_id = vblog_user.user_id-->
-    <!--left join vblog_label-->
-    <!--on vblog_article_label.label_id = vblog_label.label_id-->
-    <!--where vblog_article.author_id = #{userId}-->
-    <!--limit #{start} ,#{num}-->
-  <!--</select>-->
 
+  <select id="selectArticleNumByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_article
+    where author_id = #{userId} and hidden = 0
+  </select>
   <select id="selectArticleByUserId" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
     nickname, cover, hidden, content, article_abstract,
@@ -88,7 +74,7 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    where vblog_article.author_id = #{userId}
+    where vblog_article.author_id = #{userId} and hidden = 0
     limit #{start} ,#{num}
   </select>
 
@@ -96,7 +82,7 @@
   <select id="selectArticleNumByTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
     select count(*)
     from vblog_article
-    where title = #{title}
+    where title like CONCAT('%',#{title},'%') and hidden = 0
   </select>
   <select id="selectArticleByTitle" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id,  title, author_id,
@@ -107,14 +93,14 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    where vblog_article.title like CONCAT('%',#{title},'%')
+    where vblog_article.title like CONCAT('%',#{title},'%') and hidden = 0
     limit #{start} ,#{num}
   </select>
 
   <select id="selectArticleNumByType" resultType="java.lang.Integer">
     select count(*)
     from vblog_article_label
-    where label_id = #{typeId}
+    where label_id = #{typeId} and hidden = 0
   </select>
   <select id="selectArticleByType" resultMap="ArticleAndUserMap">
     select vblog_article_label.article_id, vblog_article_label.label_id , vblog_article.virtual_id,  title, author_id,
@@ -127,7 +113,7 @@
     on vblog_article.author_id = vblog_user.user_id
     left join vblog_article_dynamic
     on vblog_article.article_id = vblog_article_dynamic.article_id
-    where vblog_article_label.label_id = #{typeId}
+    where vblog_article_label.label_id = #{typeId} and hidden = 0
     limit #{start} ,#{num}
   </select>
 

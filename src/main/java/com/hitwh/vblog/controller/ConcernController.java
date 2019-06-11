@@ -46,7 +46,7 @@ public class ConcernController extends BaseController {
     }
 
     @LoginRequired
-    @PostMapping("/query_concern_follower")
+    @RequestMapping("/query_concern_follower")
     public CommonReturnType queryConcernFollower(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         Map<String, Object> map = concernService.queryFollower(concernInParam.getStart(), concernInParam.getEnd(), concernInParam.getUid());
 
@@ -67,7 +67,7 @@ public class ConcernController extends BaseController {
     }
 
     @LoginRequired
-    @PostMapping("/query_concern_target")
+    @RequestMapping("/query_concern_target")
     public CommonReturnType queryConcernTarget(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         Map<String, Object> map = concernService.queryTarget(concernInParam.getStart(), concernInParam.getEnd(), concernInParam.getUid());
 

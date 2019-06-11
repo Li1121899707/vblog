@@ -3,6 +3,7 @@ package com.hitwh.vblog.service.impl;
 import com.hitwh.vblog.bean.TokenDo;
 import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.bean.UserInterestDo;
+import com.hitwh.vblog.mapper.TokenDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.mapper.UserInterestDoMapper;
 import com.hitwh.vblog.model.RegisterModel;
@@ -34,6 +35,8 @@ public class RegisterServiceImpl implements RegisterService {
     private ValidatorImpl validator;
     @Autowired
     private UserInterestDoMapper userInterestDoMapper;
+    @Autowired
+    private TokenDoMapper tokenDoMapper;
 
     @Override
     public void register(RegisterModel registerModel) throws BusinessException {
@@ -75,6 +78,7 @@ public class RegisterServiceImpl implements RegisterService {
         tokenDo.setToken("0");
         tokenDo.setCreateTime(new Date(System.currentTimeMillis()));
         tokenDo.setExpiryTime(new Date(System.currentTimeMillis()));
+        tokenDoMapper.insert(tokenDo);
 
         Integer uid = userDo.getUserId();
 

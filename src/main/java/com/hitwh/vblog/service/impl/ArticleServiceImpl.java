@@ -131,19 +131,19 @@ public class ArticleServiceImpl implements ArticleService {
         if (articleModel.getArticle_id() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        ArticleDo articleDoTest = new ArticleDo();
-        ArticleDo articleDo = new ArticleDo();
-        ArticleLabelDo articleLabelDo = new ArticleLabelDo();
-        articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
-
-        if (articleDoTest == null)
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, EnumError.PARAMETER_VALIDATION_ERROR.getErrMsg());
-
         ValidationResult result = validator.validate(articleModel);
-
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
 
+        ArticleDo articleDoTest = new ArticleDo();
+        articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
+
+        if (articleDoTest == null)
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        if(articleDoTest.getHidden() == 1)
+            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+
+        ArticleDo articleDo = new ArticleDo();
         articleDo.setArticleId(articleModel.getArticle_id());
         articleDo.setVirtualId(null);
         articleDo.setTitle(articleModel.getTitle());
@@ -160,6 +160,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (writeResult != 1)
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
 
+        ArticleLabelDo articleLabelDo = new ArticleLabelDo();
         articleLabelDo.setArticleId(articleModel.getArticle_id());
         articleLabelDo.setLabelId(articleModel.getType_1());
         articleLabelDo.setLabelAddTime(timeStamp);
@@ -189,6 +190,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleAndUserDo = articleDoMapper.selectSingleArticle(article_id);
         if (articleAndUserDo == null)
             return null;
+        if(articleAndUserDo.getArticleDo().getHidden() == 1)
+            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
 
         ArticleOutParam articleOutParam = new ArticleOutParam();
         articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getArticleId());
@@ -209,13 +212,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Map<String, Object> selectArticleByAuthorId(Integer start, Integer end, Integer userId) throws BusinessException {
-        if(start == null || end == null || start < 0 || end <= start || end == 0 || userId == null || userId == 0)
+    public Map<String, Object> selectArticleByAuthorId(Integer start, Integer end, Integer authorId) throws BusinessException {
+        if(start == null || end == null || start < 0 || end <= start || end == 0 || authorId == null || authorId == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         Map<String,Object> map = new HashMap<>();
-        int sum = articleDoMapper.selectArticleNumByUserId(userId);
-        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByUserId(start, end-start+1, userId);
+        int sum = articleDoMapper.selectArticleNumByUserId(authorId);
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByUserId(start, end-start+1, authorId);
+        if(articleAndUserDos == null || articleAndUserDos.size() == 0)
+            return null;
+
         map.put("sum", sum);
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
@@ -229,6 +235,8 @@ public class ArticleServiceImpl implements ArticleService {
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByType(typeId);
         List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByType(start, end-start+1, typeId);
+        if(articleAndUserDos == null || articleAndUserDos.size() == 0)
+            return null;
         map.put("sum", sum);
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
@@ -242,6 +250,24 @@ public class ArticleServiceImpl implements ArticleService {
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByTitle(title);
         List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByTitle(start, end-start+1, title);
+        if(articleAndUserDos == null || articleAndUserDos.size() == 0)
+            return null;
+        map.put("sum", sum);
+        map.put("list", convertToArticleOutParams(articleAndUserDos));
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> selectAllArticle(Integer start, Integer end) throws BusinessException {
+        if(start == null || end == null || start < 0 || end <= start || end == 0 )
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        Map<String,Object> map = new HashMap<>();
+        int sum = articleDoMapper.selectArticleNumber();
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectAllArticle(start, end-start+1);
+        if(articleAndUserDos == null || articleAndUserDos.size() == 0)
+            return null;
+
         map.put("sum", sum);
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
@@ -255,6 +281,8 @@ public class ArticleServiceImpl implements ArticleService {
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
     }
+
+
 
     public List<ArticleOutParam> convertToArticleOutParams(List<ArticleAndUserDo> articleAndUserDos){
         List<ArticleOutParam> articleOutParams = new ArrayList<>();
@@ -282,7 +310,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleOutParam queryRandomArticle() throws BusinessException {
         int number = articleDoMapper.selectArticleNumber();
-        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectAllArticle();
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectAllArticle(0,number);
         List<ArticleOutParam> articleOutParams = convertToArticleOutParams(articleAndUserDos);
         int choice = (int)(Math.random()*number);
         ArticleOutParam articleOutParam = articleOutParams.get(choice);

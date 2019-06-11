@@ -62,10 +62,10 @@ public class ArticleController extends BaseController {
         return CommonReturnType.create(articleService.queryArticleId(articleInParam.getArticle_id()));
     }
 
-    @PostMapping("/query_by_author")
+    @RequestMapping("/query_by_author")
     public CommonReturnType queryArticleByAuthor(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByAuthorId(articleInParam.getStart(),
-                articleInParam.getEnd(), articleInParam.getUid());
+                articleInParam.getEnd(), articleInParam.getAuthor_id());
 
         ArrayList articleOutParams = (ArrayList) result.get("list");
 
@@ -76,7 +76,7 @@ public class ArticleController extends BaseController {
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
-    @PostMapping("/query_by_title")
+    @RequestMapping("/query_by_title")
     public CommonReturnType queryArticleByTitle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByTitle(articleInParam.getStart(),
                 articleInParam.getEnd(), articleInParam.getTitle());
@@ -90,7 +90,7 @@ public class ArticleController extends BaseController {
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
-    @PostMapping("/query_by_type")
+    @RequestMapping("/query_by_type")
     public CommonReturnType queryArticleByType(@RequestBody ArticleInParam articleInParam) throws BusinessException{
         Map<String, Object> result = articleService.selectArticleByType(articleInParam.getStart(),
                 articleInParam.getEnd(), articleInParam.getType_1());
@@ -104,12 +104,18 @@ public class ArticleController extends BaseController {
         return CommonReturnType.create(PageResponse.create(articleInParam.getStart(),end,sum,articleOutParams));
     }
 
-    @PostMapping("/query_random")
+    @RequestMapping("/query_random")
     public CommonReturnType queryRandomArticle() throws BusinessException{
         return CommonReturnType.create(articleService.queryRandomArticle().getArticle_id());
     }
 
-    @PostMapping("/recommend")
+    @RequestMapping("/query_all")
+    public CommonReturnType queryAllArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
+        return CommonReturnType.create(articleService.selectAllArticle(articleInParam.getStart(),
+                articleInParam.getEnd()));
+    }
+
+    @RequestMapping("/recommend")
     public CommonReturnType recommend() throws BusinessException{
         return CommonReturnType.create(articleService.recommend());
     }

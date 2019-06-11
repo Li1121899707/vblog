@@ -41,8 +41,8 @@ public class ReportController extends BaseController{
         return CommonReturnType.success();
     }
 
-    //@LoginRequired(admin = true)
-    @PostMapping("/admin/query_all")
+    @LoginRequired(admin = true)
+    @RequestMapping("/admin/query_all")
     public CommonReturnType queryAllReport(@RequestBody ReportInParam reportInParam) throws BusinessException {
         Map<String,Object> result = reportService.queryAllReports(reportInParam.getStart(),
                 reportInParam.getEnd());
@@ -60,8 +60,8 @@ public class ReportController extends BaseController{
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
-    //@LoginRequired(admin = true)
-    @PostMapping("/admin/query_by_article")
+    @LoginRequired(admin = true)
+    @RequestMapping("/admin/query_by_article")
     public CommonReturnType queryReportByArticle(@RequestBody ReportInParam reportInParam) throws BusinessException {
         Map<String,Object> result = reportService.queryReportsByArticleId(reportInParam.getStart(),
                 reportInParam.getEnd(), reportInParam.getArticle_id());
@@ -78,8 +78,8 @@ public class ReportController extends BaseController{
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
-    //@LoginRequired(admin = true)
-    @PostMapping("/admin/query_by_handle_result")
+    @LoginRequired(admin = true)
+    @RequestMapping("/admin/query_by_handle_result")
     public CommonReturnType queryReportByHandleResult(@RequestBody ReportInParam reportInParam) throws BusinessException {
         Map<String,Object> result = reportService.queryReportsByHandleResult(reportInParam.getStart(),
                 reportInParam.getEnd(), reportInParam.getHandle_result());
@@ -98,7 +98,7 @@ public class ReportController extends BaseController{
     }
 
     @LoginRequired(admin = true)
-    @PostMapping("/admin/handle")
+    @RequestMapping("/admin/handle")
     public CommonReturnType handleReport(@RequestBody ReportInParam reportInParam) throws BusinessException {
         ReportModel reportModel = new ReportModel();
         reportModel.setAdminId(reportInParam.getUid());

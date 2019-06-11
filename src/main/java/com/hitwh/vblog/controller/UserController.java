@@ -32,28 +32,28 @@ public class UserController extends BaseController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/query_by_id")
+    @RequestMapping("/query_by_id")
     public CommonReturnType queryUserById(@RequestBody UserInparam userInparam) throws BusinessException {
         return CommonReturnType.create(userService.queryById(userInparam.getUid()));
     }
 
-    @PostMapping("/query_by_account")
+    @RequestMapping("/query_by_account")
     public CommonReturnType queryUserByAccount(@RequestBody UserInparam userInparam) throws BusinessException {
         return CommonReturnType.create(userService.queryByAccount(userInparam.getAccount()));
     }
 
-    @PostMapping("/query_by_email")
+    @RequestMapping("/query_by_email")
     public CommonReturnType queryUserByEmail(@RequestBody UserInparam userInparam) throws BusinessException {
         return CommonReturnType.create(userService.queryByEmail(userInparam.getEmail()));
     }
 
-    @PostMapping("/query_by_phone")
+    @RequestMapping("/query_by_phone")
     public CommonReturnType queryUserByPhone(@RequestBody UserInparam userInparam) throws BusinessException {
         return CommonReturnType.create(userService.queryByPhone(userInparam.getPhone()));
     }
 
     @LoginRequired
-    @PostMapping("/query_by_label")
+    @RequestMapping("/query_by_label")
     public CommonReturnType queryAllUserByLabel(@RequestBody UserInparam userInparam) throws BusinessException {
         Map<String, Object> map = userService.queryAllUserByLabel(userInparam.getStart(), userInparam.getEnd(), userInparam.getLabel_id());
 
@@ -74,7 +74,7 @@ public class UserController extends BaseController {
     }
 
     @LoginRequired(admin = true)
-    @PostMapping("/admin/query_all")
+    @RequestMapping("/admin/query_all")
     public CommonReturnType queryAllUser(@RequestBody UserInparam userInparam) throws BusinessException {
         Map<String, Object> map = userService.queryAllUser(userInparam.getStart(), userInparam.getEnd());
 
@@ -116,7 +116,7 @@ public class UserController extends BaseController {
     }
 
     @LoginRequired(admin = true)
-    @PostMapping("/admin/ban_user")
+    @RequestMapping("/admin/ban_user")
     public CommonReturnType banUser(@RequestBody UserInparam userInparam) throws BusinessException {
         userService.banUser(userInparam);
         return CommonReturnType.success();
