@@ -23,5 +23,5 @@ public interface CommentService {
 
     void commentAdminHide(Integer uid, Integer commentId) throws BusinessException;
 
-    List<Map<String, Object>> queryForUser(Integer userId);
+    List<Map<String, Object>> queryForUser(Integer userId) throws BusinessException;
 }

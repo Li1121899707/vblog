@@ -273,7 +273,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Map<String, Object>> queryForUser(Integer userId) {
+    public List<Map<String, Object>> queryForUser(Integer userId) throws BusinessException {
+        if (userId == null||userId <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        
         List<ArticleDo> articleDoList = articleDoMapper.selectByUserId(userId);
         //List<List<>>
         List<Map<String,Object>> maps = new ArrayList<>();
