@@ -70,8 +70,10 @@ public class LabelServiceImpl implements LabelService {
         }else
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        resultNum = labelDoMapper.interestsPageCount();
+
         if(labelDos == null || labelDos.size() == 0)
-            return PageResponse.createBlank();
+            return PageResponse.createBlank(resultNum);
 
         List<LabelOutParam> labelOutParams = new ArrayList<>();
         for(int i=0; i<labelDos.size(); i++){
@@ -89,7 +91,7 @@ public class LabelServiceImpl implements LabelService {
         if(resultEnd < labelDos.size() - 1)
             resultEnd = resultStart + labelDos.size() - 1;
 
-        resultNum = labelDoMapper.interestsPageCount();
+
 
         return PageResponse.create(resultStart, resultEnd, resultNum, labelDos);
     }

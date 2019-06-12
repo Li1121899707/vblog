@@ -110,12 +110,12 @@ public class CommentController extends BaseController{
         return CommonReturnType.success();
     }
 
-    @LoginRequired
-    @PostMapping("/hide")
-    public CommonReturnType commentHide(@RequestBody CommentInParam commentInParam) throws BusinessException {
-        commentService.hideComment(commentInParam.getComment_id());
-        return CommonReturnType.success();
-    }
+//    @LoginRequired
+//    @PostMapping("/hide")
+//    public CommonReturnType commentHide(@RequestBody CommentInParam commentInParam) throws BusinessException {
+//        commentService.hideComment(commentInParam.getComment_id());
+//        return CommonReturnType.success();
+//    }
 
     @LoginRequired(admin = true)
     @PostMapping("/admin/hide")

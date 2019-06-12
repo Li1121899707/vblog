@@ -108,6 +108,9 @@ public class CommentServiceImpl implements CommentService {
             throw new BusinessException(EnumError.USER_NOT_EXIST);
         }
 
+        if(userDo == null)
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
         //查找出要展示的评论
         List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayCommentById(
                 start,num, userId);
@@ -213,14 +216,27 @@ public class CommentServiceImpl implements CommentService {
         if(i != 1)
             throw new BusinessException(EnumError.COMMENT_INSERT_ERROR);
     }
-//隐藏评论
+    //隐藏评论
     @Override
     public void hideComment(Integer commentId) throws BusinessException {
         //判断control传来的参数的正确性
         if(commentId == null || commentId <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        Integer hideResult = commentDoMapper.updateCommentHide(commentId);
+        CommentDo commentDo = null;
+        try {
+            commentDo = commentDoMapper.selectByPrimaryKey(commentId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.COMMENT_NOT_EXIST);
+        }
+
+        Integer hideResult = 0;
+        try {
+            hideResult = commentDoMapper.updateCommentHide(commentId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.COMMENT_HIDDEN_ERROR);
+        }
+
         //判断是否隐藏成功
         if(hideResult != 1)
             throw new BusinessException(EnumError.COMMENT_HIDDEN_ERROR);
