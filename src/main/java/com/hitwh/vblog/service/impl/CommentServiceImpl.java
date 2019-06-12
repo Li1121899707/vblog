@@ -1,9 +1,6 @@
 package com.hitwh.vblog.service.impl;
 
-import com.hitwh.vblog.bean.ArticleDo;
-import com.hitwh.vblog.bean.ArticleDynamicDo;
-import com.hitwh.vblog.bean.ComAndUserDo;
-import com.hitwh.vblog.bean.CommentDo;
+import com.hitwh.vblog.bean.*;
 import com.hitwh.vblog.mapper.ArticleDoMapper;
 import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.CommentDoMapper;
@@ -50,6 +47,16 @@ public class CommentServiceImpl implements CommentService {
 
         Map<String,Object> map = new HashMap<>();
 
+        ArticleDo articleDo = null;
+        try {
+            articleDo = articleDoMapper.selectByPrimaryKey(articleId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
+
+        if(articleDo == null)
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+
         //通过文章的ID查找出所有的评论
         try {
             sum = commentDoMapper.selectByArticleId(articleId).size();
@@ -93,6 +100,13 @@ public class CommentServiceImpl implements CommentService {
 
         Map<String,Object> map = new HashMap<>();
         int sum = commentDoMapper.selectByUserId(userId).size();
+
+        UserDo userDo = null;
+        try {
+            userDo = userDoMapper.selectByPrimaryKey(userId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
 
         //查找出要展示的评论
         List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayCommentById(
