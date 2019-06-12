@@ -130,7 +130,7 @@ public class  LoginController extends BaseController{
         return CommonReturnType.create(outResult);
     }
 
-    @LoginRequired
+    //@LoginRequired
     @RequestMapping("/logout")
     public CommonReturnType logout(@RequestBody LoginInParam loginInParam) throws BusinessException {
         if(loginInParam.getUid() == null || loginInParam.getUid() <= 0)
