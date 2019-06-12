@@ -296,4 +296,10 @@
     limit 0 , #{num}
   </select>
 
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select article_id,title
+    from vblog_article
+    where author_id = #{userId}
+  </select>
+
 </mapper>

@@ -6,6 +6,7 @@ import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.CommentDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.CommentModel;
+import com.hitwh.vblog.outparam.CommentForUserOutParam;
 import com.hitwh.vblog.outparam.CommentOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
@@ -271,6 +272,41 @@ public class CommentServiceImpl implements CommentService {
         if(hideResult != 1)
             throw new BusinessException(EnumError.COMMENT_HIDDEN_ERROR);
 
+    }
+
+    @Override
+    public List<Map<String, Object>> queryForUser(Integer userId) throws BusinessException {
+        if (userId == null||userId <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        
+        List<ArticleDo> articleDoList = articleDoMapper.selectByUserId(userId);
+        //List<List<>>
+        List<Map<String,Object>> maps = new ArrayList<>();
+        for (int i = 0;i < articleDoList.size();i++)
+        {
+            Map<String,Object> map = new HashMap<>();
+            List<CommentForUserOutParam> commentForUserOutParams = new ArrayList<>();
+            List<ComAndUserDo> comAndUserDos = commentDoMapper.selectForUser(articleDoList.get(i).getArticleId());
+            for (int j = 0;j < comAndUserDos.size();j++){
+
+                CommentForUserOutParam commentForUserOutParam = new CommentForUserOutParam();
+                commentForUserOutParam.setArticle_id(articleDoList.get(i).getArticleId());
+                commentForUserOutParam.setTitle(articleDoList.get(i).getTitle());
+                commentForUserOutParam.setAvatar_sm(comAndUserDos.get(j).getUserDo().getAvatarSm());
+                commentForUserOutParam.setComment(comAndUserDos.get(j).getCommentDo().getComment());
+                commentForUserOutParam.setComment_time((comAndUserDos.get(j).getCommentDo().getCommentTime()).getTime());
+                commentForUserOutParam.setParent_comment_id(comAndUserDos.get(j).getCommentDo().getCommentId());
+                commentForUserOutParam.setUser_id(comAndUserDos.get(j).getUserDo().getUserId());
+                commentForUserOutParam.setUser_nickname(comAndUserDos.get(j).getUserDo().getNickname());
+
+                commentForUserOutParams.add(commentForUserOutParam);
+            }
+            map.put("title",articleDoList.get(i).getTitle());
+            map.put("comment",commentForUserOutParams);
+            maps.add(map);
+        }
+
+        return maps;
     }
 
     //将数据库查出的类型转换为输出类型

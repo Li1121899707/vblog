@@ -14,6 +14,7 @@ public enum EnumError implements CommonError {
     ACCOUNT_NOT_EXIST(1101, "账号不存在"),
     PHONE_NOT_EXIST(1102, "手机号不存在"),
     EMAIL_NOT_EXIST(1103, "邮箱不存在"),
+    LOGOUT_EXIST(1104,"请勿重复登出"),
 
     ARTICLE_NOT_EXIST(2001, "文章不存在"),
     ARTICLE_HIDDEN(2002, "文章被隐藏"),

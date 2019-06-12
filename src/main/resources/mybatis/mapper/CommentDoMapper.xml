@@ -174,4 +174,14 @@
     set comment_hide = 1
     where comment_id = #{commentId}
 </update>
+
+  <select id="selectForUser" resultMap="CommentAndUserMap">
+    select vblog_user.user_id, nickname,
+    comment_id, article_id, vblog_comment.user_id,
+    comment, comment_time, parent_comment_id,comment_hide,avatar_sm
+    from vblog_comment, vblog_user
+    where article_id = #{articleId}
+    and vblog_user.user_id = vblog_comment.user_id
+    order by comment_time desc
+  </select>
 </mapper>

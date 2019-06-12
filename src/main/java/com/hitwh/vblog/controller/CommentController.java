@@ -100,6 +100,11 @@ public class CommentController extends BaseController{
         return CommonReturnType.create(commentService.selectForParent(commentInParam.getParent_comment_id()));
     }
 
+    @RequestMapping("/query_for_user")
+    public CommonReturnType queryForUser(@RequestBody CommentInParam commentInParam) throws BusinessException {
+        return CommonReturnType.create(commentService.queryForUser(commentInParam.getUid()));
+    }
+
     @LoginRequired
     @PostMapping("/insert")
     public CommonReturnType commentInsert(@RequestBody CommentInParam commentInParam) throws BusinessException {
@@ -129,4 +134,6 @@ public class CommentController extends BaseController{
         commentService.commentAdminHide(commentInParam.getUid(),commentInParam.getComment_id());
         return CommonReturnType.success();
     }
+
+
 }

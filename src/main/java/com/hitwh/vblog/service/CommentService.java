@@ -1,11 +1,13 @@
 package com.hitwh.vblog.service;
 
 import com.hitwh.vblog.bean.ComAndUserDo;
+import com.hitwh.vblog.inparam.CommentInParam;
 import com.hitwh.vblog.model.CommentModel;
 import com.hitwh.vblog.outparam.CommentOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 public interface CommentService {
@@ -20,4 +22,6 @@ public interface CommentService {
     void hideComment(Integer commentId) throws BusinessException;
 
     void commentAdminHide(Integer uid, Integer commentId) throws BusinessException;
+
+    List<Map<String, Object>> queryForUser(Integer userId) throws BusinessException;
 }
