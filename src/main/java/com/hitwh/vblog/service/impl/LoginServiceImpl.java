@@ -322,7 +322,7 @@ public class LoginServiceImpl implements LoginService {
         tokenDo.setUserId(uid);
         tokenDo.setToken("0");
 
-        Integer result = tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
+        int result = tokenDoMapper.updateByPrimaryKeySelective(tokenDo);
 
         if (result != 1)
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);

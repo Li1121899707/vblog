@@ -95,7 +95,7 @@ public class CommentController extends BaseController{
         return CommonReturnType.create(commentService.selectForParent(commentInParam.getParent_comment_id()));
     }
 
-    //@LoginRequired
+    @LoginRequired
     @PostMapping("/insert")
     public CommonReturnType commentInsert(@RequestBody CommentInParam commentInParam) throws BusinessException {
         CommentModel commentModel = new CommentModel();

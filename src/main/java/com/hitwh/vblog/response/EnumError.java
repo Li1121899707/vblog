@@ -21,7 +21,8 @@ public enum EnumError implements CommonError {
 
     PARENT_COMMENT_HIDDEN(3001,"评论被隐藏"),
     COMMENT_INSERT_ERROR(3002,"添加评论失败"),
-    COMMENT_UPDATE_ERROR(3003,"修改评论失败"),
+    COMMENT_HIDDEN_ERROR(3003,"隐藏评论失败"),
+    COMMENT_NOT_EXIST(3004,"隐藏评论失败"),
 
     LABEL_EXIST(4001,"标签已存在"),
     LABEL_INSERT_ERROR(4002, "添加标签失败"),

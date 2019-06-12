@@ -112,7 +112,12 @@ public class LabelServiceImpl implements LabelService {
         labelDo.setLabelName(labelModel.getLabelName());
         labelDo.setDescription(labelModel.getDescription());
 
-        Integer column = labelDoMapper.insert(labelDo);
+        Integer column = 0;
+        try {
+            column = labelDoMapper.insert(labelDo);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.LABEL_INSERT_ERROR);
+        }
 
         if(column == null || column == 0)
             throw new BusinessException(EnumError.LABEL_INSERT_ERROR);
@@ -139,10 +144,11 @@ public class LabelServiceImpl implements LabelService {
         labelDo.setDescription(labelModel.getDescription());
 
         Integer column = 0;
-
+        try {
             column = labelDoMapper.updateByPrimaryKeySelective(labelDo);
-
-
+        }catch (Exception e){
+            throw new BusinessException(EnumError.LABEL_UPDATE_ERROR);
+        }
 
         if(column == null || column == 0)
             throw new BusinessException(EnumError.LABEL_UPDATE_ERROR);

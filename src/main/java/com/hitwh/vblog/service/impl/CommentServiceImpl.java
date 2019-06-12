@@ -154,11 +154,11 @@ public class CommentServiceImpl implements CommentService {
         try {
             articleDo = articleDoMapper.selectByPrimaryKey(commentModel.getArticleId());
         }catch (Exception e){
-            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
         }
 
         if(articleDo == null)
-            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
 
         //往数据库中存储评论
         Integer ifInsert;
@@ -197,7 +197,7 @@ public class CommentServiceImpl implements CommentService {
         articleDynamicDo.setCommentNum(1);
         int i = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
         if(i != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.COMMENT_INSERT_ERROR);
     }
 //隐藏评论
     @Override
@@ -209,24 +209,36 @@ public class CommentServiceImpl implements CommentService {
         Integer hideResult = commentDoMapper.updateCommentHide(commentId);
         //判断是否隐藏成功
         if(hideResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.COMMENT_HIDDEN_ERROR);
 
     }
 
     @Override
     public void commentAdminHide(Integer uid, Integer commentId) throws BusinessException {
         if (uid == null||commentId == null||uid < 0||commentId < 0)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        if(userDoMapper.selectAdmin(uid) == null)
-            throw new BusinessException(EnumError.UNAUTHORIZED);
-
-        else{
-            Integer hideResult = commentDoMapper.updateCommentHide(commentId);
-            //判断是否隐藏成功
-            if(hideResult != 1)
-                throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+        CommentDo commentDo = null;
+        try {
+            commentDo = commentDoMapper.selectByPrimaryKey(commentId);
+        } catch (Exception e){
+            throw new BusinessException(EnumError.COMMENT_NOT_EXIST);
         }
+
+        if(commentDo == null)
+            throw new BusinessException(EnumError.COMMENT_NOT_EXIST);
+
+        Integer hideResult = 0;
+        try {
+            hideResult  = commentDoMapper.updateCommentHide(commentId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.COMMENT_HIDDEN_ERROR);
+        }
+
+        //判断是否隐藏成功
+        if(hideResult != 1)
+            throw new BusinessException(EnumError.COMMENT_HIDDEN_ERROR);
+
     }
 
     //将数据库查出的类型转换为输出类型
