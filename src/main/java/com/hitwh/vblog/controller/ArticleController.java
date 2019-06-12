@@ -45,8 +45,10 @@ public class ArticleController extends BaseController {
     @LoginRequired
     @PostMapping("/update")
     public CommonReturnType updateArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException {
+        Integer articleIdInteger = articleService.getArticleId(articleInParam.getArticle_id());
         ArticleModel articleModel = new ArticleModel();
         BeanUtils.copyProperties(articleInParam, articleModel);
+        articleModel.setArticle_id(articleIdInteger);
         articleModel.setArticleAbstract(articleInParam.getArticle_abstract());
         articleService.update(articleModel);
         return CommonReturnType.success();
@@ -55,14 +57,16 @@ public class ArticleController extends BaseController {
     @LoginRequired
     @PostMapping("/delete")
     public CommonReturnType deleteArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        articleService.delete(articleInParam.getArticle_id(), articleInParam.getUid());
+        Integer articleIdInteger = articleService.getArticleId(articleInParam.getArticle_id());
+        articleService.delete(articleIdInteger, articleInParam.getUid());
         return CommonReturnType.success();
     }
 
 
     @RequestMapping("/query_by_id")
     public CommonReturnType queryArticleById(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        return CommonReturnType.create(articleService.queryArticleId(articleInParam.getArticle_id()));
+        Integer articleIdInteger = articleService.getArticleId(articleInParam.getArticle_id());
+        return CommonReturnType.create(articleService.queryArticleId(articleIdInteger));
     }
 
     @RequestMapping("/query_by_author")
@@ -124,7 +128,7 @@ public class ArticleController extends BaseController {
     }
 
     @RequestMapping("/recommend")
-    public CommonReturnType recommend() throws BusinessException{
-        return CommonReturnType.create(articleService.recommend());
+    public CommonReturnType recommend(@RequestBody ArticleInParam articleInParam) throws BusinessException{
+        return CommonReturnType.create(articleService.recommend(articleInParam.getNum()));
     }
 }

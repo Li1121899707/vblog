@@ -10,7 +10,7 @@ import java.util.Map;
 public interface LoginService {
     //Map<String,Object> getLoginInfoByAccout(LoginModel loginModel) throws BusinessException;
 
-    Boolean keyValidate(String key,Integer uid,long Request_time);
+    Boolean keyValidate(String key,Integer uid,long Request_time) throws BusinessException;
 
     Boolean tokenValidate(Integer uid, long Request_time);
 

@@ -27,7 +27,7 @@ public interface ArticleDoMapper {
     List<ArticleAndUserDo> selectAllArticle(@Param("start") Integer start,
                                             @Param("num") Integer num);
 
-    List<ArticleAndUserDo> recommend();
+    List<ArticleAndUserDo> recommend(@Param("num") Integer num);
 
     int selectArticleNumber();
 
@@ -50,4 +50,6 @@ public interface ArticleDoMapper {
     int updateByPrimaryKeySelective(ArticleDo record);
 
     int updateByPrimaryKey(ArticleDo record);
+
+    int selectArticleIdByVirtualId(@Param("virtualId")String virtualId);
 }

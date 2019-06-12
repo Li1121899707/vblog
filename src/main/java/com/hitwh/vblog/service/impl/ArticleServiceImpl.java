@@ -155,8 +155,8 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (articleDoTest == null)
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
-        if(articleDoTest.getHidden() == 1)
-            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+//        if(articleDoTest.getHidden() == 1)
+//            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
         if(articleDoTest.getAuthorId() != articleModel.getUid())
             throw new BusinessException(EnumError.UNAUTHORIZED);
 
@@ -207,8 +207,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleAndUserDo = articleDoMapper.selectSingleArticle(article_id);
         if (articleAndUserDo == null)
             return null;
-        if(articleAndUserDo.getArticleDo().getHidden() == 1)
-            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+//        if(articleAndUserDo.getArticleDo().getHidden() == 1)
+//            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
 
         ArticleOutParam articleOutParam = new ArticleOutParam();
         articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getArticleId());
@@ -291,14 +291,36 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Map<String, Object> recommend() {
-        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.recommend();
+    public Map<String, Object> recommend(Integer num) {
+        Integer count = 0;
+        if(num == null || num <= 0)
+            count = 10;
+        else
+            count = num;
+
+        List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.recommend(count);
         Map<String,Object> map = new HashMap<>();
         map.put("sum", articleAndUserDos.size());
         map.put("list", convertToArticleOutParams(articleAndUserDos));
         return map;
     }
 
+    @Override
+    public Integer getArticleId(String virtualId) throws BusinessException {
+        if(virtualId == null || virtualId.equals(""))
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "文章ID传入参数错误");
+
+        Integer articleId = 0;
+        try {
+            articleId = articleDoMapper.selectArticleIdByVirtualId(virtualId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
+        if(articleId == null || articleId <= 0)
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+
+        return articleId;
+    }
 
 
     public List<ArticleOutParam> convertToArticleOutParams(List<ArticleAndUserDo> articleAndUserDos){

@@ -150,8 +150,8 @@ public class CommentServiceImpl implements CommentService {
         //转换成commentoutparam
         CommentOutParam commentOutParam = typeChange(comAndUserDo);
         //判断父评论是否被隐藏
-        if(comAndUserDo.getCommentDo().getCommentHide() == 1)
-            throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
+//        if(comAndUserDo.getCommentDo().getCommentHide() == 1)
+//            throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
 
         return commentOutParam;
     }

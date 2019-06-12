@@ -29,8 +29,8 @@ public class PageResponse {
 
     public static PageResponse createBlank(){
         PageResponse pageResponse = new PageResponse();
-        pageResponse.start = 0;
-        pageResponse.end = 0;
+        pageResponse.start = -1;
+        pageResponse.end = -1;
         pageResponse.sum = 0;
         pageResponse.arr = null;
         return pageResponse;

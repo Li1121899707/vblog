@@ -68,7 +68,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             e.printStackTrace();
         }
 
-        long request_time;
+        long request_time = 0L;
         String key;
         Integer uid;
 
@@ -80,16 +80,23 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             request_time = (long) parameterMap.get("request_time");
         }catch (Exception e){
-            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
+            System.out.println("时间参数错误， request_time" + Long.toString(request_time));
+            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR, "时间参数错误");
         }
 
         key = String.valueOf(parameterMap.get("key"));
-        if(key == null || key.equals("") || key.equals("null"))
-            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
+        if(key == null || key.equals("") || key.equals("null")){
+            System.out.println("key 参数错误");
+            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR, "key参数错误");
+        }
+
 
         uid = (Integer) parameterMap.get("uid");
-        if(uid == null || uid.equals(0))
+        if(uid == null || uid.equals(0)){
+            System.out.println("uid 参数错误");
             throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
+        }
+
 
         LoginService loginService = (LoginService) SpringUtil.getBean(LoginService.class);
 

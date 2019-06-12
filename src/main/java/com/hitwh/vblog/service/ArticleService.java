@@ -20,5 +20,7 @@ public interface ArticleService {
 
     Map<String,Object> selectAllArticle(Integer start, Integer end) throws BusinessException;
 
-    Map<String, Object> recommend();
+    Map<String, Object> recommend(Integer num);
+
+    Integer getArticleId(String virtualId) throws BusinessException;
 }

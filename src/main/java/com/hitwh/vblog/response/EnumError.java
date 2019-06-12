@@ -58,6 +58,7 @@ public enum EnumError implements CommonError {
     TOKEN_RENEW_FAILED(5, "刷新Token"),
     QUERY_NOT_EXIST(6,"查询项不存在"),
     UNAUTHORIZED(7, "用户没有权限"),
+    TOKEN_ERROR(8,"数据库中 token 错误, 请重新登录");
 
     //TOKEN_UID_NOT_FOUND(5, "验证 Token，用户ID参数错误"),
     //TOKEN_TIME_NOT_FOUND(6, "验证 Token，时间参数错误"),

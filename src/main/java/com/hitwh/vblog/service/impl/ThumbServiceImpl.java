@@ -163,7 +163,7 @@ public class ThumbServiceImpl implements ThumbService {
     }
 
     @Override
-    public Boolean queryIfThumb(ThumbModel thumbModel) throws BusinessException {
+    public int queryIfThumb(ThumbModel thumbModel) throws BusinessException {
         if(thumbModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
@@ -178,8 +178,10 @@ public class ThumbServiceImpl implements ThumbService {
         int num = thumbRecordDoMapper.selectIfThumb(thumbRecordDo);
 
         if(num == 0)
-            return false;
+            return 0;
         else
-            return true;
+            return 1;
     }
+
+
 }

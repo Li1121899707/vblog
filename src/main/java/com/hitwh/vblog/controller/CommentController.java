@@ -8,6 +8,7 @@ import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.response.PageResponse;
+import com.hitwh.vblog.service.ArticleService;
 import com.hitwh.vblog.service.impl.CommentServiceImpl;
 import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +34,9 @@ public class CommentController extends BaseController{
     private Integer numForOut;
 
     private List<CommentOutParam> commentOutParamsForOut;
+
+    @Autowired
+    ArticleService articleService;
     /**
      *
      * @param commentInParam
@@ -42,12 +46,13 @@ public class CommentController extends BaseController{
      */
     @RequestMapping("/article_query")
     public CommonReturnType queryByArticle(@RequestBody CommentInParam commentInParam) throws BusinessException {
+        Integer articleIdInteger = articleService.getArticleId(commentInParam.getArticle_id());
         //获取得到的信息
         Map<String,Object> map = new HashMap<>();
         map = commentService.selectDisplayComment(
                 commentInParam.getStart() ,
                 commentInParam.getEnd(),
-                commentInParam.getArticle_id()
+                articleIdInteger
         );
 
         if(map == null)
@@ -98,8 +103,9 @@ public class CommentController extends BaseController{
     @LoginRequired
     @PostMapping("/insert")
     public CommonReturnType commentInsert(@RequestBody CommentInParam commentInParam) throws BusinessException {
+        Integer articleIdInteger = articleService.getArticleId(commentInParam.getArticle_id());
         CommentModel commentModel = new CommentModel();
-        commentModel.setArticleId(commentInParam.getArticle_id());
+        commentModel.setArticleId(articleIdInteger);
         commentModel.setComment(commentInParam.getComment());
         commentModel.setCommentId(commentInParam.getComment_id());
         commentModel.setCommentTime(new Date(System.currentTimeMillis()));

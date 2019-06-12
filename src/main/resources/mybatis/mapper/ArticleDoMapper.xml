@@ -42,6 +42,12 @@
     where article_id = #{articleId,jdbcType=INTEGER}
   </select>
 
+  <select id="selectArticleIdByVirtualId" parameterType="java.lang.String" resultType="java.lang.Integer" >
+    select article_id
+    from vblog_article
+    where virtual_id = #{virtualId,jdbcType=VARCHAR}
+  </select>
+
   <select id="selectArticleNumber" resultType="java.lang.Integer">
     select count(*)
     from vblog_article where hidden = 0
@@ -287,7 +293,7 @@
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
     order by thumb_num, reading_num desc
-    limit 0 , 9
+    limit 0 , #{num}
   </select>
 
 </mapper>

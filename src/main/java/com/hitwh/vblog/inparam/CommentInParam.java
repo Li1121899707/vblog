@@ -1,18 +1,18 @@
 package com.hitwh.vblog.inparam;
 
 public class CommentInParam extends BaseInParam {
-    private Integer article_id;
+    private String article_id;
     private Integer start;
     private Integer end;
     private Integer comment_id;
     private String comment;
     private Integer parent_comment_id;
 
-    public Integer getArticle_id() {
+    public String getArticle_id() {
         return article_id;
     }
 
-    public void setArticle_id(Integer article_id) {
+    public void setArticle_id(String article_id) {
         this.article_id = article_id;
     }
 

@@ -6,7 +6,7 @@ package com.hitwh.vblog.inparam;
  * @date 2019/6/522:18
  */
 public class ReportInParam extends BaseInParam {
-    private Integer article_id;
+    private String  article_id;
 
     private String reason;
 
@@ -16,11 +16,11 @@ public class ReportInParam extends BaseInParam {
 
     private Integer handle_result;
 
-    public Integer getArticle_id() {
+    public String getArticle_id() {
         return article_id;
     }
 
-    public void setArticle_id(Integer article_id) {
+    public void setArticle_id(String article_id) {
         this.article_id = article_id;
     }
 

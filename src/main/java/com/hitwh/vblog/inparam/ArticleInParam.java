@@ -26,11 +26,13 @@ public class ArticleInParam extends BaseInParam {
 
     private String article_abstract;
 
-    private Integer article_id;
+    private String article_id;
 
     private Integer start;
 
     private Integer end;
+
+    private Integer num;
 
     public String getTitle() {
         return title;
@@ -88,11 +90,11 @@ public class ArticleInParam extends BaseInParam {
         this.article_abstract = article_abstract;
     }
 
-    public Integer getArticle_id() {
+    public String getArticle_id() {
         return article_id;
     }
 
-    public void setArticle_id(Integer article_id) {
+    public void setArticle_id(String article_id) {
         this.article_id = article_id;
     }
 
@@ -110,5 +112,13 @@ public class ArticleInParam extends BaseInParam {
 
     public void setEnd(Integer end) {
         this.end = end;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
     }
 }

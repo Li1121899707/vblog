@@ -77,17 +77,25 @@ public class LoginServiceImpl implements LoginService {
 //    }
 
     @Override
-    public Boolean keyValidate(String key, Integer uid, long Request_time) {
+    public Boolean keyValidate(String key, Integer uid, long Request_time) throws BusinessException {
         TokenDo tokenDo = tokenDoMapper.selectByPrimaryKey(uid);
         if(tokenDo == null)
             return false;
         String token = tokenDo.getToken();
+        System.out.println("token : " +token);
         int start = (int) (Request_time % 4);
+        System.out.println("start : " + start);
         char[] charToken = new char[8];
-        for(int i = 0; i < 8; i++){
-            charToken[i] = token.charAt(start);
-            start += 4;
+        try {
+            for(int i = 0; i < 8; i++){
+                System.out.println(charToken[i]);
+                charToken[i] = token.charAt(start);
+                start += 4;
+            }
+        }catch (Exception e){
+            throw new BusinessException(EnumError.TOKEN_ERROR);
         }
+
 
         System.out.println("token  " + token );
         System.out.println("char  " + String.valueOf(charToken));

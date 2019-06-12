@@ -7,6 +7,7 @@ import com.hitwh.vblog.outparam.ReportOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.CommonReturnType;
 import com.hitwh.vblog.response.PageResponse;
+import com.hitwh.vblog.service.ArticleService;
 import com.hitwh.vblog.service.ReportService;
 import com.hitwh.vblog.util.LoginRequired;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,15 @@ public class ReportController extends BaseController{
     @Autowired
     ReportService reportService;
 
+    @Autowired
+    ArticleService articleService;
+
     @LoginRequired
     @PostMapping("/article")
     public CommonReturnType reportArticle(@RequestBody ReportInParam reportInParam) throws BusinessException {
+        Integer articleIdInteger = articleService.getArticleId(reportInParam.getArticle_id());
         ReportModel reportModel = new ReportModel();
-        reportModel.setArticleId(reportInParam.getArticle_id());
+        reportModel.setArticleId(articleIdInteger);
         reportModel.setReporterId(reportInParam.getUid());
         reportModel.setReason(reportInParam.getReason());
         reportService.addReport(reportModel);
@@ -61,8 +66,9 @@ public class ReportController extends BaseController{
     @LoginRequired(admin = true)
     @RequestMapping("/admin/query_by_article")
     public CommonReturnType queryReportByArticle(@RequestBody ReportInParam reportInParam) throws BusinessException {
+        Integer articleIdInteger = articleService.getArticleId(reportInParam.getArticle_id());
         Map<String,Object> result = reportService.queryReportsByArticleId(reportInParam.getStart(),
-                reportInParam.getEnd(), reportInParam.getArticle_id());
+                reportInParam.getEnd(), articleIdInteger);
 
         if(result == null)
             return CommonReturnType.create(PageResponse.createBlank());
@@ -93,12 +99,13 @@ public class ReportController extends BaseController{
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
-    //@LoginRequired(admin = true)
+    @LoginRequired(admin = true)
     @RequestMapping("/admin/handle")
     public CommonReturnType handleReport(@RequestBody ReportInParam reportInParam) throws BusinessException {
+        Integer articleIdInteger = articleService.getArticleId(reportInParam.getArticle_id());
         ReportModel reportModel = new ReportModel();
         reportModel.setAdminId(reportInParam.getUid());
-        reportModel.setArticleId(reportInParam.getArticle_id());
+        reportModel.setArticleId(articleIdInteger);
         reportModel.setHandleResult(reportInParam.getHandle_result());
         reportService.handleReport(reportModel);
         return CommonReturnType.success();
