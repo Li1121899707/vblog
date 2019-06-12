@@ -123,7 +123,7 @@ public class ArticleController extends BaseController {
     @RequestMapping("/query_random")
     public CommonReturnType queryRandomArticle() throws BusinessException{
         Map<String, Object> map = new HashMap<>();
-        map.put("article_id", articleService.queryRandomArticle().getArticle_id());
+        map.put("article_id", articleService.queryRandomArticle().getVirtual_id());
         return CommonReturnType.create(map);
     }
 

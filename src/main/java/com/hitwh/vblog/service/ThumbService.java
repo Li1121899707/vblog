@@ -15,5 +15,5 @@ public interface ThumbService {
 
     void deleteThumbRecord(ThumbModel thumbModel) throws BusinessException;
 
-    int queryIfThumb(ThumbModel thumbModel) throws BusinessException;
+    Boolean queryIfThumb(ThumbModel thumbModel) throws BusinessException;
 }

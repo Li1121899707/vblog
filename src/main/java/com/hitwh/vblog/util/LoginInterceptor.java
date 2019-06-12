@@ -75,26 +75,26 @@ public class LoginInterceptor implements HandlerInterceptor {
         //long request_time = (long) parameterMap.get("request_time");
         //request_time = 1559483686339L;
         if(parameterMap == null)
-            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
         try {
             request_time = (long) parameterMap.get("request_time");
         }catch (Exception e){
             System.out.println("时间参数错误， request_time" + Long.toString(request_time));
-            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR, "时间参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "时间参数错误");
         }
 
         key = String.valueOf(parameterMap.get("key"));
         if(key == null || key.equals("") || key.equals("null")){
             System.out.println("key 参数错误");
-            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR, "key参数错误");
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "key参数错误");
         }
 
 
         uid = (Integer) parameterMap.get("uid");
         if(uid == null || uid.equals(0)){
             System.out.println("uid 参数错误");
-            throw new BusinessException(EnumError.KEY_VALIDATE_PARAM_ERROR);
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
         }
 
 

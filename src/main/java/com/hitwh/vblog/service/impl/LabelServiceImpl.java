@@ -73,7 +73,7 @@ public class LabelServiceImpl implements LabelService {
         resultNum = labelDoMapper.interestsPageCount();
 
         if(labelDos == null || labelDos.size() == 0)
-            return PageResponse.createBlank(resultNum);
+            return PageResponse.createBlank();
 
         List<LabelOutParam> labelOutParams = new ArrayList<>();
         for(int i=0; i<labelDos.size(); i++){
@@ -90,8 +90,6 @@ public class LabelServiceImpl implements LabelService {
             resultEnd = labelDos.size() - 1;
         if(resultEnd < labelDos.size() - 1)
             resultEnd = resultStart + labelDos.size() - 1;
-
-
 
         return PageResponse.create(resultStart, resultEnd, resultNum, labelDos);
     }

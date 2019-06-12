@@ -50,7 +50,7 @@
 
   <select id="selectArticleNumber" resultType="java.lang.Integer">
     select count(*)
-    from vblog_article where hidden = 0
+    from vblog_article
   </select>
   <select id="selectAllArticle" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id, title, author_id,

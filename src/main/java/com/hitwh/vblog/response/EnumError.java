@@ -35,6 +35,8 @@ public enum EnumError implements CommonError {
     CONCERN_EXIST(5002, "请勿重复关注"),
     CONCERN_DELETE_ERROR(5003, "解除关注失败"),
     TARGET_NOT_EXIST(5004, "关注者不存在"),
+    CONCERN_NOT_EXIST(5005, "没有关注关系"),
+    CONCERN_MYSELF(5006, "自己关注自己"),
 
     THUMB_INSERT_ERROR(6001, "点赞失败"),
     THUMB_EXIST(6002, "请勿重复点赞"),

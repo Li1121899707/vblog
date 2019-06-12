@@ -178,15 +178,17 @@ public class CommentServiceImpl implements CommentService {
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
 
         //往数据库中存储评论
-        Integer ifInsert;
+        Integer ifInsert = 0;
         CommentDo commentDo = new CommentDo();
         commentDo.setComment(commentModel.getComment());
         commentDo.setArticleId(commentModel.getArticleId());
         commentDo.setCommentTime(new Date(System.currentTimeMillis()));
         commentDo.setUserId(commentModel.getUserId());
 
-        if(commentModel.getParentCommentId() != null && commentModel.getParentCommentId() > 0)
-            commentModel.setParentCommentId(commentModel.getParentCommentId());
+        if(commentModel.getParentCommentId() == null || commentModel.getParentCommentId() <= 0)
+            commentDo.setParentCommentId(0);
+        else
+            commentDo.setParentCommentId(commentModel.getParentCommentId());
 
         try {
             ifInsert = commentDoMapper.insertSelective(commentDo);

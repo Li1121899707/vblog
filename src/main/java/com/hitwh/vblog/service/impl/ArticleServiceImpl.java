@@ -17,13 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
+    private static final Random rng = new Random();
+
     @Autowired
     UserDoMapper userDoMapper;
     @Autowired
@@ -388,9 +387,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleOutParam queryRandomArticle() throws BusinessException {
         int number = articleDoMapper.selectArticleNumber();
+        System.out.println("number " + number + "");
         List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectAllArticle(0,number);
         List<ArticleOutParam> articleOutParams = convertToArticleOutParams(articleAndUserDos);
-        int choice = (int)(Math.random()*number);
+
+        int choice = rng.nextInt(number);
+
         ArticleOutParam articleOutParam = articleOutParams.get(choice);
         return articleOutParam;
     }

@@ -12,6 +12,7 @@ import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.ThumbService;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -163,7 +164,7 @@ public class ThumbServiceImpl implements ThumbService {
     }
 
     @Override
-    public int queryIfThumb(ThumbModel thumbModel) throws BusinessException {
+    public Boolean queryIfThumb(ThumbModel thumbModel) throws BusinessException {
         if(thumbModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
@@ -178,9 +179,9 @@ public class ThumbServiceImpl implements ThumbService {
         int num = thumbRecordDoMapper.selectIfThumb(thumbRecordDo);
 
         if(num == 0)
-            return 0;
+            return false;
         else
-            return 1;
+            return true;
     }
 
 

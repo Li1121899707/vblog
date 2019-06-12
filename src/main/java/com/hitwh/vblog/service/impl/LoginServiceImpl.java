@@ -177,6 +177,10 @@ public class LoginServiceImpl implements LoginService {
         loginOutParam.setAllowance(userDo.getAllowance());
         loginOutParam.setUid(userDo.getUserId());
         loginOutParam.setToken(map.get("token").toString());
+        loginOutParam.setNickname(userDo.getNickname());
+        loginOutParam.setAvatar_lg(userDo.getAvatarLg());
+        loginOutParam.setAvatar_md(userDo.getAvatarMd());
+        loginOutParam.setAvatar_sm(userDo.getAvatarSm());
 
 
 //        returnMap.put("allowance",userDo.getAllowance());
@@ -379,9 +383,6 @@ public class LoginServiceImpl implements LoginService {
         String saltPassword = MyMd5.md5Encryption(password) + MyMd5.md5Encryption(salt.toString());
         if(!MyMd5.md5Encryption(saltPassword).equals(userDoFromTable.getPwd()))
             throw new BusinessException(EnumError.USER_PASSWORD_ERROR);
-
-        if(userDoFromTable.getBan() == 1)
-            throw new BusinessException(EnumError.USER_HIDDEN);
 
         LoginOutParam loginOutParam = returnMap(userDoFromTable);
 

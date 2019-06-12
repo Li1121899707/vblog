@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class ConcernController extends BaseController {
     @Autowired
     ConcernService concernService;
 
-    @LoginRequired
+   // @LoginRequired
     @PostMapping("/add")
     public CommonReturnType addConcern(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         ConcernModel concernModel = new ConcernModel();
@@ -84,11 +85,15 @@ public class ConcernController extends BaseController {
 
     }
 
+    @LoginRequired
     @PostMapping("/is_concerned")
     public CommonReturnType isConcerned(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         ConcernModel concernModel = new ConcernModel();
         concernModel.setTargetId(concernInParam.getTarget_id());
         concernModel.setUserId(concernInParam.getUid());
-        return CommonReturnType.create(concernService.isConcerned(concernModel));
+        Map<String, Object> result = new HashMap<>();
+        result.put("validate_result",concernService.isConcerned(concernModel));
+        return CommonReturnType.create(result);
     }
+
 }

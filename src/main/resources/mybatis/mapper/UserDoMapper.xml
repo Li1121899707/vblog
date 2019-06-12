@@ -9,6 +9,10 @@
     <result column="ban" jdbcType="INTEGER" property="ban" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="avatar_lg" jdbcType="VARCHAR" property="avatarLg"/>
+    <result column="avatar_md" jdbcType="VARCHAR" property="avatarMd"/>
+    <result column="avatar_sm" jdbcType="VARCHAR" property="avatarSm"/>
     <result column="allowance" jdbcType="INTEGER" property="allowance" />
   </resultMap>
   <resultMap id="BaseResultMap" type="com.hitwh.vblog.bean.UserDo">
@@ -27,6 +31,7 @@
     <result column="avatar_md" jdbcType="VARCHAR" property="avatarMd"/>
     <result column="avatar_sm" jdbcType="VARCHAR" property="avatarSm"/>
   </resultMap>
+
   <sql id="Base_Column_List">
     user_id, account, pwd, nickname, email, phone, signature, allowance, ban, register_time, salt, avatar_lg, avatar_md, avatar_sm
   </sql>

@@ -39,6 +39,9 @@ public class ConcernServiceImpl implements ConcernService {
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
 
+        if(concernModel.getUserId() == concernModel.getTargetId())
+            throw new BusinessException(EnumError.CONCERN_MYSELF);
+
         UserDo userDo = null;
         try {
             userDo = userDoMapper.selectByPrimaryKey(concernModel.getTargetId());
@@ -86,7 +89,7 @@ public class ConcernServiceImpl implements ConcernService {
 
         Integer testIfConcerned = concernRecordDoMapper.selectIsConcerned(concernRecordDo);
         if(testIfConcerned == 0)
-            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+            throw new BusinessException(EnumError.CONCERN_NOT_EXIST);
 
         int writeResult = concernRecordDoMapper.delete(concernRecordDo);
         if (writeResult != 1)
@@ -142,6 +145,11 @@ public class ConcernServiceImpl implements ConcernService {
 
     @Override
     public boolean isConcerned(ConcernModel concernModel) throws BusinessException{
+        if(concernModel.getTargetId() == null || concernModel.getUserId() == null || concernModel.getUserId()<=0 || concernModel.getTargetId()<=0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        if(concernModel.getTargetId() == concernModel.getUserId())
+            throw new BusinessException(EnumError.CONCERN_MYSELF);
+
         ConcernRecordDo concernRecordDo = new ConcernRecordDo();
         concernRecordDo.setTargetId(concernModel.getTargetId());
         concernRecordDo.setFollowerId(concernModel.getUserId());

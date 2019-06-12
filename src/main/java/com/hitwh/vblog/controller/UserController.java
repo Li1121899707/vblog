@@ -57,6 +57,9 @@ public class UserController extends BaseController {
     public CommonReturnType queryAllUserByLabel(@RequestBody UserInparam userInparam) throws BusinessException {
         Map<String, Object> map = userService.queryAllUserByLabel(userInparam.getStart(), userInparam.getEnd(), userInparam.getLabel_id());
 
+        if(map == null)
+            return CommonReturnType.create(PageResponse.createBlank());
+
         ArrayList userOutParams = (ArrayList)map.get("list");
         int sum = (int)map.get("sum");
 
@@ -94,7 +97,7 @@ public class UserController extends BaseController {
                     ,sum,userOutParams));
     }
 
-    //@LoginRequired
+    @LoginRequired
     @RequestMapping("/update")
     public CommonReturnType updateUserInfo(@RequestBody UserInparam userInparam) throws BusinessException {
         UserDo userDo = new UserDo();
@@ -120,5 +123,10 @@ public class UserController extends BaseController {
     public CommonReturnType banUser(@RequestBody UserInparam userInparam) throws BusinessException {
         userService.banUser(userInparam);
         return CommonReturnType.success();
+    }
+
+    @RequestMapping("/avatar")
+    public CommonReturnType getUserAvatar(@RequestBody UserInparam userInparam) throws BusinessException{
+        return  CommonReturnType.create(userService.userAvatar(userInparam.getUid()));
     }
 }

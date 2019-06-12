@@ -66,6 +66,7 @@ public class ThumbController extends BaseController {
     }
 
     // 查看是否点赞
+    @LoginRequired
     @RequestMapping("/query_if_thumb")
     public CommonReturnType queryIfThumb(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
         Integer articleIdInteger = articleService.getArticleId(thumbInParam.getArticle_id());

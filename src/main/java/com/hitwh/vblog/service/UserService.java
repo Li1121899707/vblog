@@ -33,4 +33,6 @@ public interface UserService {
     void updateUserInterest(List<Integer> userInterestDos, Integer userId) throws BusinessException;
 
     void banUser(UserInparam userInparam) throws BusinessException;
+
+    Map<String, Object> userAvatar(Integer uid) throws BusinessException;
 }

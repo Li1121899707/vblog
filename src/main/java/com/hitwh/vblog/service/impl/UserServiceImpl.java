@@ -1,10 +1,8 @@
 package com.hitwh.vblog.service.impl;
 
-import com.hitwh.vblog.bean.ArticleAndUserDo;
-import com.hitwh.vblog.bean.UserDo;
-import com.hitwh.vblog.bean.UserInterestDo;
-import com.hitwh.vblog.bean.UserInterestDoOut;
+import com.hitwh.vblog.bean.*;
 import com.hitwh.vblog.inparam.UserInparam;
+import com.hitwh.vblog.mapper.LabelDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.mapper.UserInterestDoMapper;
 import com.hitwh.vblog.model.UserModel;
@@ -12,6 +10,7 @@ import com.hitwh.vblog.outparam.UserOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +32,8 @@ public class UserServiceImpl implements UserService {
     UserDoMapper userDoMapper;
     @Autowired
     UserInterestDoMapper userInterestDoMapper;
+    @Autowired
+    LabelDoMapper labelDoMapper;
 
     @Override
     public UserOutParam queryById(Integer uid) throws BusinessException {
@@ -92,6 +93,16 @@ public class UserServiceImpl implements UserService {
         if(start == null || end == null || start < 0 || end < start || labelId == null || labelId <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        LabelDo labelDo = null;
+        try {
+            labelDo = labelDoMapper.selectByPrimaryKey(labelId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.LABEL_NOT_EXIST);
+        }
+
+        if(labelDo == null)
+            throw new BusinessException(EnumError.LABEL_NOT_EXIST);
+
         List<UserDo> userDos = userDoMapper.selectAllUserByLabel(start, end-start+1, labelId);
 
         if(userDos.size() == 0)
@@ -122,6 +133,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserInfo(UserDo userDo) throws BusinessException {
         if(userDo.getUserId() == null || userDo.getUserId() <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        if(userDo.getNickname() == null && userDo.getAccount() == null && userDo.getEmail() == null && userDo.getPhone() == null
+        && userDo.getSignature() == null && userDo.getAvatarSm() == null && userDo.getAvatarMd() == null && userDo.getAvatarLg() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         userDoMapper.updateByPrimaryKeySelective(userDo);
@@ -160,6 +175,29 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public Map<String, Object> userAvatar(Integer uid) throws BusinessException {
+        if(uid == null || uid <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+
+        UserDo userDo = null;
+        try {
+            userDo = userDoMapper.selectByPrimaryKey(uid);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
+
+        if(userDo == null)
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("avatar_lg", userDo.getAvatarLg());
+        map.put("avatar_md", userDo.getAvatarMd());
+        map.put("avatar_sm", userDo.getAvatarSm());
+
+        return map;
+    }
+
 
     public UserOutParam convertUserDoToUserOutParam(UserDo userDo){
         UserOutParam userOutParam = new UserOutParam();
@@ -196,8 +234,8 @@ public class UserServiceImpl implements UserService {
             userOutParams.add(userOutParam);
         }
         return userOutParams;
-
-
     }
+
+
 
 }
