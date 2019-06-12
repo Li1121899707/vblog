@@ -52,4 +52,6 @@ public interface ArticleDoMapper {
     int updateByPrimaryKey(ArticleDo record);
 
     int selectArticleIdByVirtualId(@Param("virtualId")String virtualId);
+
+    List<ArticleDo> selectByUserId(@Param("userId")Integer userId);
 }

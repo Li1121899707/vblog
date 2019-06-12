@@ -36,4 +36,6 @@ public interface CommentDoMapper {
 
     Integer updateCommentHide(Integer commentId);
 
+    List<ComAndUserDo> selectForUser(@Param("articleId") Integer articleId);
+
 }
