@@ -94,14 +94,14 @@ public class UserController extends BaseController {
                     ,sum,userOutParams));
     }
 
-    @LoginRequired
+    //@LoginRequired
     @RequestMapping("/update")
     public CommonReturnType updateUserInfo(@RequestBody UserInparam userInparam) throws BusinessException {
         UserDo userDo = new UserDo();
         userDo.setUserId(userInparam.getUid());
         userDo.setAccount(userInparam.getAccount());
         userDo.setEmail(userInparam.getEmail());
-        userDo.setNickname(userInparam.getUsername());
+        userDo.setNickname(userInparam.getNickname());
         userDo.setSignature(userInparam.getSignature());
         userDo.setPhone(userInparam.getPhone());
         userDo.setPwd(userInparam.getPwd());

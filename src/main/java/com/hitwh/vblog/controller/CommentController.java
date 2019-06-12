@@ -50,6 +50,9 @@ public class CommentController extends BaseController{
                 commentInParam.getArticle_id()
         );
 
+        if(map == null)
+            return CommonReturnType.create(PageResponse.createBlank());
+
         startGForOut = (int)map.get("start");
         endForOut = (int)map.get("end");
         numForOut = (int)map.get("sum");
@@ -74,6 +77,9 @@ public class CommentController extends BaseController{
                 commentInParam.getEnd(),
                 commentInParam.getUid());
 
+        if(map == null)
+            return CommonReturnType.create(PageResponse.createBlank());
+
         startGForOut = (int)map.get("start");
         endForOut = (int)map.get("end");
         numForOut = (int)map.get("sum");
@@ -89,7 +95,7 @@ public class CommentController extends BaseController{
         return CommonReturnType.create(commentService.selectForParent(commentInParam.getParent_comment_id()));
     }
 
-    @LoginRequired
+    //@LoginRequired
     @PostMapping("/insert")
     public CommonReturnType commentInsert(@RequestBody CommentInParam commentInParam) throws BusinessException {
         CommentModel commentModel = new CommentModel();

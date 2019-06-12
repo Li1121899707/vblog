@@ -18,6 +18,15 @@ public class PageResponse {
         return pageResponse;
     }
 
+    public static PageResponse createBlank(){
+        PageResponse pageResponse = new PageResponse();
+        pageResponse.start = 0;
+        pageResponse.end = 0;
+        pageResponse.sum = 0;
+        pageResponse.arr = null;
+        return pageResponse;
+    }
+
     public Integer getStart() {
         return start;
     }

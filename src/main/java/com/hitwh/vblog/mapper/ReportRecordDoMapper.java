@@ -2,6 +2,7 @@ package com.hitwh.vblog.mapper;
 
 import com.hitwh.vblog.bean.ReportAndArticleDo;
 import com.hitwh.vblog.bean.ReportRecordDo;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,4 +30,8 @@ public interface ReportRecordDoMapper {
     Integer selectReportRecordsByHandleResultNum(@Param("handleResult") Integer handleResult);
 
     Integer updateByArticleId(ReportRecordDo record);
+
+    Integer selectIfReported(ReportRecordDo record);
+
+    Integer selectIfArticleExist(ReportRecordDo record);
 }

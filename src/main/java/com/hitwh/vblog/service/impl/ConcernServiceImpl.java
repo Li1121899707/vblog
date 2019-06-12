@@ -2,7 +2,9 @@ package com.hitwh.vblog.service.impl;
 
 import com.hitwh.vblog.bean.ConcernAndUserDo;
 import com.hitwh.vblog.bean.ConcernRecordDo;
+import com.hitwh.vblog.bean.UserDo;
 import com.hitwh.vblog.mapper.ConcernRecordDoMapper;
+import com.hitwh.vblog.mapper.UserDoMapper;
 import com.hitwh.vblog.model.ConcernModel;
 import com.hitwh.vblog.outparam.ConcernOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -26,25 +28,47 @@ public class ConcernServiceImpl implements ConcernService {
     ConcernRecordDoMapper concernRecordDoMapper;
     @Autowired
     ValidatorImpl validator;
+    @Autowired
+    UserDoMapper userDoMapper;
     @Override
     public void insert(ConcernModel concernModel) throws BusinessException {
         if(concernModel == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         ValidationResult result = validator.validate(concernModel);
-        if(result.isHasErrors()){
+        if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+
+        UserDo userDo = null;
+        try {
+            userDo = userDoMapper.selectByPrimaryKey(concernModel.getTargetId());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.TARGET_NOT_EXIST);
         }
+
+        if(userDo == null)
+            throw new BusinessException(EnumError.TARGET_NOT_EXIST);
 
         ConcernRecordDo concernRecordDo = new ConcernRecordDo();
         concernRecordDo.setFollowerId(concernModel.getUserId());
         concernRecordDo.setTargetId(concernModel.getTargetId());
+
+        Integer testIfConcerned = concernRecordDoMapper.selectIsConcerned(concernRecordDo);
+        if(testIfConcerned != 0)
+            throw new BusinessException(EnumError.CONCERN_EXIST);
+
         Timestamp timestamp = TimestampUtil.getNowTime();
         concernRecordDo.setConcernTime(timestamp);
 
-        int writeResult = concernRecordDoMapper.insertSelective(concernRecordDo);
+        int writeResult = 0;
+        try {
+            writeResult = concernRecordDoMapper.insertSelective(concernRecordDo);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.CONCERN_INSERT_ERROR);
+        }
+
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.CONCERN_INSERT_ERROR);
     }
 
     @Override
@@ -59,9 +83,14 @@ public class ConcernServiceImpl implements ConcernService {
         ConcernRecordDo concernRecordDo = new ConcernRecordDo();
         concernRecordDo.setFollowerId(concernModel.getUserId());
         concernRecordDo.setTargetId(concernModel.getTargetId());
+
+        Integer testIfConcerned = concernRecordDoMapper.selectIsConcerned(concernRecordDo);
+        if(testIfConcerned == 0)
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+
         int writeResult = concernRecordDoMapper.delete(concernRecordDo);
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.CONCERN_DELETE_ERROR);
     }
 
     @Override
@@ -70,6 +99,9 @@ public class ConcernServiceImpl implements ConcernService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectFollower(start, end-start+1, userId);
+        if(concernAndUserDos == null || concernAndUserDos.size() == 0)
+            return null;
+
         List<ConcernOutParam> concernOutParams = new ArrayList<>();
         for (ConcernAndUserDo concernAndUserDo: concernAndUserDos) {
             ConcernOutParam concernOutParam = new ConcernOutParam();
@@ -77,6 +109,7 @@ public class ConcernServiceImpl implements ConcernService {
             concernOutParam.setUser_nickname(concernAndUserDo.getUserDo().getNickname());
             concernOutParams.add(concernOutParam);
         }
+
 
         Map<String, Object> map = new HashMap<>();
         map.put("list", concernOutParams);
@@ -90,6 +123,9 @@ public class ConcernServiceImpl implements ConcernService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         List<ConcernAndUserDo> concernAndUserDos = concernRecordDoMapper.selectTarget(start, end-start+1, userId);
+        if(concernAndUserDos == null || concernAndUserDos.size() == 0)
+            return null;
+
         List<ConcernOutParam> concernOutParams = new ArrayList<>();
         for (ConcernAndUserDo concernAndUserDo: concernAndUserDos) {
             ConcernOutParam concernOutParam = new ConcernOutParam();
@@ -101,7 +137,6 @@ public class ConcernServiceImpl implements ConcernService {
         Map<String, Object> map = new HashMap<>();
         map.put("list", concernOutParams);
         map.put("sum", concernRecordDoMapper.selectTargetNum(userId));
-
         return map;
     }
 

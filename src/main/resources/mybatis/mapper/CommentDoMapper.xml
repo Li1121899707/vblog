@@ -46,7 +46,7 @@
       #{comment,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP}, #{parentCommentId,jdbcType=INTEGER},
       #{commentHide,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.CommentDo">
+  <insert id="insertSelective" parameterType="com.hitwh.vblog.bean.CommentDo" useGeneratedKeys="true" keyProperty="commentId">
     insert into vblog_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="commentId != null">

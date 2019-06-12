@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author liysuzy
  * @description: 点赞Controller
@@ -25,7 +28,7 @@ public class ThumbController extends BaseController {
     ThumbService thumbService;
 
     // 添加点赞
-    //@LoginRequired
+    @LoginRequired
     @PostMapping("/add")
     public CommonReturnType insertThumb(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
         ThumbModel thumbModel = new ThumbModel();
@@ -51,7 +54,9 @@ public class ThumbController extends BaseController {
     // 查看点赞数
     @RequestMapping("/query_thumb_number")
     public CommonReturnType queryThumbNumber(@RequestBody ThumbInParam thumbInParam) throws BusinessException {
-        return CommonReturnType.create(thumbService.countThumbNum(thumbInParam.getArticle_id()));
+        Map<String,Object> map = new HashMap<>();
+        map.put("thumb_num",thumbService.countThumbNum(thumbInParam.getArticle_id()));
+        return CommonReturnType.create(map);
     }
 
     // 查看是否点赞
@@ -60,8 +65,9 @@ public class ThumbController extends BaseController {
         ThumbModel thumbModel = new ThumbModel();
         thumbModel.setArticleId(thumbInParam.getArticle_id());
         thumbModel.setUserId(thumbInParam.getUid());
-
-        return CommonReturnType.create(thumbService.queryIfThumb(thumbModel));
+        Map<String,Object> map = new HashMap<>();
+        map.put("validate_result",thumbService.queryIfThumb(thumbModel));
+        return CommonReturnType.create(map);
     }
 
 }

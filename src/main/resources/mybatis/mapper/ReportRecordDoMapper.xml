@@ -58,6 +58,16 @@
     select count(*) from vblog_report_record where vblog_report_record.article_id = #{articleId}
   </select>
 
+  <select id="selectIfReported" resultType="java.lang.Integer">
+    select count(*) from vblog_report_record where
+    vblog_report_record.article_id = #{articleId}
+    and vblog_report_record.reporter_id = #{reporterId}
+  </select>
+
+  <select id="selectIfArticleExist" resultType="java.lang.Integer">
+    select count(*) from vblog_report_record where
+    vblog_report_record.article_id = #{articleId}
+  </select>
 
   <select id="selectReportRecordsByHandleResult" resultMap="RecordAndArticleMap">
     SELECT vblog_article.article_id, vblog_article.virtual_id, title, reporter_id,
@@ -75,7 +85,8 @@
   </select>
 
   <update id="updateByArticleId" parameterType="com.hitwh.vblog.bean.ReportRecordDo">
-    update vblog_report_record set handle_result = #{handleResult} where article_id = #{articleId}
+    update vblog_report_record set handle_result = #{handleResult}, admin_id = #{adminId},
+     handle_time = #{handleTime} where article_id = #{articleId}
   </update>
 
 

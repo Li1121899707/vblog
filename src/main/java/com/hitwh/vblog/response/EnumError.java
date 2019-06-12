@@ -20,6 +20,30 @@ public enum EnumError implements CommonError {
     ARTICLE_DELETE_FAILED(2004, "文章删除失败"),
 
     PARENT_COMMENT_HIDDEN(3001,"评论被隐藏"),
+    COMMENT_INSERT_ERROR(3002,"添加评论失败"),
+    COMMENT_UPDATE_ERROR(3003,"修改评论失败"),
+
+    LABEL_EXIST(4001,"标签已存在"),
+    LABEL_INSERT_ERROR(4002, "添加标签失败"),
+    LABEL_UPDATE_ERROR(4003, "修改标签失败"),
+
+    CONCERN_INSERT_ERROR(5001, "关注失败"),
+    CONCERN_EXIST(5002, "请勿重复关注"),
+    CONCERN_DELETE_ERROR(5003, "解除关注失败"),
+    TARGET_NOT_EXIST(5004, "关注者不存在"),
+
+    THUMB_INSERT_ERROR(6001, "点赞失败"),
+    THUMB_EXIST(6002, "请勿重复点赞"),
+    THUMB_DELETE_ERROR(6003, "取消点赞失败"),
+    THUMB_NOT_EXIST(6004, "未点赞，不可取消点赞"),
+
+    REPORT_FAILED(7001, "不可举报自己文章"),
+    REPORT_EXIST(7002, "举报已存在"),
+    REPORT_INSERT_ERROR(7003, "添加举报失败"),
+    REPORT_NOT_EXIST(7004, "举报不存在"),
+    REPORT_HANDLE_ERROR(7005, "处理举报失败"),
+
+
     //COMMENT_HIDE_ERROR(3002,"评论隐藏失败"),
     //DATABASE_INSERT_ERROR(2001, "数据库添加失败"),
     //DATABASE_QUERY_NULL_ERROR(2002, "数据库查询数据为空"),

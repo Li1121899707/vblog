@@ -123,12 +123,6 @@ public class ArticleController extends BaseController {
         return CommonReturnType.create(map);
     }
 
-    @RequestMapping("/query_all")
-    public CommonReturnType queryAllArticle(@RequestBody ArticleInParam articleInParam) throws BusinessException{
-        return CommonReturnType.create(articleService.selectAllArticle(articleInParam.getStart(),
-                articleInParam.getEnd()));
-    }
-
     @RequestMapping("/recommend")
     public CommonReturnType recommend() throws BusinessException{
         return CommonReturnType.create(articleService.recommend());

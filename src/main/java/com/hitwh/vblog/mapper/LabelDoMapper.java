@@ -14,6 +14,8 @@ public interface LabelDoMapper {
 
     LabelDo selectByPrimaryKey(Integer lableId);
 
+    LabelDo selectByLabelName(@Param("labelName")String labelName);
+
     int updateByPrimaryKeySelective(LabelDo record);
 
     int updateByPrimaryKey(LabelDo record);

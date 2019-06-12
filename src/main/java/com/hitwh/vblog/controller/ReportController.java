@@ -47,13 +47,11 @@ public class ReportController extends BaseController{
         Map<String,Object> result = reportService.queryAllReports(reportInParam.getStart(),
                 reportInParam.getEnd());
 
+        if(result == null)
+            return CommonReturnType.create(PageResponse.createBlank());
+
         int sum = (int) result.get("sum");
-        // sum = 0, 读取数据为空，直接返回前台，data为空
-        if(sum == 0)
-            return CommonReturnType.success();
-
         ArrayList reportOutParams = (ArrayList) result.get("list");
-
         int end = reportInParam.getEnd() - reportInParam.getStart() ;
         if(end > reportOutParams.size()) end = reportOutParams.size() + reportInParam.getStart() - 1;
 
@@ -66,10 +64,10 @@ public class ReportController extends BaseController{
         Map<String,Object> result = reportService.queryReportsByArticleId(reportInParam.getStart(),
                 reportInParam.getEnd(), reportInParam.getArticle_id());
 
-        int sum = (int) result.get("sum");
-        if(sum == 0)
-            return CommonReturnType.success();
+        if(result == null)
+            return CommonReturnType.create(PageResponse.createBlank());
 
+        int sum = (int) result.get("sum");
         ArrayList reportOutParams = (ArrayList) result.get("list");
 
         int end = reportInParam.getEnd() - reportInParam.getStart() ;
@@ -84,20 +82,18 @@ public class ReportController extends BaseController{
         Map<String,Object> result = reportService.queryReportsByHandleResult(reportInParam.getStart(),
                 reportInParam.getEnd(), reportInParam.getHandle_result());
 
+        if(result == null)
+            return CommonReturnType.create(PageResponse.createBlank());
+
         int sum = (int) result.get("sum");
-        // sum = 0, 读取数据为空，直接返回前台，data为空
-        if(sum == 0)
-            return CommonReturnType.success();
 
         ArrayList reportOutParams = (ArrayList) result.get("list");
-
         int end = reportInParam.getEnd() - reportInParam.getStart() ;
         if(end > reportOutParams.size()) end = reportOutParams.size() + reportInParam.getStart() - 1;
-
         return CommonReturnType.create(PageResponse.create(reportInParam.getStart(),end,sum,reportOutParams));
     }
 
-    @LoginRequired(admin = true)
+    //@LoginRequired(admin = true)
     @RequestMapping("/admin/handle")
     public CommonReturnType handleReport(@RequestBody ReportInParam reportInParam) throws BusinessException {
         ReportModel reportModel = new ReportModel();

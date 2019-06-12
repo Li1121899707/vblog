@@ -49,13 +49,11 @@ public class ConcernController extends BaseController {
     @RequestMapping("/query_concern_follower")
     public CommonReturnType queryConcernFollower(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         Map<String, Object> map = concernService.queryFollower(concernInParam.getStart(), concernInParam.getEnd(), concernInParam.getUid());
+        if(map == null)
+            return CommonReturnType.create(PageResponse.createBlank());
 
-        List<ConcernOutParam> concernOutParams = (ArrayList)map.get("list");
+        ArrayList concernOutParams = (ArrayList)map.get("list");
         int sum = (int)map.get("sum");
-
-        if(sum == 0)
-            return CommonReturnType.success();
-
         if(concernOutParams.size() ==
                 concernInParam.getEnd() - concernInParam.getStart() + 1)
             return CommonReturnType.create(PageResponse.create(concernInParam.getStart(),
@@ -70,13 +68,11 @@ public class ConcernController extends BaseController {
     @RequestMapping("/query_concern_target")
     public CommonReturnType queryConcernTarget(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         Map<String, Object> map = concernService.queryTarget(concernInParam.getStart(), concernInParam.getEnd(), concernInParam.getUid());
+        if(map == null)
+            return CommonReturnType.create(PageResponse.createBlank());
 
-        List<ConcernOutParam> concernOutParams = (ArrayList)map.get("list");
+        ArrayList concernOutParams = (ArrayList)map.get("list");
         int sum = (int)map.get("sum");
-
-        if(sum == 0)
-            return CommonReturnType.success();
-
         if(concernOutParams.size() ==
                 concernInParam.getEnd() - concernInParam.getStart() + 1)
             return CommonReturnType.create(PageResponse.create(concernInParam.getStart(),

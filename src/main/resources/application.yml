@@ -6,7 +6,7 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://140.143.194.120:3306/vblog?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
-    # url: jdbc:mysql://127.0.0.1:3306/vblog?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    #url: jdbc:mysql://127.0.0.1:3306/vblog?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
 
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml

@@ -1,8 +1,10 @@
 package com.hitwh.vblog.service.impl;
 
+import com.hitwh.vblog.bean.ArticleDo;
 import com.hitwh.vblog.bean.ArticleDynamicDo;
 import com.hitwh.vblog.bean.ComAndUserDo;
 import com.hitwh.vblog.bean.CommentDo;
+import com.hitwh.vblog.mapper.ArticleDoMapper;
 import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
 import com.hitwh.vblog.mapper.CommentDoMapper;
 import com.hitwh.vblog.mapper.UserDoMapper;
@@ -17,10 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -35,26 +34,35 @@ public class CommentServiceImpl implements CommentService {
     ValidatorImpl validator;
     @Autowired
     UserDoMapper userDoMapper;
-
+    @Autowired
+    ArticleDoMapper articleDoMapper;
     @Autowired
     ArticleDynamicDoMapper articleDynamicDoMapper;
 
 
     @Override
     public Map<String,Object> selectDisplayComment(Integer start, Integer end, Integer articleId) throws BusinessException {
-        if(start == null || end == null || articleId == null || start < 0|| end < start)
+        if(start == null || end == null || articleId == null || start < 0|| end < start )
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         int num = end - start + 1;
+        int sum = 0;
 
         Map<String,Object> map = new HashMap<>();
 
         //通过文章的ID查找出所有的评论
-        int sum = commentDoMapper.selectByArticleId(articleId).size();
+        try {
+            sum = commentDoMapper.selectByArticleId(articleId).size();
+        }catch (Exception e){
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+        }
 
         //查找出要展示的评论
         List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayComment(
                 start,num, articleId);
+
+        if(comAndUserDoList == null || comAndUserDoList.size() == 0)
+            return null;
 
         //将格式转换成输出类型
         List<CommentOutParam> commentOutParamList = new ArrayList<>();
@@ -74,7 +82,8 @@ public class CommentServiceImpl implements CommentService {
         map.put("list",commentOutParamList);
         return map;
     }
-//通过用户ID来查找评论
+
+    //通过用户ID来查找评论
     @Override
     public Map<String, Object> selectDisplayCommentById(Integer start, Integer end, Integer userId) throws BusinessException {
         if(start == null || end == null || userId == null || start < 0|| end < start)
@@ -89,6 +98,9 @@ public class CommentServiceImpl implements CommentService {
         List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayCommentById(
                 start,num, userId);
 
+        if(comAndUserDoList == null || comAndUserDoList.size() == 0)
+            return null;
+
         //将格式转换成输出类型
         List<CommentOutParam> commentOutParamList = new ArrayList<>();
         for (ComAndUserDo c:comAndUserDoList) {
@@ -108,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
 
         return map;
     }
-//查找父评论
+    //查找父评论
     @Override
     public CommentOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
         if(parent_comment_id == null || parent_comment_id <= 0)
@@ -117,7 +129,7 @@ public class CommentServiceImpl implements CommentService {
         ComAndUserDo comAndUserDo = commentDoMapper.selectForParent(parent_comment_id);
         //判断是否为空
         if (comAndUserDo == null)
-            return null;
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
         //转换成commentoutparam
         CommentOutParam commentOutParam = typeChange(comAndUserDo);
         //判断父评论是否被隐藏
@@ -137,19 +149,50 @@ public class CommentServiceImpl implements CommentService {
         if (result.isHasErrors()) {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
+
+        ArticleDo articleDo;
+        try {
+            articleDo = articleDoMapper.selectByPrimaryKey(commentModel.getArticleId());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+        }
+
+        if(articleDo == null)
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+
         //往数据库中存储评论
         Integer ifInsert;
         CommentDo commentDo = new CommentDo();
-        BeanUtils.copyProperties(commentModel, commentDo);
+        commentDo.setComment(commentModel.getComment());
+        commentDo.setArticleId(commentModel.getArticleId());
+        commentDo.setCommentTime(new Date(System.currentTimeMillis()));
+        commentDo.setUserId(commentModel.getUserId());
+
+        if(commentModel.getParentCommentId() != null && commentModel.getParentCommentId() > 0)
+            commentModel.setParentCommentId(commentModel.getParentCommentId());
+
         try {
             ifInsert = commentDoMapper.insertSelective(commentDo);
         } catch (Exception e) {
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.COMMENT_INSERT_ERROR);
         }
         //返回值不为1则抛出错误
         if (ifInsert != 1) {
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.COMMENT_INSERT_ERROR);
         }
+
+        if(commentModel.getParentCommentId() == null || commentModel.getParentCommentId() <=0){
+            CommentDo updateCommentDo = new CommentDo();
+            updateCommentDo.setCommentId(commentDo.getCommentId());
+            updateCommentDo.setParentCommentId(commentDo.getCommentId());
+            try {
+                commentDoMapper.updateByPrimaryKeySelective(updateCommentDo);
+            }catch (Exception e){
+                throw new BusinessException(EnumError.COMMENT_INSERT_ERROR);
+            }
+
+        }
+
         articleDynamicDo.setArticleId(commentModel.getArticleId());
         articleDynamicDo.setCommentNum(1);
         int i = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);

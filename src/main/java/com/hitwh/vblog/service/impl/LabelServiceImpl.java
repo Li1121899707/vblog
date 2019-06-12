@@ -33,10 +33,15 @@ public class LabelServiceImpl implements LabelService {
         if(id == null || id <=0 )
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        LabelDo labelDo = labelDoMapper.selectByPrimaryKey(id);
+        LabelDo labelDo = null;
+        try {
+            labelDo = labelDoMapper.selectByPrimaryKey(id);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+        }
 
         if(labelDo == null)
-            return null;
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
 
         LabelOutParam labelOutParam = new LabelOutParam();
         labelOutParam.setLabel_id(labelDo.getLabelId());
@@ -57,12 +62,16 @@ public class LabelServiceImpl implements LabelService {
             labelDos = labelDoMapper.selectAllInterests();
         }
         else if(start != null && end != null && start >= 0 && end >= start){
-            labelDos = labelDoMapper.selectAllInterestsWithPage(start, end-start+1);
+            try {
+                labelDos = labelDoMapper.selectAllInterestsWithPage(start, end-start+1);
+            }catch (Exception e){
+                throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+            }
         }else
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         if(labelDos == null || labelDos.size() == 0)
-            return null;
+            return PageResponse.createBlank();
 
         List<LabelOutParam> labelOutParams = new ArrayList<>();
         for(int i=0; i<labelDos.size(); i++){
@@ -95,6 +104,10 @@ public class LabelServiceImpl implements LabelService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
 
+        LabelDo testLabelDo = labelDoMapper.selectByLabelName(labelModel.getLabelName());
+        if(testLabelDo != null)
+            throw new BusinessException(EnumError.LABEL_EXIST);
+
         LabelDo labelDo = new LabelDo();
         labelDo.setLabelName(labelModel.getLabelName());
         labelDo.setDescription(labelModel.getDescription());
@@ -102,7 +115,7 @@ public class LabelServiceImpl implements LabelService {
         Integer column = labelDoMapper.insert(labelDo);
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.LABEL_INSERT_ERROR);
     }
 
     @Override
@@ -113,20 +126,26 @@ public class LabelServiceImpl implements LabelService {
         if(labelModel.getLabelId() == null || labelModel.getLabelId() <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        ValidationResult result = validator.validate(labelModel);
-        if(result.isHasErrors()){
-            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
-        }
+        if(labelModel.getDescription() == null && labelModel.getLabelName() == null)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+        if(labelModel.getLabelName() != null && labelModel.getLabelName().equals(""))
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+        if(labelModel.getDescription() != null && labelModel.getDescription().equals(""))
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
         LabelDo labelDo = new LabelDo();
         labelDo.setLabelId(labelModel.getLabelId());
         labelDo.setLabelName(labelModel.getLabelName());
         labelDo.setDescription(labelModel.getDescription());
 
-        Integer column = labelDoMapper.updateByPrimaryKeySelective(labelDo);
+        Integer column = 0;
+
+            column = labelDoMapper.updateByPrimaryKeySelective(labelDo);
+
+
 
         if(column == null || column == 0)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.LABEL_UPDATE_ERROR);
     }
 
 

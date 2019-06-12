@@ -13,9 +13,7 @@ public class CommentModel {
     private Integer userId;
     @NotBlank(message = "评论不能为空")
     private String comment;
-    @NotNull(message = "日期不能为空")
     private Date commentTime;
-    @NotNull(message = "父评论不能为空")
     private Integer parentCommentId;
 
     public Integer getCommentId() {

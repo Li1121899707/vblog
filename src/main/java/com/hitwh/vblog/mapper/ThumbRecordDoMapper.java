@@ -12,5 +12,5 @@ public interface ThumbRecordDoMapper {
 
     int countThumbNum(@Param("articleId") Integer articleId);
 
-    ThumbRecordDo selectIfThumb(ThumbRecordDo record);
+    int selectIfThumb(ThumbRecordDo record);
 }

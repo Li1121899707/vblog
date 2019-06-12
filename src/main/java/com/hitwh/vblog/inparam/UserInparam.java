@@ -36,6 +36,16 @@ public class UserInparam extends BaseInParam {
 
     private Integer ban_user_id;
 
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public Integer getBan_user_id() {
         return ban_user_id;
     }
