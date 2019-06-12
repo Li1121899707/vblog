@@ -1,10 +1,7 @@
 package com.hitwh.vblog.service.impl;
 
 import com.hitwh.vblog.bean.*;
-import com.hitwh.vblog.mapper.ArticleDoMapper;
-import com.hitwh.vblog.mapper.ArticleDynamicDoMapper;
-import com.hitwh.vblog.mapper.ArticleLabelDoMapper;
-import com.hitwh.vblog.mapper.UserDoMapper;
+import com.hitwh.vblog.mapper.*;
 import com.hitwh.vblog.model.ArticleModel;
 import com.hitwh.vblog.outparam.ArticleOutParam;
 import com.hitwh.vblog.response.BusinessException;
@@ -37,6 +34,8 @@ public class ArticleServiceImpl implements ArticleService {
     ValidatorImpl validator;
     @Autowired
     ArticleLabelDoMapper articleLabelDoMapper;
+    @Autowired
+    LabelDoMapper labelDoMapper;
 
     @Override
     public void write(ArticleModel articleModel) throws BusinessException {
@@ -52,7 +51,12 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
         ArticleLabelDo articleLabelDo = new ArticleLabelDo();
 
-        userDo = userDoMapper.selectByPrimaryKey(articleModel.getUid());
+        try {
+            userDo = userDoMapper.selectByPrimaryKey(articleModel.getUid());
+        }catch (Exception e){
+            System.out.println("用户不存在");
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
 
         String title = articleModel.getTitle();
         String author = userDo.getAccount();
@@ -69,10 +73,15 @@ public class ArticleServiceImpl implements ArticleService {
         articleDo.setReleaseTime(timeStamp);
         articleDo.setUpdateTime(timeStamp);
 
-        Integer writeResult = articleDoMapper.insertSelective(articleDo);
+        Integer writeResult = 0;
+        try {
+            writeResult = articleDoMapper.insertSelective(articleDo);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_INSERT_ERROR);
+        }
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_INSERT_ERROR);
 
         articleDynamicDo.setArticleId(articleDo.getArticleId());
         articleDynamicDo.setVirtualId(virture);
@@ -80,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult = articleDynamicDoMapper.insertSelective(articleDynamicDo);
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_INSERT_ERROR);
 
         articleLabelDo.setArticleId(articleDo.getArticleId());
         articleLabelDo.setLabelId(articleModel.getType_1());
@@ -89,7 +98,7 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult = articleLabelDoMapper.insert(articleLabelDo);
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_INSERT_ERROR);
 
         if (articleModel.getType_2() != null)
         {
@@ -100,7 +109,7 @@ public class ArticleServiceImpl implements ArticleService {
             writeResult = articleLabelDoMapper.insert(articleLabelDo);
 
             if (writeResult != 1)
-                throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+                throw new BusinessException(EnumError.ARTICLE_INSERT_ERROR);
         }
     }
 
@@ -120,12 +129,14 @@ public class ArticleServiceImpl implements ArticleService {
 
         boolean deletedTA = true, deletedTB = true, deleteTC = true;
 
-        deletedTA = deleteResult == 1;
         if (deleteResult != 1)
             throw new BusinessException(EnumError.ARTICLE_DELETE_FAILED);
 
-        deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
-        deletedTB = deleteResult == 1;
+        try {
+            deleteResult = articleDynamicDoMapper.deleteByPrimaryKey(article_id);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
 
 //        if(deletedTA && deletedTB) // success
 //            else
@@ -134,8 +145,12 @@ public class ArticleServiceImpl implements ArticleService {
         if (deleteResult != 1)
             throw new BusinessException(EnumError.ARTICLE_DELETE_FAILED);
 
-        deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
-        deletedTB = deleteResult == 1;
+        try {
+            deleteResult = articleLabelDoMapper.deleteByPrimaryKey(article_id);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
+
         if(deleteResult < 1)
             throw new BusinessException(EnumError.ARTICLE_DELETE_FAILED);
 
@@ -172,10 +187,15 @@ public class ArticleServiceImpl implements ArticleService {
         Timestamp timeStamp = TimestampUtil.getNowTime();
         articleDo.setUpdateTime(timeStamp);
 
-        Integer writeResult  = articleDoMapper.updateByPrimaryKeySelective(articleDo);
+        Integer writeResult  = 0;
+        try {
+            writeResult = articleDoMapper.updateByPrimaryKeySelective(articleDo);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_UPDATE_ERROR);
+        }
 
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_UPDATE_ERROR);
 
         ArticleLabelDo articleLabelDo = new ArticleLabelDo();
         articleLabelDo.setArticleId(articleModel.getArticle_id());
@@ -185,7 +205,7 @@ public class ArticleServiceImpl implements ArticleService {
         writeResult = articleLabelDoMapper.deleteByPrimaryKey(articleLabelDo.getArticleId());
         writeResult = articleLabelDoMapper.insert(articleLabelDo);
         if (writeResult != 1)
-            throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(EnumError.ARTICLE_UPDATE_ERROR);
         if (articleModel.getType_2() != null)
         {
             articleLabelDo.setArticleId(articleModel.getArticle_id());
@@ -193,7 +213,7 @@ public class ArticleServiceImpl implements ArticleService {
 
             writeResult = articleLabelDoMapper.insert(articleLabelDo);
             if (writeResult != 1)
-                throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);
+                throw new BusinessException(EnumError.ARTICLE_UPDATE_ERROR);
         }
     }
 
@@ -233,6 +253,16 @@ public class ArticleServiceImpl implements ArticleService {
         if(start == null || end == null || start < 0 || end < start || end == 0 || authorId == null || authorId == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        UserDo userDo = null;
+        try {
+            userDo = userDoMapper.selectByPrimaryKey(authorId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
+
+        if(userDo == null)
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByUserId(authorId);
         List<ArticleAndUserDo> articleAndUserDos = articleDoMapper.selectArticleByUserId(start, end-start+1, authorId);
@@ -248,6 +278,15 @@ public class ArticleServiceImpl implements ArticleService {
     public Map<String, Object> selectArticleByType(Integer start, Integer end, Integer typeId) throws BusinessException {
         if(start == null || end == null || start < 0 || end < start || end == 0 || typeId == null || typeId == 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        LabelDo labelDo = null;
+        try {
+            labelDo = labelDoMapper.selectByPrimaryKey(typeId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.LABEL_NOT_EXIST);
+        }
+        if(labelDo == null)
+            throw new BusinessException(EnumError.LABEL_NOT_EXIST);
 
         Map<String,Object> map = new HashMap<>();
         int sum = articleDoMapper.selectArticleNumByType(typeId);

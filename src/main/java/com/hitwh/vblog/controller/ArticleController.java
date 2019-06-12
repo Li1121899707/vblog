@@ -75,7 +75,7 @@ public class ArticleController extends BaseController {
                 articleInParam.getEnd(), articleInParam.getAuthor_id());
 
         if(result == null)
-            return CommonReturnType.success();
+            return CommonReturnType.create(PageResponse.createBlank());
 
         ArrayList articleOutParams = (ArrayList) result.get("list");
 
@@ -92,7 +92,7 @@ public class ArticleController extends BaseController {
                 articleInParam.getEnd(), articleInParam.getTitle());
 
         if(result == null)
-            return CommonReturnType.success();
+            return CommonReturnType.create(PageResponse.createBlank());
 
         ArrayList articleOutParams =  (ArrayList) result.get("list");
 
@@ -109,7 +109,7 @@ public class ArticleController extends BaseController {
                 articleInParam.getEnd(), articleInParam.getType_1());
 
         if(result == null)
-            return CommonReturnType.success();
+            return CommonReturnType.create(PageResponse.createBlank());
 
         ArrayList articleOutParams = (ArrayList) result.get("list");
 

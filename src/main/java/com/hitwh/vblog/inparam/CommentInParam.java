@@ -7,6 +7,7 @@ public class CommentInParam extends BaseInParam {
     private Integer comment_id;
     private String comment;
     private Integer parent_comment_id;
+    private Integer user_id;
 
     public String getArticle_id() {
         return article_id;
@@ -56,5 +57,13 @@ public class CommentInParam extends BaseInParam {
 
     public void setParent_comment_id(Integer parent_comment_id) {
         this.parent_comment_id = parent_comment_id;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 }

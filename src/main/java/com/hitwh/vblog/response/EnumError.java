@@ -17,7 +17,9 @@ public enum EnumError implements CommonError {
 
     ARTICLE_NOT_EXIST(2001, "文章不存在"),
     ARTICLE_HIDDEN(2002, "文章被隐藏"),
-    ARTICLE_DELETE_FAILED(2004, "文章删除失败"),
+    ARTICLE_INSERT_ERROR(2003,"添加文章失败"),
+    ARTICLE_DELETE_FAILED(2004, "删除文章失败"), // +
+    ARTICLE_UPDATE_ERROR(2005,"修改文章失败"), // +
 
     PARENT_COMMENT_HIDDEN(3001,"评论被隐藏"),
     COMMENT_INSERT_ERROR(3002,"添加评论失败"),
@@ -27,6 +29,7 @@ public enum EnumError implements CommonError {
     LABEL_EXIST(4001,"标签已存在"),
     LABEL_INSERT_ERROR(4002, "添加标签失败"),
     LABEL_UPDATE_ERROR(4003, "修改标签失败"),
+    LABEL_NOT_EXIST(4004, "标签不存在"),
 
     CONCERN_INSERT_ERROR(5001, "关注失败"),
     CONCERN_EXIST(5002, "请勿重复关注"),
