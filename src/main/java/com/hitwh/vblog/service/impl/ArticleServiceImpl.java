@@ -244,6 +244,21 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleLabelDoSimple> articleLabelDoSimples = articleLabelDoMapper.selectAllArticleInterest(articleAndUserDo.getArticleDo().getArticleId());
         articleOutParam.setLabels(articleLabelDoSimples);
 
+        // 阅读量 +1
+        ArticleDynamicDo articleDynamicDo = new ArticleDynamicDo();
+        articleDynamicDo.setArticleId(article_id);
+        articleDynamicDo.setReadingNum(1);
+        Integer addColum = 0;
+        try {
+            addColum = articleDynamicDoMapper.addArticleDynamic(articleDynamicDo);
+        }catch (Exception e){
+            System.out.println("阅读量加一失败");
+            return articleOutParam;
+        }
+
+        if(addColum == null || addColum == 0)
+            return articleOutParam;
+
         return articleOutParam;
     }
 
