@@ -113,48 +113,48 @@ public class CommentServiceImpl implements CommentService {
             throw new BusinessException(EnumError.USER_NOT_EXIST);
 
         //查找出要展示的评论
-        List<ComAndUserDo> comAndUserDoList = commentDoMapper.selectDisplayCommentById(
+        List<ComUserArticleDo> comUserArticleDos = commentDoMapper.selectDisplayCommentById(
                 start,num, userId);
 
-        if(comAndUserDoList == null || comAndUserDoList.size() == 0)
+        if(comUserArticleDos == null || comUserArticleDos.size() == 0)
             return null;
 
         //将格式转换成输出类型
-        List<CommentOutParam> commentOutParamList = new ArrayList<>();
-        for (ComAndUserDo c:comAndUserDoList) {
-            commentOutParamList.add(typeChange(c));
+        List<CommentForUserOutParam> commentForUserOutParams = new ArrayList<>();
+        for (ComUserArticleDo c:comUserArticleDos) {
+            commentForUserOutParams.add(typeChange1(c));
         }
 
         //判断是否取到足够的数据
-        if (comAndUserDoList.size() < num)
-            endForOut = start + comAndUserDoList.size() - 1;
+        if (comUserArticleDos.size() < num)
+            endForOut = start + comUserArticleDos.size() - 1;
         else endForOut = start + num - 1;
 
         //将数据进行封装，返回
         map.put("start",start);
         map.put("end",endForOut);
         map.put("sum",sum);
-        map.put("list",commentOutParamList);
+        map.put("list",commentForUserOutParams);
 
         return map;
     }
     //查找父评论
     @Override
-    public CommentOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
+    public CommentForUserOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
         if(parent_comment_id == null || parent_comment_id <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         //通过数据库查询评论
-        ComAndUserDo comAndUserDo = commentDoMapper.selectForParent(parent_comment_id);
+        ComUserArticleDo comUserArticleDo = commentDoMapper.selectForParent(parent_comment_id);
         //判断是否为空
-        if (comAndUserDo == null)
+        if (comUserArticleDo == null)
             throw new BusinessException(EnumError.QUERY_NOT_EXIST);
         //转换成commentoutparam
-        CommentOutParam commentOutParam = typeChange(comAndUserDo);
+        CommentForUserOutParam commentForUserOutParam = typeChange1(comUserArticleDo);
         //判断父评论是否被隐藏
 //        if(comAndUserDo.getCommentDo().getCommentHide() == 1)
 //            throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
 
-        return commentOutParam;
+        return commentForUserOutParam;
     }
 //添加评论
     @Override
@@ -275,22 +275,23 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Map<String, Object>> queryForUser(Integer userId) throws BusinessException {
+    public List<CommentForUserOutParam> queryForUser(Integer userId) throws BusinessException {
         if (userId == null||userId <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
-        
+
         List<ArticleDo> articleDoList = articleDoMapper.selectByUserId(userId);
         //List<List<>>
-        List<Map<String,Object>> maps = new ArrayList<>();
+//        List<Map<String,Object>> maps = new ArrayList<>();
+        List<CommentForUserOutParam> commentForUserOutParams = new ArrayList<>();
         for (int i = 0;i < articleDoList.size();i++)
         {
             Map<String,Object> map = new HashMap<>();
-            List<CommentForUserOutParam> commentForUserOutParams = new ArrayList<>();
+
             List<ComAndUserDo> comAndUserDos = commentDoMapper.selectForUser(articleDoList.get(i).getArticleId());
             for (int j = 0;j < comAndUserDos.size();j++){
 
                 CommentForUserOutParam commentForUserOutParam = new CommentForUserOutParam();
-                commentForUserOutParam.setArticle_id(articleDoList.get(i).getArticleId());
+                commentForUserOutParam.setArticle_id(articleDoList.get(i).getVirtualId());
                 commentForUserOutParam.setTitle(articleDoList.get(i).getTitle());
                 commentForUserOutParam.setAvatar_sm(comAndUserDos.get(j).getUserDo().getAvatarSm());
                 commentForUserOutParam.setComment(comAndUserDos.get(j).getCommentDo().getComment());
@@ -301,12 +302,12 @@ public class CommentServiceImpl implements CommentService {
 
                 commentForUserOutParams.add(commentForUserOutParam);
             }
-            map.put("title",articleDoList.get(i).getTitle());
-            map.put("comment",commentForUserOutParams);
-            maps.add(map);
+//            map.put("title",articleDoList.get(i).getTitle());
+//            map.put("comment",commentForUserOutParams);
+//            maps.add(map);
         }
 
-        return maps;
+        return commentForUserOutParams;
     }
 
     //将数据库查出的类型转换为输出类型
@@ -320,5 +321,23 @@ public class CommentServiceImpl implements CommentService {
         commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
         commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
         return commentOutParam;
+    }
+    //将数据库查出的类型转换为输出类型
+    public CommentForUserOutParam typeChange1(ComUserArticleDo comUserArticleDo){
+        CommentForUserOutParam commentForUserOutParam = new CommentForUserOutParam();
+        if (comUserArticleDo.getArticleDo().getTitle() == null||
+                comUserArticleDo.getArticleDo().getTitle().equals(""))
+            commentForUserOutParam.setTitle("文章不存在");
+
+        commentForUserOutParam.setTitle(comUserArticleDo.getArticleDo().getTitle());
+        commentForUserOutParam.setArticle_id(comUserArticleDo.getArticleDo().getVirtualId());
+        commentForUserOutParam.setUser_nickname(comUserArticleDo.getUserDo().getNickname());
+        commentForUserOutParam.setComment(comUserArticleDo.getCommentDo().getComment());
+        commentForUserOutParam.setUser_id(comUserArticleDo.getUserDo().getUserId());
+        commentForUserOutParam.setAvatar_sm(comUserArticleDo.getUserDo().getAvatarSm());
+        commentForUserOutParam.setParent_comment_id(comUserArticleDo.getCommentDo().getCommentId());
+        commentForUserOutParam.setComment_time(comUserArticleDo.getCommentDo().getCommentTime().getTime()/1000);
+
+        return commentForUserOutParam;
     }
 }

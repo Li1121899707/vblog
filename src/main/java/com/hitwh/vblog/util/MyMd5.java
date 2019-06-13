@@ -33,9 +33,15 @@ public class MyMd5 {
         Random random = new Random(System.currentTimeMillis());
         Integer salt = random.nextInt(8999) + 1000;
         try {
+            System.out.println("password : " + plainText);
+            System.out.println("salt : " + salt);
             String md5salt = DigestUtils.md5DigestAsHex(salt.toString().getBytes());
+            System.out.println("md5 salt : " + md5salt);
             String md5pwd = DigestUtils.md5DigestAsHex(plainText.getBytes());
+            System.out.println("md5 pwd : " + md5pwd);
             result = DigestUtils.md5DigestAsHex((md5pwd + md5salt).getBytes());
+            System.out.println("md5 (pwd + salt) : " + result);
+
         }catch (Exception e){
             System.out.println("MD5 ERROR");
             throw new BusinessException(EnumError.INTERNAL_SERVER_ERROR);

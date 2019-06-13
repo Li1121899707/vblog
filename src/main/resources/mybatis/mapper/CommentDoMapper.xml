@@ -16,12 +16,22 @@
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="avatar_sm" jdbcType="VARCHAR" property="avatarSm" />
   </resultMap>
+
+  <resultMap id="ArticleMap" type="com.hitwh.vblog.bean.ArticleDo">
+    <id column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="virtual_id" jdbcType="VARCHAR" property="virtualId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
   
+  <resultMap id="ComUserArticleDoMap" type="com.hitwh.vblog.bean.ComUserArticleDo">
+    <association property="userDo" javaType="com.hitwh.vblog.bean.UserDo" resultMap="UserMap"/>
+    <association property="commentDo" javaType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap"/>
+    <association property="articleDo" javaType="com.hitwh.vblog.bean.ArticleDo" resultMap="ArticleMap"/>
+  </resultMap>
   <resultMap id="CommentAndUserMap" type="com.hitwh.vblog.bean.ComAndUserDo">
     <association property="userDo" javaType="com.hitwh.vblog.bean.UserDo" resultMap="UserMap"/>
     <association property="commentDo" javaType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap"/>
   </resultMap>
-
   <sql id="Base_Column_List">
     comment_id, article_id, user_id, comment, comment_time, parent_comment_id,comment_hide
   </sql>
@@ -137,23 +147,21 @@
     from vblog_comment, vblog_user
     where article_id = #{articleId}
     and vblog_user.user_id = vblog_comment.user_id
-    and comment_hide = 0
     limit #{start} ,#{num}
   </select>
   <select id="selectByArticleId" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from vblog_comment
     where article_id = #{articleId}
-    and comment_hide = 0
   </select>
-<select id="selectDisplayCommentById" resultMap="CommentAndUserMap">
-    select vblog_user.user_id, nickname,
-    comment_id, article_id, vblog_comment.user_id,
-    comment, comment_time, parent_comment_id,avatar_sm
-    from vblog_comment, vblog_user
-    where vblog_user.user_id= #{userId}
-    and vblog_user.user_id = vblog_comment.user_id
-    and comment_hide = 0
+<select id="selectDisplayCommentById" resultMap="ComUserArticleDoMap">
+    SELECT vblog_user.user_id, nickname,
+    comment_id, vblog_comment.article_id, vblog_comment.user_id, COMMENT,
+    comment_time, parent_comment_id,comment_hide,avatar_sm,virtual_id,title
+    FROM vblog_comment
+    LEFT JOIN vblog_user ON vblog_user.user_id = vblog_comment.user_id
+    LEFT JOIN vblog_article ON vblog_comment.article_id = vblog_article.article_id
+    WHERE vblog_comment.user_id = #{userId}
     limit #{start} ,#{num}
 </select>
   <select id="selectByUserId" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap">
@@ -161,13 +169,14 @@
     from vblog_comment
     where user_id = #{userId}
   </select>
-  <select id="selectForParent" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="CommentAndUserMap">
-    select vblog_user.user_id, nickname,
-    comment_id, article_id, vblog_comment.user_id, comment,
-    comment_time, parent_comment_id,comment_hide,avatar_sm
-    from vblog_comment, vblog_user
-    where comment_id = #{parent_comment_id}
-    and vblog_user.user_id = vblog_comment.user_id
+  <select id="selectForParent"  resultMap="ComUserArticleDoMap">
+    SELECT vblog_user.user_id, nickname,
+    comment_id, vblog_comment.article_id, vblog_comment.user_id, COMMENT,
+    comment_time, parent_comment_id,comment_hide,avatar_sm,virtual_id,title
+    FROM vblog_comment
+    LEFT JOIN vblog_user ON vblog_user.user_id = vblog_comment.user_id
+    LEFT JOIN vblog_article ON vblog_comment.article_id = vblog_article.article_id
+    WHERE comment_id = #{parent_comment_id}
   </select>
 <update id="updateCommentHide">
   update vblog_comment

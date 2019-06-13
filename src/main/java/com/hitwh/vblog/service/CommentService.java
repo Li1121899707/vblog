@@ -3,6 +3,7 @@ package com.hitwh.vblog.service;
 import com.hitwh.vblog.bean.ComAndUserDo;
 import com.hitwh.vblog.inparam.CommentInParam;
 import com.hitwh.vblog.model.CommentModel;
+import com.hitwh.vblog.outparam.CommentForUserOutParam;
 import com.hitwh.vblog.outparam.CommentOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +16,7 @@ public interface CommentService {
 
     Map<String,Object> selectDisplayCommentById(Integer start, Integer end, Integer userId) throws BusinessException;
 
-    CommentOutParam selectForParent(@Param("parent_comment_id") Integer parent_comment_id) throws BusinessException;
+    CommentForUserOutParam selectForParent(@Param("parent_comment_id") Integer parent_comment_id) throws BusinessException;
 
     void insertComment(CommentModel commentModel) throws BusinessException;
 
@@ -23,5 +24,5 @@ public interface CommentService {
 
     void commentAdminHide(Integer uid, Integer commentId) throws BusinessException;
 
-    List<Map<String, Object>> queryForUser(Integer userId) throws BusinessException;
+    List<CommentForUserOutParam> queryForUser(Integer userId) throws BusinessException;
 }

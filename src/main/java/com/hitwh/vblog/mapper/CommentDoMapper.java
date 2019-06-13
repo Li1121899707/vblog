@@ -1,6 +1,7 @@
 package com.hitwh.vblog.mapper;
 
 import com.hitwh.vblog.bean.ComAndUserDo;
+import com.hitwh.vblog.bean.ComUserArticleDo;
 import com.hitwh.vblog.bean.CommentDo;
 import com.hitwh.vblog.outparam.CommentOutParam;
 import org.apache.ibatis.annotations.Param;
@@ -26,13 +27,13 @@ public interface CommentDoMapper {
 
     List<CommentDo> selectByArticleId(Integer articleId);
 
-    List<ComAndUserDo> selectDisplayCommentById(@Param("start") Integer start,
+    List<ComUserArticleDo> selectDisplayCommentById(@Param("start") Integer start,
                                             @Param("num") Integer num,
                                             @Param("userId") Integer userId);
 
     List<CommentDo> selectByUserId(Integer userId);
 
-    ComAndUserDo selectForParent(Integer userId);
+    ComUserArticleDo selectForParent(Integer parent_comment_id);
 
     Integer updateCommentHide(Integer commentId);
 

@@ -5,7 +5,7 @@ package com.hitwh.vblog.outparam;
  * @date 2019/6/12 14:06
  */
 public class CommentForUserOutParam {
-    private Integer article_id;
+    private String article_id;
 
     private String comment;
 
@@ -21,11 +21,11 @@ public class CommentForUserOutParam {
 
     private String title;
 
-    public Integer getArticle_id() {
+    public String getArticle_id() {
         return article_id;
     }
 
-    public void setArticle_id(Integer article_id) {
+    public void setArticle_id(String article_id) {
         this.article_id = article_id;
     }
 

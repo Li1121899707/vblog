@@ -297,7 +297,7 @@
   </select>
 
   <select id="selectByUserId" resultMap="BaseResultMap">
-    select article_id,title
+    select article_id,title,virtual_id
     from vblog_article
     where author_id = #{userId}
   </select>
