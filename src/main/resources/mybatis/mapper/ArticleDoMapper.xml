@@ -50,7 +50,7 @@
 
   <select id="selectArticleNumber" resultType="java.lang.Integer">
     select count(*)
-    from vblog_article
+    from vblog_article where hidden = 0
   </select>
   <select id="selectAllArticle" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
@@ -67,7 +67,7 @@
   <select id="selectArticleNumByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select count(*)
     from vblog_article
-    where author_id = #{userId}
+    where author_id = #{userId} and hidden = 0
   </select>
   <select id="selectArticleByUserId" parameterType="java.lang.Integer" resultMap="ArticleAndUserMap">
     select vblog_article.article_id, vblog_article.virtual_id, title, author_id,
@@ -78,7 +78,7 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    where vblog_article.author_id = #{userId}
+    where vblog_article.author_id = #{userId} and hidden = 0
     limit #{start} ,#{num}
   </select>
 
@@ -97,7 +97,7 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
-    where vblog_article.title like CONCAT('%',#{title},'%')
+    where hidden = 0 and vblog_article.title like CONCAT('%',#{title},'%')
     limit #{start} ,#{num}
   </select>
 
@@ -117,7 +117,7 @@
     on vblog_article.author_id = vblog_user.user_id
     left join vblog_article_dynamic
     on vblog_article.article_id = vblog_article_dynamic.article_id
-    where vblog_article_label.label_id = #{typeId}
+    where vblog_article_label.label_id = #{typeId} and hidden = 0
     limit #{start} ,#{num}
   </select>
 
@@ -278,7 +278,7 @@
     ON vblog_article.article_id = vblog_article_dynamic.article_id
     RIGHT JOIN vblog_user
     ON vblog_article.author_id = vblog_user.user_id
-    WHERE vblog_collection_record.collector_id = #{userId}
+    WHERE vblog_collection_record.collector_id = #{userId} and hidden = 0
     limit #{start} ,#{num}
   </select>
 
@@ -292,6 +292,7 @@
     on vblog_article.article_id = vblog_article_dynamic.article_id
     left join vblog_user
     on vblog_article.author_id = vblog_user.user_id
+    where hidden = 0
     order by thumb_num, reading_num desc
     limit 0 , #{num}
   </select>
@@ -300,6 +301,7 @@
     select article_id,title,virtual_id
     from vblog_article
     where author_id = #{userId}
+    and hidden = 0
   </select>
 
 </mapper>

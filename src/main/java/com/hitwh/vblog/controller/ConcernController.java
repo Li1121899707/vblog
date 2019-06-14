@@ -26,7 +26,7 @@ public class ConcernController extends BaseController {
     @Autowired
     ConcernService concernService;
 
-   // @LoginRequired
+    @LoginRequired
     @PostMapping("/add")
     public CommonReturnType addConcern(@RequestBody ConcernInParam concernInParam) throws BusinessException{
         ConcernModel concernModel = new ConcernModel();

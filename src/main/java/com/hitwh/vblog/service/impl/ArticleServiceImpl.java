@@ -124,7 +124,14 @@ public class ArticleServiceImpl implements ArticleService {
         if(articleDo.getAuthorId() != uid)
             throw new BusinessException(EnumError.UNAUTHORIZED);
 
-        Integer deleteResult = articleDoMapper.deleteByPrimaryKey(article_id, uid);
+        ifHidden(article_id);
+
+        Integer deleteResult = null;
+        try {
+            deleteResult = articleDoMapper.deleteByPrimaryKey(article_id, uid);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
 
         boolean deletedTA = true, deletedTB = true, deleteTC = true;
 
@@ -165,12 +172,17 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
 
         ArticleDo articleDoTest = new ArticleDo();
-        articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
+        try {
+            articleDoTest = articleDoMapper.selectByPrimaryKey(articleModel.getArticle_id());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
+
+        ifHidden(articleModel.getArticle_id());
 
         if (articleDoTest == null)
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
-//        if(articleDoTest.getHidden() == 1)
-//            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+
         if(articleDoTest.getAuthorId() != articleModel.getUid())
             throw new BusinessException(EnumError.UNAUTHORIZED);
 
@@ -226,8 +238,8 @@ public class ArticleServiceImpl implements ArticleService {
         articleAndUserDo = articleDoMapper.selectSingleArticle(article_id);
         if (articleAndUserDo == null)
             return null;
-//        if(articleAndUserDo.getArticleDo().getHidden() == 1)
-//            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+
+        ifHidden(article_id);
 
         ArticleOutParam articleOutParam = new ArticleOutParam();
         articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getArticleId());
@@ -373,6 +385,30 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
 
         return articleId;
+    }
+
+    @Override
+    public void ifHidden(Integer articleIntegerId) throws BusinessException {
+        if(articleIntegerId == null || articleIntegerId <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "验证用户是否被禁用时article参数错误");
+
+        ArticleDo articleDo = null;
+        try {
+            articleDo = articleDoMapper.selectByPrimaryKey(articleIntegerId);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+        }
+
+        if(articleDo == null)
+            throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
+
+        if(articleDo.getHidden() == null){
+            System.out.println(articleIntegerId + "文章隐藏属性为空，检查数据库");
+            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
+        }
+
+        if(articleDo.getHidden() != 0)
+            throw new BusinessException(EnumError.ARTICLE_HIDDEN);
     }
 
 

@@ -26,7 +26,6 @@ public class ReportServiceImpl implements ReportService {
     ReportRecordDoMapper reportRecordDoMapper;
     @Autowired
     ArticleDoMapper articleDoMapper;
-
     @Autowired
     ValidatorImpl validator;
 

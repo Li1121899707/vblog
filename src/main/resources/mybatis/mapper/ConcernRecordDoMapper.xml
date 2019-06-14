@@ -13,7 +13,11 @@
   <resultMap id="UserMap" type="com.hitwh.vblog.bean.UserDo">
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="avatar_md" jdbcType="VARCHAR" property="avatarMd" />
+    <result column="ban" jdbcType="INTEGER" property="ban"/>
   </resultMap>
+
   <insert id="insert" parameterType="com.hitwh.vblog.bean.ConcernRecordDo">
     insert into vblog_concern_record (target_id, follower_id, concern_time
       )
@@ -52,32 +56,30 @@
   </delete>
 
   <select id="selectFollower" parameterType="java.lang.Integer" resultMap="ConcernMap">
-    select vblog_concern_record.follower_id, vblog_user.user_id, vblog_user.nickname
+    select vblog_concern_record.follower_id, vblog_user.user_id, vblog_user.nickname, vblog_user.signature, vblog_user.avatar_md, vblog_user.ban
     from vblog_concern_record, vblog_user
     where vblog_concern_record.target_id = #{userId}
-    and vblog_user.user_id = vblog_concern_record.follower_id
+    and vblog_user.user_id = vblog_concern_record.follower_id and vblog_user.ban = 0
     limit #{start}, #{num}
   </select>
   <select id="selectFollowerNum" resultType="java.lang.Integer">
     select count(*)
     from vblog_concern_record
-    where vblog_concern_record.target_id = #{userId}
+    where vblog_concern_record.target_id = #{userId} and vblog_user.ban = 0
   </select>
 
-
   <select id="selectTarget" parameterType="java.lang.Integer" resultMap="ConcernMap">
-    select vblog_concern_record.target_id, vblog_user.user_id, vblog_user.nickname
+    select vblog_concern_record.target_id, vblog_user.user_id, vblog_user.nickname, vblog_user.signature, vblog_user.avatar_md, vblog_user.ban
     from vblog_concern_record, vblog_user
     where vblog_concern_record.follower_id = #{userId}
-    and vblog_user.user_id = vblog_concern_record.target_id
+    and vblog_user.user_id = vblog_concern_record.target_id and vblog_user.ban = 0
     limit #{start}, #{num}
   </select>
   <select id="selectTargetNum" resultType="java.lang.Integer">
     select count(*)
     from vblog_concern_record
-     where vblog_concern_record.follower_id = #{userId}
+     where vblog_concern_record.follower_id = #{userId} and ban = 0
   </select>
-
 
   <select id="selectIsConcerned" parameterType="com.hitwh.vblog.bean.ConcernRecordDo" resultType="java.lang.Integer">
     select count(*)

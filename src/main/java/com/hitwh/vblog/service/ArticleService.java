@@ -23,4 +23,6 @@ public interface ArticleService {
     Map<String, Object> recommend(Integer num);
 
     Integer getArticleId(String virtualId) throws BusinessException;
+
+    void ifHidden(Integer articleIntegerId) throws BusinessException;
 }

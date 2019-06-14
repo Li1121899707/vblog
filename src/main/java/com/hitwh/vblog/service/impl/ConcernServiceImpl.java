@@ -10,6 +10,7 @@ import com.hitwh.vblog.outparam.ConcernOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.ConcernService;
+import com.hitwh.vblog.service.UserService;
 import com.hitwh.vblog.util.TimestampUtil;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
@@ -30,6 +31,9 @@ public class ConcernServiceImpl implements ConcernService {
     ValidatorImpl validator;
     @Autowired
     UserDoMapper userDoMapper;
+    @Autowired
+    UserService userService;
+
     @Override
     public void insert(ConcernModel concernModel) throws BusinessException {
         if(concernModel == null)
@@ -38,6 +42,8 @@ public class ConcernServiceImpl implements ConcernService {
         ValidationResult result = validator.validate(concernModel);
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+
+        userService.ifBan(concernModel.getTargetId());
 
         if(concernModel.getUserId() == concernModel.getTargetId())
             throw new BusinessException(EnumError.CONCERN_MYSELF);
@@ -110,6 +116,8 @@ public class ConcernServiceImpl implements ConcernService {
             ConcernOutParam concernOutParam = new ConcernOutParam();
             concernOutParam.setUser_id(concernAndUserDo.getConcernRecordDo().getFollowerId());
             concernOutParam.setUser_nickname(concernAndUserDo.getUserDo().getNickname());
+            concernOutParam.setSignature(concernAndUserDo.getUserDo().getSignature());
+            concernOutParam.setAvatar_md(concernAndUserDo.getUserDo().getAvatarMd());
             concernOutParams.add(concernOutParam);
         }
 
@@ -134,6 +142,8 @@ public class ConcernServiceImpl implements ConcernService {
             ConcernOutParam concernOutParam = new ConcernOutParam();
             concernOutParam.setUser_id(concernAndUserDo.getConcernRecordDo().getTargetId());
             concernOutParam.setUser_nickname(concernAndUserDo.getUserDo().getNickname());
+            concernOutParam.setSignature(concernAndUserDo.getUserDo().getSignature());
+            concernOutParam.setAvatar_md(concernAndUserDo.getUserDo().getAvatarMd());
             concernOutParams.add(concernOutParam);
         }
 

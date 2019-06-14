@@ -259,6 +259,7 @@
     LEFT JOIN vblog_user
     ON vblog_user_interest.user_id = vblog_user.user_id
     WHERE vblog_user_interest.label_id = #{labelId}
+    and ban = 0
     limit #{start}, #{num}
   </select>
 
@@ -266,6 +267,7 @@
     select count(*)
     from vblog_user_interest
     where label_id = #{labelId}
+    and ban = 0
   </select>
 
   <select id="selectAllUser" resultMap="BaseResultMap">

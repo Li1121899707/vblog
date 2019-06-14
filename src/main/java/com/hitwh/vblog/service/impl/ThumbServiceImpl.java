@@ -9,7 +9,9 @@ import com.hitwh.vblog.mapper.ThumbRecordDoMapper;
 import com.hitwh.vblog.model.ThumbModel;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
+import com.hitwh.vblog.service.ArticleService;
 import com.hitwh.vblog.service.ThumbService;
+import com.hitwh.vblog.service.UserService;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -33,6 +35,8 @@ public class ThumbServiceImpl implements ThumbService {
     ArticleDynamicDoMapper articleDynamicDoMapper;
     @Autowired
     ArticleDoMapper articleDoMapper;
+    @Autowired
+    ArticleService articleService;
 
     @Override
     public void insertThumbRecord(ThumbModel thumbModel) throws BusinessException {
@@ -46,6 +50,8 @@ public class ThumbServiceImpl implements ThumbService {
         ThumbRecordDo thumbRecordDo = new ThumbRecordDo();
         thumbRecordDo.setArticleId(thumbModel.getArticleId());
         thumbRecordDo.setThumberId(thumbModel.getUserId());
+
+        articleService.ifHidden(thumbModel.getArticleId());
 
         ArticleDo articleDo = null;
         try {

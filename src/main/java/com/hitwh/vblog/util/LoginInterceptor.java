@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
 import com.hitwh.vblog.service.LoginService;
+import com.hitwh.vblog.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -99,17 +100,20 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 
         LoginService loginService = (LoginService) SpringUtil.getBean(LoginService.class);
+        UserService userService = (UserService) SpringUtil.getBean(UserService.class);
 
         Boolean keyValidateResult = loginService.keyValidate(key, uid, request_time);
 
-        // result为false，代表token验证失败，直接返回
+
         if(!keyValidateResult)
             throw new BusinessException(EnumError.KEY_ERROR);
-
+        // result为false，代表token验证失败，直接返回
         Boolean tokenValidateResult = loginService.tokenValidate(uid, request_time);
 
         if(!tokenValidateResult)
             throw new BusinessException(EnumError.TOKEN_OVERDUE);
+
+        userService.ifBan(uid);
 
         // result为true，代表token验证成功，需要判断是否需要管理员权限
         // 不需要管理员权限，直接返回

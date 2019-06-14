@@ -40,9 +40,18 @@ public class UserServiceImpl implements UserService {
         if(uid == null || uid <=0 )
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        UserDo userResult = userDoMapper.selectByPrimaryKey(uid);
+        ifBan(uid);
+
+        UserDo userResult = null;
+        try {
+            userResult = userDoMapper.selectByPrimaryKey(uid);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
+
         if(userResult == null)
-            return null;
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
         return convertUserDoToUserOutParam(userResult);
     }
 
@@ -50,6 +59,7 @@ public class UserServiceImpl implements UserService {
     public UserOutParam queryByAccount(String account) throws BusinessException {
         if(account == null || account.equals(""))
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
         UserDo userDo = new UserDo();
         userDo.setAccount(account);
         UserDo userResult = userDoMapper.selectIfLogin(userDo);
@@ -64,6 +74,7 @@ public class UserServiceImpl implements UserService {
     public UserOutParam queryByPhone(String phone) throws BusinessException {
         if(phone == null || phone.equals(""))
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
         UserDo userDo = new UserDo();
         userDo.setPhone(phone);
         UserDo userResult = userDoMapper.selectIfLoginByPhone(userDo);
@@ -135,6 +146,8 @@ public class UserServiceImpl implements UserService {
         if(userDo.getUserId() == null || userDo.getUserId() <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        ifBan(userDo.getUserId());
+
         if(userDo.getNickname() == null && userDo.getAccount() == null && userDo.getEmail() == null && userDo.getPhone() == null
         && userDo.getSignature() == null && userDo.getAvatarSm() == null && userDo.getAvatarMd() == null && userDo.getAvatarLg() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
@@ -146,6 +159,8 @@ public class UserServiceImpl implements UserService {
     public void updateUserInterest(List<Integer> userInterestDos, Integer userId) throws BusinessException {
         if(userInterestDos == null || userInterestDos.size() == 0)
             return;
+
+        ifBan(userId);
 
         Integer interestNum = userInterestDoMapper.queryByUserIdNum(userId);
         if(interestNum > 0)
@@ -196,6 +211,30 @@ public class UserServiceImpl implements UserService {
         map.put("avatar_sm", userDo.getAvatarSm());
 
         return map;
+    }
+
+    @Override
+    public void ifBan(Integer uid) throws BusinessException {
+        if(uid == null || uid <= 0)
+            throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "验证用户是否被禁用时uid参数错误");
+
+        UserDo userDo = null;
+        try {
+            userDo = userDoMapper.selectByPrimaryKey(uid);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
+
+        if(userDo == null)
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
+        if(userDo.getBan() == null){
+            System.out.println(uid + "用户隐藏属性为null，检查数据库");
+            throw new BusinessException(EnumError.USER_HIDDEN);
+        }
+
+        if(userDo.getBan() != 0)
+            throw new BusinessException(EnumError.USER_HIDDEN);
     }
 
 

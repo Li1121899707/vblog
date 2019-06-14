@@ -38,20 +38,20 @@ public class UserController extends BaseController {
         return CommonReturnType.create(userService.queryById(userInparam.getUid()));
     }
 
-    @RequestMapping("/query_by_account")
-    public CommonReturnType queryUserByAccount(@RequestBody UserInparam userInparam) throws BusinessException {
-        return CommonReturnType.create(userService.queryByAccount(userInparam.getAccount()));
-    }
-
-    @RequestMapping("/query_by_email")
-    public CommonReturnType queryUserByEmail(@RequestBody UserInparam userInparam) throws BusinessException {
-        return CommonReturnType.create(userService.queryByEmail(userInparam.getEmail()));
-    }
-
-    @RequestMapping("/query_by_phone")
-    public CommonReturnType queryUserByPhone(@RequestBody UserInparam userInparam) throws BusinessException {
-        return CommonReturnType.create(userService.queryByPhone(userInparam.getPhone()));
-    }
+//    @RequestMapping("/query_by_account")
+//    public CommonReturnType queryUserByAccount(@RequestBody UserInparam userInparam) throws BusinessException {
+//        return CommonReturnType.create(userService.queryByAccount(userInparam.getAccount()));
+//    }
+//
+//    @RequestMapping("/query_by_email")
+//    public CommonReturnType queryUserByEmail(@RequestBody UserInparam userInparam) throws BusinessException {
+//        return CommonReturnType.create(userService.queryByEmail(userInparam.getEmail()));
+//    }
+//
+//    @RequestMapping("/query_by_phone")
+//    public CommonReturnType queryUserByPhone(@RequestBody UserInparam userInparam) throws BusinessException {
+//        return CommonReturnType.create(userService.queryByPhone(userInparam.getPhone()));
+//    }
 
     @LoginRequired
     @RequestMapping("/query_by_label")

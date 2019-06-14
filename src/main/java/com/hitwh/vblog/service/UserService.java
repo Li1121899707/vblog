@@ -35,4 +35,6 @@ public interface UserService {
     void banUser(UserInparam userInparam) throws BusinessException;
 
     Map<String, Object> userAvatar(Integer uid) throws BusinessException;
+
+    void ifBan(Integer uid) throws BusinessException;
 }
