@@ -109,6 +109,8 @@ public class ThumbServiceImpl implements ThumbService {
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
         }
 
+        articleService.ifHidden(articleId);
+
         if(articleDynamicDo == null || articleDynamicDo.getThumbNum() == null )
             throw new BusinessException(EnumError.ARTICLE_NOT_EXIST);
 
@@ -177,6 +179,8 @@ public class ThumbServiceImpl implements ThumbService {
         ValidationResult result = validator.validate(thumbModel);
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+
+        articleService.ifHidden(thumbModel.getArticleId());
 
         ThumbRecordDo thumbRecordDo = new ThumbRecordDo();
         thumbRecordDo.setArticleId(thumbModel.getArticleId());

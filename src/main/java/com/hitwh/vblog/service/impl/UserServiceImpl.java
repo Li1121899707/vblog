@@ -126,17 +126,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> queryAllUser(Integer start, Integer end) throws BusinessException {
-        if(start == null || end == null || start < 0 || end < start)
+    public Map<String, Object> queryAllUser(Integer start, Integer end, Integer ban) throws BusinessException {
+        if(start == null || end == null || start < 0 || end < start || ban == null || ban < 0 || ban > 2)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        List<UserDo> userDos = userDoMapper.selectAllUser(start, end-start+1);
+
+        List<UserDo> userDos = null;
+
+        if(ban == 2)
+            userDos = userDoMapper.selectAllUser(start, end-start+1);
+        else
+            userDos = userDoMapper.selectAllUserWithBan(start, end-start+1, ban);
 
         if(userDos.size() == 0)
             return null;
 
         Map<String, Object> map = new HashMap<>();
-        map.put("sum", userDoMapper.selectAllUserNum());
+        if(ban == 2)
+            map.put("sum", userDoMapper.selectAllUserNum());
+        else
+            map.put("sum", userDoMapper.selectAllUserNumWithBan(ban));
         map.put("list", convertUserDoToUserOutParamList(userDos));
         return map;
     }
@@ -176,17 +185,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void banUser(UserInparam userInparam) throws BusinessException {
-        if (userInparam.getUid() == null || userInparam.getBan_user_id() == null)
+        if (userInparam.getUid() == null || userInparam.getBan_uid() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
-        UserDo userDo = userDoMapper.selectAdmin(userInparam.getUid());
+        UserDo userDo = null;
+        try {
+            userDo = userDoMapper.selectAdmin(userInparam.getUid());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.UNAUTHORIZED);
+        }
+
         if (userDo == null || userDo.getUserId() == null)
             throw new BusinessException(EnumError.UNAUTHORIZED);
 
+        UserDo testUserDo = null;
+        try {
+            testUserDo = userDoMapper.selectByPrimaryKey(userInparam.getBan_uid());
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
+
+        if(testUserDo == null)
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+
+        if(testUserDo.getBan() == 1)
+            throw new BusinessException(EnumError.BAN_USER_REPEAT);
+
         UserDo userDo1 = new UserDo();
-        userDo1.setUserId(userInparam.getBan_user_id());
+        userDo1.setUserId(userInparam.getBan_uid());
         userDo1.setBan(1);
-        userDoMapper.updateByPrimaryKeySelective(userDo1);
+        try {
+            userDoMapper.updateByPrimaryKeySelective(userDo1);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.USER_NOT_EXIST);
+        }
+
 
     }
 
@@ -250,6 +283,8 @@ public class UserServiceImpl implements UserService {
         userOutParam.setAvatar_sm(userDo.getAvatarSm());
         userOutParam.setSignature(userDo.getSignature());
         ArrayList<UserInterestDoOut> userInterestDoOuts = (ArrayList)userInterestDoMapper.queryAllInterestsByUserId(userDo.getUserId());
+        if(userDo.getBan() != null)
+            userOutParam.setBan(userDo.getBan());
         userOutParam.setInterest(userInterestDoOuts);
         return userOutParam;
     }
@@ -270,6 +305,8 @@ public class UserServiceImpl implements UserService {
             userOutParam.setSignature(userDo.getSignature());
             ArrayList<UserInterestDoOut> userInterestDoOuts = (ArrayList)userInterestDoMapper.queryAllInterestsByUserId(userDo.getUserId());
             userOutParam.setInterest(userInterestDoOuts);
+            if(userDo.getBan() != null)
+                userOutParam.setBan(userDo.getBan());
             userOutParams.add(userOutParam);
         }
         return userOutParams;

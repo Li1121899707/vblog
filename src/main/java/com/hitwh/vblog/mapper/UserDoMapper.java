@@ -37,8 +37,12 @@ public interface UserDoMapper {
 
     Integer selectAllUserByLabelNum(@Param("labelId")Integer labelId);
 
+    List<UserDo> selectAllUserWithBan(@Param("start")Integer start, @Param("num") Integer num, @Param("ban") Integer ban);
+
     List<UserDo> selectAllUser(@Param("start")Integer start, @Param("num") Integer num);
 
     Integer selectAllUserNum();
+
+    Integer selectAllUserNumWithBan(@Param("ban") Integer ban);
 
 }

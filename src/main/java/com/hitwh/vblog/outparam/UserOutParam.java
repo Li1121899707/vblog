@@ -28,6 +28,8 @@ public class UserOutParam {
 
     private String signature;
 
+    private Integer ban;
+
     private ArrayList<UserInterestDoOut> interest;
 
     public Integer getUser_id() {
@@ -108,5 +110,13 @@ public class UserOutParam {
 
     public void setInterest(ArrayList<UserInterestDoOut> interest) {
         this.interest = interest;
+    }
+
+    public Integer getBan() {
+        return ban;
+    }
+
+    public void setBan(Integer ban) {
+        this.ban = ban;
     }
 }

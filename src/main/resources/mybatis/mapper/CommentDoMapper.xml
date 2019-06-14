@@ -147,12 +147,14 @@
     from vblog_comment, vblog_user
     where article_id = #{articleId}
     and vblog_user.user_id = vblog_comment.user_id
+    and comment_hide = 0
     limit #{start} ,#{num}
   </select>
   <select id="selectByArticleId" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from vblog_comment
     where article_id = #{articleId}
+    and comment_hide = 0
   </select>
 <select id="selectDisplayCommentById" resultMap="ComUserArticleDoMap">
     SELECT vblog_user.user_id, nickname,
@@ -162,12 +164,14 @@
     LEFT JOIN vblog_user ON vblog_user.user_id = vblog_comment.user_id
     LEFT JOIN vblog_article ON vblog_comment.article_id = vblog_article.article_id
     WHERE vblog_comment.user_id = #{userId}
+    and comment_hide = 0
     limit #{start} ,#{num}
 </select>
   <select id="selectByUserId" parameterType="com.hitwh.vblog.bean.CommentDo" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from vblog_comment
     where user_id = #{userId}
+    and comment_hide = 0
   </select>
   <select id="selectForParent"  resultMap="ComUserArticleDoMap">
     SELECT vblog_user.user_id, nickname,
@@ -187,10 +191,10 @@
   <select id="selectForUser" resultMap="CommentAndUserMap">
     select vblog_user.user_id, nickname,
     comment_id, article_id, vblog_comment.user_id,
-    comment, comment_time, parent_comment_id,comment_hide,avatar_sm
+    comment, comment_time, parent_comment_id,comment_hide,avatar_sm, vblog_user.ban
     from vblog_comment, vblog_user
     where article_id = #{articleId}
-    and vblog_user.user_id = vblog_comment.user_id
+    and vblog_user.user_id = vblog_comment.user_id and vblog_user.ban = 0 and comment_hide = 0
     order by comment_time desc
   </select>
 </mapper>

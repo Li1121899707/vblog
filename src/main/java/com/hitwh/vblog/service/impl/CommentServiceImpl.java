@@ -10,7 +10,10 @@ import com.hitwh.vblog.outparam.CommentForUserOutParam;
 import com.hitwh.vblog.outparam.CommentOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
+import com.hitwh.vblog.response.PageResponse;
+import com.hitwh.vblog.service.ArticleService;
 import com.hitwh.vblog.service.CommentService;
+import com.hitwh.vblog.service.UserService;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
@@ -36,12 +39,18 @@ public class CommentServiceImpl implements CommentService {
     ArticleDoMapper articleDoMapper;
     @Autowired
     ArticleDynamicDoMapper articleDynamicDoMapper;
+    @Autowired
+    ArticleService articleService;
+    @Autowired
+    UserService userService;
 
 
     @Override
     public Map<String,Object> selectDisplayComment(Integer start, Integer end, Integer articleId) throws BusinessException {
         if(start == null || end == null || articleId == null || start < 0|| end < start )
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
+
+        articleService.ifHidden(articleId);
 
         int num = end - start + 1;
         int sum = 0;
@@ -97,6 +106,8 @@ public class CommentServiceImpl implements CommentService {
         if(start == null || end == null || userId == null || start < 0|| end < start)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
+        userService.ifBan(userId);
+
         int num = end - start + 1;
 
         Map<String,Object> map = new HashMap<>();
@@ -138,25 +149,34 @@ public class CommentServiceImpl implements CommentService {
 
         return map;
     }
+
     //查找父评论
     @Override
     public CommentForUserOutParam selectForParent(Integer parent_comment_id) throws BusinessException {
         if(parent_comment_id == null || parent_comment_id <= 0)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
         //通过数据库查询评论
-        ComUserArticleDo comUserArticleDo = commentDoMapper.selectForParent(parent_comment_id);
+        ComUserArticleDo comUserArticleDo = null;
+        try {
+            comUserArticleDo = commentDoMapper.selectForParent(parent_comment_id);
+        }catch (Exception e){
+            throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+        }
+
         //判断是否为空
         if (comUserArticleDo == null)
             throw new BusinessException(EnumError.QUERY_NOT_EXIST);
+
+        if(comUserArticleDo.getCommentDo().getCommentHide() != 0)
+            throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
+
         //转换成commentoutparam
         CommentForUserOutParam commentForUserOutParam = typeChange1(comUserArticleDo);
-        //判断父评论是否被隐藏
-//        if(comAndUserDo.getCommentDo().getCommentHide() == 1)
-//            throw new BusinessException(EnumError.PARENT_COMMENT_HIDDEN);
 
         return commentForUserOutParam;
     }
-//添加评论
+
+    //添加评论
     @Override
     public void insertComment(CommentModel commentModel) throws BusinessException {
         if (commentModel == null) {
@@ -167,6 +187,8 @@ public class CommentServiceImpl implements CommentService {
         if (result.isHasErrors()) {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
         }
+
+        articleService.ifHidden(commentModel.getArticleId());
 
         ArticleDo articleDo;
         try {
@@ -261,6 +283,9 @@ public class CommentServiceImpl implements CommentService {
         if(commentDo == null)
             throw new BusinessException(EnumError.COMMENT_NOT_EXIST);
 
+        if(commentDo.getCommentHide() == 1)
+            throw new BusinessException(EnumError.COMMENT_HIDDEN_REPEAT);
+
         Integer hideResult = 0;
         try {
             hideResult  = commentDoMapper.updateCommentHide(commentId);
@@ -280,8 +305,7 @@ public class CommentServiceImpl implements CommentService {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
 
         List<ArticleDo> articleDoList = articleDoMapper.selectByUserId(userId);
-        //List<List<>>
-//        List<Map<String,Object>> maps = new ArrayList<>();
+
         List<CommentForUserOutParam> commentForUserOutParams = new ArrayList<>();
         for (int i = 0;i < articleDoList.size();i++)
         {

@@ -15,6 +15,8 @@ public enum EnumError implements CommonError {
     PHONE_NOT_EXIST(1102, "手机号不存在"),
     EMAIL_NOT_EXIST(1103, "邮箱不存在"),
     LOGOUT_EXIST(1104,"请勿重复登出"),
+    BAN_USER_FAILED(1201,"禁用户失败"),
+    BAN_USER_REPEAT(1301,"请勿重复禁止用户"),
 
     ARTICLE_NOT_EXIST(2001, "文章不存在"),
     ARTICLE_HIDDEN(2002, "文章被隐藏"),
@@ -26,6 +28,7 @@ public enum EnumError implements CommonError {
     COMMENT_INSERT_ERROR(3002,"添加评论失败"),
     COMMENT_HIDDEN_ERROR(3003,"隐藏评论失败"),
     COMMENT_NOT_EXIST(3004,"评论不存在"),
+    COMMENT_HIDDEN_REPEAT(3005,"重复隐藏评论"),
 
     LABEL_EXIST(4001,"标签已存在"),
     LABEL_INSERT_ERROR(4002, "添加标签失败"),

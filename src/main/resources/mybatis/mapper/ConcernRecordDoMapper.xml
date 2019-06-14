@@ -63,8 +63,8 @@
     limit #{start}, #{num}
   </select>
   <select id="selectFollowerNum" resultType="java.lang.Integer">
-    select count(*)
-    from vblog_concern_record
+    select count(*), ban
+    from vblog_concern_record left join vblog_user on vblog_concern_record.target_id = vblog_user.user_id
     where vblog_concern_record.target_id = #{userId} and vblog_user.ban = 0
   </select>
 
@@ -76,9 +76,9 @@
     limit #{start}, #{num}
   </select>
   <select id="selectTargetNum" resultType="java.lang.Integer">
-    select count(*)
-    from vblog_concern_record
-     where vblog_concern_record.follower_id = #{userId} and ban = 0
+    select count(*), ban
+    from vblog_concern_record left join vblog_user on vblog_concern_record.follower_id = vblog_user.user_id
+     where vblog_concern_record.follower_id = #{userId} and vblog_user.ban = 0
   </select>
 
   <select id="selectIsConcerned" parameterType="com.hitwh.vblog.bean.ConcernRecordDo" resultType="java.lang.Integer">

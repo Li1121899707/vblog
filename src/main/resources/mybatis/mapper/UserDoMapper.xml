@@ -264,10 +264,23 @@
   </select>
 
   <select id="selectAllUserByLabelNum" resultType="java.lang.Integer">
-    select count(*)
+    select count(*), ban
     from vblog_user_interest
+    left join vblog_user
+    on vblog_user.user_id = vblog_user_interest.user_id
     where label_id = #{labelId}
     and ban = 0
+  </select>
+
+  <select id="selectAllUserWithBan" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from vblog_user where ban = #{ban}
+    limit #{start}, #{num}
+  </select>
+
+  <select id="selectAllUserNumWithBan" resultType="java.lang.Integer">
+    select count(*)
+    from vblog_user where ban = #{ban}
   </select>
 
   <select id="selectAllUser" resultMap="BaseResultMap">

@@ -34,9 +34,19 @@ public class UserInparam extends BaseInParam {
 
     private ArrayList<Integer> interest;
 
-    private Integer ban_user_id;
+    private Integer ban_uid;
 
     private String nickname;
+
+    private Integer ban;
+
+    public Integer getBan() {
+        return ban;
+    }
+
+    public void setBan(Integer ban) {
+        this.ban = ban;
+    }
 
     public String getNickname() {
         return nickname;
@@ -46,12 +56,12 @@ public class UserInparam extends BaseInParam {
         this.nickname = nickname;
     }
 
-    public Integer getBan_user_id() {
-        return ban_user_id;
+    public Integer getBan_uid() {
+        return ban_uid;
     }
 
-    public void setBan_user_id(Integer ban_user_id) {
-        this.ban_user_id = ban_user_id;
+    public void setBan_uid(Integer ban_uid) {
+        this.ban_uid = ban_uid;
     }
 
     public Integer getLabel_id() {

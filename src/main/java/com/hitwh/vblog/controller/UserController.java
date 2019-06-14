@@ -80,7 +80,7 @@ public class UserController extends BaseController {
     @LoginRequired(admin = true)
     @RequestMapping("/admin/query_all")
     public CommonReturnType queryAllUser(@RequestBody UserInparam userInparam) throws BusinessException {
-        Map<String, Object> map = userService.queryAllUser(userInparam.getStart(), userInparam.getEnd());
+        Map<String, Object> map = userService.queryAllUser(userInparam.getStart(), userInparam.getEnd(), userInparam.getBan());
 
         ArrayList userOutParams = (ArrayList)map.get("list");
         int sum = (int)map.get("sum");

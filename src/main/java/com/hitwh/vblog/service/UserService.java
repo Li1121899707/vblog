@@ -26,7 +26,7 @@ public interface UserService {
 
     Map<String, Object> queryAllUserByLabel(Integer start, Integer end, Integer labelId) throws BusinessException;
 
-    Map<String, Object> queryAllUser(Integer start, Integer end) throws BusinessException;
+    Map<String, Object> queryAllUser(Integer start, Integer end, Integer ban) throws BusinessException;
 
     void updateUserInfo(UserDo userDo) throws BusinessException;
 

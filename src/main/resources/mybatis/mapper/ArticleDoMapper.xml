@@ -104,7 +104,7 @@
   <select id="selectArticleNumByType" resultType="java.lang.Integer">
     select count(*)
     from vblog_article_label
-    where label_id = #{typeId}
+    where label_id = #{typeId} and hidden = 0
   </select>
   <select id="selectArticleByType" resultMap="ArticleAndUserMap">
     select vblog_article_label.article_id, vblog_article_label.label_id , vblog_article.virtual_id,  title, author_id,

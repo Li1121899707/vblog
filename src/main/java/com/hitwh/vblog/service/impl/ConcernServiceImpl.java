@@ -160,6 +160,8 @@ public class ConcernServiceImpl implements ConcernService {
         if(concernModel.getTargetId() == concernModel.getUserId())
             throw new BusinessException(EnumError.CONCERN_MYSELF);
 
+        userService.ifBan(concernModel.getTargetId());
+
         ConcernRecordDo concernRecordDo = new ConcernRecordDo();
         concernRecordDo.setTargetId(concernModel.getTargetId());
         concernRecordDo.setFollowerId(concernModel.getUserId());

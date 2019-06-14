@@ -7,6 +7,7 @@ import com.hitwh.vblog.model.ReportModel;
 import com.hitwh.vblog.outparam.ReportOutParam;
 import com.hitwh.vblog.response.BusinessException;
 import com.hitwh.vblog.response.EnumError;
+import com.hitwh.vblog.service.ArticleService;
 import com.hitwh.vblog.service.ReportService;
 import com.hitwh.vblog.validator.ValidationResult;
 import com.hitwh.vblog.validator.ValidatorImpl;
@@ -28,6 +29,8 @@ public class ReportServiceImpl implements ReportService {
     ArticleDoMapper articleDoMapper;
     @Autowired
     ValidatorImpl validator;
+    @Autowired
+    ArticleService articleService;
 
     @Override
     public void addReport(ReportModel reportModel) throws BusinessException {
@@ -37,6 +40,8 @@ public class ReportServiceImpl implements ReportService {
         ValidationResult result = validator.validate(reportModel);
         if(result.isHasErrors())
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, result.getErrMsg());
+
+        articleService.ifHidden(reportModel.getArticleId());
 
         ArticleDo testArticleDo = null;
         try {
@@ -55,7 +60,6 @@ public class ReportServiceImpl implements ReportService {
             System.out.println("自己不可以举报自己文章");
             throw new BusinessException(EnumError.REPORT_FAILED);
         }
-
 
         ReportRecordDo reportRecordDo = new ReportRecordDo();
         reportRecordDo.setArticleId(reportModel.getArticleId());
