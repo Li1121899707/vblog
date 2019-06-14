@@ -316,7 +316,7 @@ public class CommentServiceImpl implements CommentService {
         commentOutParam.setArticle_id(comAndUserDo.getCommentDo().getArticleId());
         commentOutParam.setUser_nickname(comAndUserDo.getUserDo().getNickname());
         commentOutParam.setComment(comAndUserDo.getCommentDo().getComment());
-        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime().getTime()/1000);
+        commentOutParam.setComment_time(comAndUserDo.getCommentDo().getCommentTime().getTime());
         commentOutParam.setUser_id(comAndUserDo.getUserDo().getUserId());
         commentOutParam.setParent_comment_id(comAndUserDo.getCommentDo().getParentCommentId());
         commentOutParam.setAvatar_sm(comAndUserDo.getUserDo().getAvatarSm());
@@ -336,7 +336,7 @@ public class CommentServiceImpl implements CommentService {
         commentForUserOutParam.setUser_id(comUserArticleDo.getUserDo().getUserId());
         commentForUserOutParam.setAvatar_sm(comUserArticleDo.getUserDo().getAvatarSm());
         commentForUserOutParam.setParent_comment_id(comUserArticleDo.getCommentDo().getCommentId());
-        commentForUserOutParam.setComment_time(comUserArticleDo.getCommentDo().getCommentTime().getTime()/1000);
+        commentForUserOutParam.setComment_time(comUserArticleDo.getCommentDo().getCommentTime().getTime());
 
         return commentForUserOutParam;
     }
