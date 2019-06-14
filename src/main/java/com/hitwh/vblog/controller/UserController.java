@@ -32,6 +32,7 @@ public class UserController extends BaseController {
     @Autowired
     UserService userService;
 
+    //@LoginRequired
     @RequestMapping("/query_by_id")
     public CommonReturnType queryUserById(@RequestBody UserInparam userInparam) throws BusinessException {
         return CommonReturnType.create(userService.queryById(userInparam.getUid()));
