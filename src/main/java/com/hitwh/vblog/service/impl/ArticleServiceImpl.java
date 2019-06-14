@@ -233,7 +233,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleOutParam.setArticle_id(articleAndUserDo.getArticleDo().getArticleId());
         articleOutParam.setVirtual_id(articleAndUserDo.getArticleDo().getVirtualId());
         articleOutParam.setTitle(articleAndUserDo.getArticleDo().getTitle());
-        articleOutParam.setAuthor_id(articleAndUserDo.getArticleDo().getArticleId());
+        articleOutParam.setAuthor_id(articleAndUserDo.getArticleDo().getAuthorId());
         articleOutParam.setAuthor_nickname(articleAndUserDo.getUserDo().getNickname());
         articleOutParam.setCover(articleAndUserDo.getArticleDo().getCover());//另一张表的url字段
         articleOutParam.setContent(articleAndUserDo.getArticleDo().getContent());
