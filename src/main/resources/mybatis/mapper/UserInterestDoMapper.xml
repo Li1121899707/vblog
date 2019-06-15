@@ -45,7 +45,7 @@
     </select>
 
     <delete id="deleteInterestByUserId" >
-        delete vblog_user_interest where user_id = #{userId}
+        delete FROM vblog_user_interest where user_id = #{userId}
     </delete>
 
     <select id="queryByUserIdNum" resultType="java.lang.Integer">

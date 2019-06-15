@@ -3,9 +3,8 @@ package com.hitwh.vblog.util;
 import java.lang.annotation.*;
 
 /**
- * @ClassName YfLog
  * @Description TODO
- * @Author yf
+ * @Author liysuzy
  * @Date 2018/10/15 10:18
  * @Version 1.0
  */

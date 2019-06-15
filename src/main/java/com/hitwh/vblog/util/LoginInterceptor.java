@@ -75,8 +75,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         //long request_time = (long) parameterMap.get("request_time");
         //request_time = 1559483686339L;
-        if(parameterMap == null)
+        if(parameterMap == null){
+            System.out.println("获取参数错误");
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        }
+
 
         try {
             request_time = (long) parameterMap.get("request_time");

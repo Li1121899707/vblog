@@ -161,7 +161,12 @@ public class UserServiceImpl implements UserService {
         && userDo.getSignature() == null && userDo.getAvatarSm() == null && userDo.getAvatarMd() == null && userDo.getAvatarLg() == null)
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR, "传入参数错误");
 
-        userDoMapper.updateByPrimaryKeySelective(userDo);
+        try {
+            userDoMapper.updateByPrimaryKeySelective(userDo);
+        }catch (Exception e){
+            System.out.println("update by primary key error");
+        }
+
     }
 
     @Override
@@ -172,14 +177,26 @@ public class UserServiceImpl implements UserService {
         ifBan(userId);
 
         Integer interestNum = userInterestDoMapper.queryByUserIdNum(userId);
-        if(interestNum > 0)
-            userInterestDoMapper.deleteInterestByUserId(userId);
+
+        if(interestNum > 0){
+            try {
+                userInterestDoMapper.deleteInterestByUserId(userId);
+            }catch (Exception e){
+                System.out.println("delete interest error");
+            }
+        }
 
         for(int i=0; i<userInterestDos.size(); i++){
             UserInterestDo userInterestDo = new UserInterestDo();
             userInterestDo.setUserId(userId);
             userInterestDo.setLabelId(userInterestDos.get(i));
-            userInterestDoMapper.insert(userInterestDo);
+            System.out.println(userId + " label_id: " + userInterestDos.get(i));
+            try {
+                userInterestDoMapper.insert(userInterestDo);
+            }catch (Exception e){
+                System.out.println(userId + " label_id: " + userInterestDos.get(i) + "错误");
+            }
+
         }
     }
 
@@ -197,6 +214,11 @@ public class UserServiceImpl implements UserService {
 
         if (userDo == null || userDo.getUserId() == null)
             throw new BusinessException(EnumError.UNAUTHORIZED);
+
+        if(userDo.getUserId() == userInparam.getBan_uid()){
+            System.out.println("管理员不能禁自己");
+            throw new BusinessException(EnumError.UNAUTHORIZED);
+        }
 
         UserDo testUserDo = null;
         try {
@@ -219,8 +241,6 @@ public class UserServiceImpl implements UserService {
         }catch (Exception e){
             throw new BusinessException(EnumError.USER_NOT_EXIST);
         }
-
-
     }
 
     @Override

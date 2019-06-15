@@ -301,8 +301,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentForUserOutParam> queryForUser(Integer userId) throws BusinessException {
-        if (userId == null||userId <= 0)
+        if (userId == null||userId <= 0) {
             throw new BusinessException(EnumError.PARAMETER_VALIDATION_ERROR);
+        }
 
         List<ArticleDo> articleDoList = articleDoMapper.selectByUserId(userId);
 
